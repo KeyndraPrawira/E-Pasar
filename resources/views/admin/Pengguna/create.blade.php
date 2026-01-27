@@ -4,6 +4,15 @@
         <div class="card-body">
             <div class="card-body">
                   <h4 class="card-title mb-3">Tambah Data Pengguna</h4>
+                   @if ($errors->any())
+                        <div style="background:#fee; padding:10px;">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif      
                   <form action="{{ route('pengguna.store') }}" method="POST">
                     @csrf
                    

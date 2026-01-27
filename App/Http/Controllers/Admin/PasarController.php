@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Pasar;
 use App\Http\Controllers\Controller;
@@ -15,12 +15,13 @@ class PasarController extends Controller
     public function index()
     {
         $pasar = Pasar::first();
-        
-       return response()->json([
+        $data = [
+            'pasar' => $pasar,
             'status' => 'success',
             'message' => 'Data pasar berhasil ditampilkan',
-            'data' => $pasar,
-        ], 200);
+
+        ]; 
+       return view('admin.pasar.index', compact('pasar'));
     }
 
     /**
@@ -91,12 +92,12 @@ class PasarController extends Controller
 
         $pasar->update($data);
         
-        
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pasar berhasil diperbarui',
-            'data' => $pasar
-        ], 200);
+        $data = [
+            'data' => $request,
+            'status' => 200,
+            'message' => 'Data pasar berhasil ditampilkan',
+        ];
+        return redirect()->route('pasar.index')->with('success', 'Data pasar berhasil diperbarui.');
     }
 
     /**

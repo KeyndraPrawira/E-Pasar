@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Kategori;
+use App\Models\Kategori;
 use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
-    protected $table = 'produk';
+    protected $table = 'produks';
 
     protected $fillable = [
         'nama_produk',

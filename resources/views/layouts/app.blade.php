@@ -33,12 +33,14 @@
          @include('layouts.admin.sidebar')
          
 <div class="page-wrapper">
+  
         @include('layouts.admin.navbar')
        
 
         
-          <div class="body-wraper">
-            <div class="container-fluid mt-5">
+          <div class="body-wraper" >
+            <br><br>
+            <div class="container-fluid mt-5 " style="margin-top: 300px;">
               @yield('content')
           </div>
          
@@ -49,22 +51,43 @@
   </div>
 
 <div class="dark-transparent sidebartoggler"></div>
+</div>
+</body>
   <script src="{{ asset('template/js/vendor.min.js')}}"></script>
   <!-- Import Js Files -->
  
-  <script src="{{ asset('template/js/theme/sidebarmenu.js')}}"></script>
+ 
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('template/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+<script>
+$(document).ready(function(){
+  $('.counter-carousel').owlCarousel({
+    loop:true,
+    margin:10,
+    nav:false,
+    dots:false,
+    responsive:{
+      0:{ items:1 },
+      768:{ items:3 },
+      1200:{ items:5 }
+    }
+  });
+});
+</script>
 
  <script src="{{ asset('template/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('template/libs/simplebar/dist/simplebar.min.js') }}"></script>
   <script src="{{ asset('template/js/theme/app.init.js') }}"></script>
   <script src="{{ asset('template/js/theme/theme.js') }}"></script>
   <script src="{{ asset('template/js/theme/app.min.js') }}"></script>
+    <script src="{{ asset('template/js/theme/sidebarmenu.js')}}"></script>
   <script src="https://cdn.datatables.net/responsive/3.0.7/js/dataTables.responsive.min.js"></script>
 
   <!-- solar icons -->
  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
   <script src="{{ asset ('template/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
   <script src="{{ asset ('template/js/datatable/datatable-basic.init.js')}}"></script></body>
+@stack('scripts')
+ 
 </html>

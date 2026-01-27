@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Kios;
 use App\Models\Pasar;
@@ -16,8 +16,12 @@ class KiosController extends Controller
     public function index()
     {
         $kios = Kios::all();
-        
-        return response()
+        $data = [
+            "kios" => $kios,
+            "status" => 200,
+            "message" => "Data Kios Berhasil Ditampilkan"
+        ];
+        return view('admin.kios.index', compact('kios'));
     }
 
     /**
@@ -107,6 +111,7 @@ class KiosController extends Controller
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
             'lokasi.required' => 'Alamat Kios wajib diisi.',
+            
             'user_id.required' => 'Pemilik Kios wajib diisi.',
             'user_id.exists' => 'Pemilik Kios tidak valid.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',

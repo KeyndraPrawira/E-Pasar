@@ -53,6 +53,7 @@
               </a>
             </li>
 
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('kios.index') }}"  aria-expanded="false">
                 <span>
@@ -66,46 +67,32 @@
             <!-- ---------------------------------- -->
             <!-- Frontend page -->
             <!-- ---------------------------------- -->
-             <li class="sidebar-item">
-                <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                  <span class="rounded-3">
-                    <i class="ti ti-app-window"></i>
-                  </span>
-                  <span class="hide-menu">Produk</span>
-                </a>
-                <ul aria-expanded="false" class="collapse first-level">
-                  <li class="sidebar-item">
-                    <a href="../main/frontend-landingpage.html" class="sidebar-link">
-                      <i class="ti ti-circle"></i>
-                      <span class="hide-menu">Homepage</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a href="../main/frontend-aboutpage.html" class="sidebar-link">
-                      <i class="ti ti-circle"></i>
-                      <span class="hide-menu">About Us</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a href="../main/frontend-contactpage.html" class="sidebar-link">
-                      <i class="ti ti-circle"></i>
-                      <span class="hide-menu">Contact Us</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a href="../main/frontend-blogpage.html" class="sidebar-link">
-                      <i class="ti ti-circle"></i>
-                      <span class="hide-menu">Blog</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a href="../main/frontend-blogdetailpage.html" class="sidebar-link">
-                      <i class="ti ti-circle"></i>
-                      <span class="hide-menu">Blog Details</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
+            <li class="sidebar-item">
+  <a class="sidebar-link has-arrow"
+     data-bs-toggle="collapse"
+     href="#menuProduk"
+     aria-expanded="false">
+    <span class="rounded-3">
+      <i class="ti ti-app-window"></i>
+    </span>
+    <span class="hide-menu">Produk</span>
+  </a>
+
+  <ul class="collapse first-level" id="menuProduk">
+    <li class="sidebar-item">
+      <a href="{{ route('produk.index') }}"  class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Data Produk</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a href="{{ route('kategori.index') }}" class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Kategori</span>
+      </a>
+    </li>
+  </ul>
+</li>
 
           
            

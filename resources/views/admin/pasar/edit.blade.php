@@ -16,7 +16,7 @@
  <div class="card">
                 <div class="card-body">
                   <h4 class="card-title mb-3">Data Pasar</h4>
-                  <form action="{{ route('pasar.update', parameters: $pasar->id) }}" method="POST">
+                  <form action="{{ route('pasar.update', parameters: $pasar->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     @if ($errors->any())
@@ -111,18 +111,38 @@
                             </div>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                              @if ($pasar->foto_pasar !== null)
+                              <img src="{{ asset('storage/' . $pasar->foto_pasar) }}" width="100%" alt="foto pasar">
+                              @else
+                              <div class="card">
+                                <div class="card-body">
+                                  <p class="text-dark d-flex justify-content-center">Tidak ada foto pasar</p>
+                              </div>
+                              @endif
+                            
+                            </div>
+                        </div>
+                      </div>
                      <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
-                            <input name="foto_pasar" type="file" class="form-control" id="tb-gambar" value="{{ $pasar->ongkir }}" />
+                            <input name="foto_pasar" type="file" class="form-control" id="tb-gambar"  />
                             <label for="tb-gambar" class="text-dark">Foto Pasar</label>
                             </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-md-12">
+                      <div class="row d-flex justify-content-between">
+                        <div class="col-md-6">
                             <div class="form-floating mb-3">
                             <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2"> Simpan Perubahan</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                              <a href="{{ route('pasar.index') }}" class="btn w-100 py-8 mb-4 rounded-2" style="background-color: grey;color:white;">Batal</a>
                             </div>
                         </div>
                       </div>
@@ -135,8 +155,9 @@
 
 <script>
     // default lokasi (contoh Bandung)
-    let defaultLat = -6.914744;
-    let defaultLng = 107.609810;
+
+    let defaultLat = @json($pasar->latitude ?? -6.914744);
+    let defaultLng = @json($pasar->longitude ?? 107.609810)  ;
 
     let map = L.map('map').setView([defaultLat, defaultLng], 13);
 

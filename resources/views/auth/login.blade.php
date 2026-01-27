@@ -29,7 +29,7 @@
 </head>
 <body>
      <div class="preloader">
-    <img src="./assets/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+    <img src="{{asset ('template/images/logos/Pajajap logo.png')}}" alt="loader" class="lds-ripple img-fluid" />
   </div>
      <div id="main-wrapper">
 
@@ -43,8 +43,8 @@
             <div class="card mb-0">
               <div class="card-body">
                 <a href="{{route('login')}}" class="text-nowrap logo-img text-center d-block  w-100">
-                  <img src="{{ asset('template/images/Pajajap.png') }}" width="250px" class="dark-logo" alt="Logo-Dark" />
-                  <img src="{{ asset('template/images/Pajajap.png') }}" width="250px" class="light-logo" alt="Logo-light" />
+                  <img src="{{ asset('template/images/logos/Pajajap logo.png') }}" width="250px" class="dark-logo" alt="Logo-Dark" />
+                  <img src="{{ asset('template/images/logos/Pajajap logo.png') }}" width="250px" class="light-logo" alt="Logo-light" />
                 </a>
                
                

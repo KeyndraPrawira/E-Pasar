@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -14,11 +14,7 @@ class UserController extends Controller
     public function index()
     {
         $user = User::all();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data pengguna berhasil ditampilkan',
-            'data' => $user
-        ], 200);
+        return view('admin.Pengguna.index', compact('user'));
     }
 
     /**
@@ -62,11 +58,7 @@ class UserController extends Controller
                 'nomor_telepon' => $request->nomor_telepon,
             ]);
         
-        return response()->json([
-            'data' => $request->all(),
-            'status' => 'success',
-            'message' => 'Pengguna berhasil ditambahkan',
-        ], 201);
+        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
     /**
@@ -74,12 +66,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user = User::find($user->id);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data pengguna berhasil ditampilkan',
-            'data' => $user
-        ], 200);
+        //
     }
 
     /**
@@ -88,11 +75,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data pengguna berhasil ditampilkan',
-            'data' => $user
-        ], 200);
+        return view('admin.Pengguna.edit', compact('user'));
     }
 
     /**
@@ -124,11 +107,7 @@ class UserController extends Controller
             ]
         );
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pengguna berhasil diperbarui',
-            'data' => $user
-        ], 200);
+        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
     /**
@@ -138,9 +117,6 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pengguna berhasil dihapus',
-        ], 200);
+        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 }

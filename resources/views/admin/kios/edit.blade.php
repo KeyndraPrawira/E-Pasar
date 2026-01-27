@@ -1,23 +1,12 @@
-
-
 @extends('layouts.app')
 @section('content')
     <div class="card">
         <div class="card-body">
             <div class="card-body">
                   <h4 class="card-title mb-3">Tambah Data Kios</h4>
-                  @if ($errors->any())
-    <div style="background:#fee; padding:10px;" class="mb-3">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-                  <form action="{{ route('kios.store') }}" method="POST">
+                  <form action="{{ route('kios.update', $pasar->id) }}" method="POST">
                     @csrf
-                   
+                   @method('PUT')
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-floating mb-3">
@@ -32,11 +21,9 @@
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
                             <select name="user_id" id="tb-pedagang" class="form-control">
-                              <option value="" selected disabled>Pilih pedagang</option>
-                              @foreach($penjual as $p)
-                                <option value="{{ $p->id }}" >{{ $p->name }}</option>
-                                @endforeach
-                            </select>
+                              <option value="" selected disabled >Pilih pedagang</option>
+                              @foreach($pedagang as $p)
+ <option value="{{ $p->id }}" {{ $p->id === $selectedPedagangid  ? 'selected' : ''}}>{{ $p->name }}</option>                            </select>
                             <label for="tb-pedagang" class="text-dark">Pedagang</label>
                             </div>
                         </div>
@@ -63,23 +50,15 @@
                       <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
-                              <textarea name="deskripsi" class="form-control"  id="tb_deskripsi"></textarea>
+                              <textarea name="deskripsi"  id="tb_deskripsi"></textarea>
                             <label for="tb-deskripsi" class="text-dark">Deskripsi (opsional)</label>
-                            </div>
-                        </div>
-                      </div>
-                       <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-floating mb-3">
-                            <input name="foto_kios" type="file" class="form-control" id="tb-gambar"  />
-                            <label for="tb-gambar" class="text-dark">Foto Kios</label>
                             </div>
                         </div>
                       </div>
 
                     <div class="row d-flex justify-content-between">
                         <div class="col text-start">
-                        <button type="submit" class="btn btn-primary">Buat Kios</button>
+                        <button type="submit" class="btn btn-success">Edit Kios</button>
                       </div>
                       <div class="col text-end">
                         <a href="{{ route('kios.index') }}" style="background-color: grey;color:white;" class="btn">Batal</a>
