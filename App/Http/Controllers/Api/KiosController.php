@@ -17,7 +17,11 @@ class KiosController extends Controller
     {
         $kios = Kios::all();
         
-        return response()
+        return response([
+            "kios" => $kios,
+            "status" => 200,
+            "message" => "Data Kios Berhasil Ditampilkan"
+        ], 200);
     }
 
     /**

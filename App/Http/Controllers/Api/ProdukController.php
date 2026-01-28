@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Produk;
@@ -19,19 +19,17 @@ class ProdukController extends Controller
     {
         $produks = Produk::with(['kategori', 'kios'])->get();
 
-        return view('admin.produk.index', compact('produks'));
+       return response()->json([
+            'status' => 'success',
+            'message' => 'Semua data produk berhasil ditampilkan',
+            'data' => $produks
+        ], 200);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        $kategori = Kategori::all();
-        $kios = Kios::all();
-
-        return view('admin.produk.create', compact('kategori', 'kios'));
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -83,21 +81,17 @@ class ProdukController extends Controller
 
         Produk::create($data);
 
-        return redirect()
-            ->route('produk.index')
-            ->with('success', 'Produk berhasil ditambahkan');
+       return response()->json([
+            'status' => 'success',
+            'message' => 'Produk berhasil ditambahkan',
+            'data' => $data
+        ], 201);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Produk $produk)
-    {
-        $kategori = Kategori::all();
-        $kios = Kios::all();
-
-        return view('admin.produk.edit', compact('produk', 'kategori', 'kios'));
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -153,9 +147,11 @@ class ProdukController extends Controller
 
         $produk->update($data);
 
-        return redirect()
-            ->route('produk.index')
-            ->with('success', 'Produk berhasil diperbarui');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Produk berhasil diperbarui',
+            'data' => $data
+        ], 200);
     }
 
     /**
@@ -171,8 +167,11 @@ class ProdukController extends Controller
 
         $produk->delete();
 
-        return redirect()
-            ->route('produk.index')
-            ->with('success', 'Produk berhasil dihapus');
+       return response()->json([
+            'status' => 'success',
+            'message' => 'Produk berhasil dihapus',
+        ], 200);
     }
+
+   
 }

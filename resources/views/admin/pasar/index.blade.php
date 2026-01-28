@@ -47,19 +47,7 @@
                       <div class="row">
 
                       
-                      <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                          <input readonly id="lng" type="text" value="{{ $pasar->longitude }}" class="form-control" id="tb-pwd" placeholder="Longitude tidak terisi" />
-                          <label for="tb-pwd">Longitude</label>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                          <input readonly id="lat" type="text" value="{{ $pasar->latitude }}" class="form-control" id="tb-cpwd" placeholder="Password" />
-                          <label for="tb-cpwd">Latitude</label>
-                        </div>
-                      </div>
-                      </div>
+                     
 
 
                     

@@ -23,8 +23,18 @@ class Order extends Model
         'total_harga',
     ];
 
-    public function user()
+    public function pembeli()
+{
+    return $this->belongsTo(User::class, 'buyer_id');
+}
+    public function driver()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'driver_id');
     }
+
+    public function produk(){
+            return $this->belongsToMany(Produk::class, 'order_details', 'order_id', 'produk_id')->withPivot('jumlah', 'subtotal_harga')
+                    ->withTimestamps();
+     }
+
 }

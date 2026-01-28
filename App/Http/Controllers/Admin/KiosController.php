@@ -90,9 +90,10 @@ class KiosController extends Controller
     public function edit(Kios $kios)
     {
         $pasar = Pasar::first();
-        $pedagang = User::where('role', 'penjual')->get();
+        $pedagang = User::where('role', 'pedagang')->get();
+        
         $selectedPedagangid = $kios->user_id;
-        return view('admin.kios.edit', compact('kios', 'pasar', 'pedagang'));
+        return view('admin.kios.edit', data: compact('kios', 'pasar', 'pedagang', 'selectedPedagangid'));
     }
 
     /**
@@ -104,14 +105,14 @@ class KiosController extends Controller
             'nama_kios' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
-            'foto_kios' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'foto_kios' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
             'kontak' => 'nullable|string|max:100',
             'deskripsi' => 'nullable|string',
         ],
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
             'lokasi.required' => 'Alamat Kios wajib diisi.',
-            
+            'foto_kios.mimes' => 'Format foto harus berupa jpeg, png, jpg, atau svg.',
             'user_id.required' => 'Pemilik Kios wajib diisi.',
             'user_id.exists' => 'Pemilik Kios tidak valid.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
@@ -128,7 +129,7 @@ class KiosController extends Controller
 
         $kios->update($data);
 
-        return redirect()->route('admin.kios.index')->with('success', 'Kios Berhasil Diperbarui');
+        return redirect()->route('kios.index')->with('success', 'Kios Berhasil Diperbarui');
     }
 
     /**

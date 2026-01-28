@@ -4,7 +4,15 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title mb-3">Edit Data Produk</h4>
-
+        @if ($errors->any())
+                        <div style="background:#fee; padding:10px;">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif     
         <form action="{{ route('produk.update', $produk->id) }}" 
               method="POST" 
               enctype="multipart/form-data">
@@ -69,6 +77,15 @@
                                id="tb-harga"
                                value="{{ old('harga', $produk->harga) }}">
                         <label for="tb-harga" class="text-dark">Harga</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" value="{{ $produk->berat_satuan }}" name="berat_satuan" id="tb-bruto">
+                        <label for="tb-bruto" class="text-dark">Berat satuan/bruto (gram)</label>
                     </div>
                 </div>
             </div>

@@ -4,7 +4,15 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title mb-3">Tambah Data Produk</h4>
-
+        @if ($errors->any())
+                        <div style="background:#fee; padding:10px;">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif     
         <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
@@ -54,6 +62,16 @@
                     <div class="form-floating mb-3">
                         <input type="number" class="form-control" name="harga" id="tb-harga">
                         <label for="tb-harga" class="text-dark">Harga</label>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Berat satuan --}}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" name="berat_satuan" id="tb-bruto">
+                        <label for="tb-bruto" class="text-dark">Berat satuan/bruto (gram)</label>
                     </div>
                 </div>
             </div>

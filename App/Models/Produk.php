@@ -15,8 +15,9 @@ class Produk extends Model
         'kios_id',
         'harga',
         'stok',
+        'berat satuan',
         'deskripsi',
-        'foto_produk',
+        'foto',
     ];
 
     public function kategori()

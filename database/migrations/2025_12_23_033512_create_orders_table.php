@@ -41,19 +41,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-         Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_detail_id');
-            $table->unsignedBigInteger('produk_id');
-            $table->integer('jumlah');
-            $table->integer('harga_satuan');
-            $table->integer('subtotal');
-
-            $table->foreign('order_detail_id')->references('id')->on('order_details')->onDelete('cascade');
-            $table->foreign('produk_id')->references('id')->on('produks')->onDelete('cascade');
-            $table->timestamps();
-        });
-
+        
         Schema::create('order_chats', function (Blueprint $table) {
             $table->id();
 

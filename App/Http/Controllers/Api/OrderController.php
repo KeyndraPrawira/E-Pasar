@@ -1,18 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Keranjang;
+use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
-class KeranjangController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
+        $order = Order::all();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Semua data order berhasil ditampilkan',
+            'data' => $order
+        ], 200);
     }
 
     /**
@@ -34,7 +40,7 @@ class KeranjangController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Keranjang $keranjang)
+    public function show(Order $order)
     {
         //
     }
@@ -42,7 +48,7 @@ class KeranjangController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Keranjang $keranjang)
+    public function edit(Order $order)
     {
         //
     }
@@ -50,7 +56,7 @@ class KeranjangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Keranjang $keranjang)
+    public function update(Request $request, Order $order)
     {
         //
     }
@@ -58,7 +64,7 @@ class KeranjangController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Keranjang $keranjang)
+    public function destroy(Order $order)
     {
         //
     }

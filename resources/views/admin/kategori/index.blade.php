@@ -56,7 +56,7 @@
                         
                       </tr>
                       @empty
-                      <h4 class="d-flex justify-content-center">Belum ada data kios</h4>
+                      <p style="color:red">*belum ada data kategori</p>
                       <!-- end row -->
                       @endforelse
                     </tbody>

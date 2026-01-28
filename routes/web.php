@@ -10,15 +10,13 @@ use App\Http\Controllers\Admin\PasarController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\KiosController;
 use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\LandingpageController;
 use App\Models\User;
 use Filament\Facades\Filament;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingpageController::class, 'index'])->name('landingpage');
 
 Route::resource('login', LoginController::class);
-
 
 
 
@@ -27,7 +25,7 @@ Auth::routes();
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::resource('pasar', PasarController::class);
         Route::resource('pengguna', UserController::class);
-        Route::resource('kios', KiosController::class);
+        Route::resource('kios', KiosController::class)->parameters(['kios' => 'kios']);;
         Route::resource('kategori', KategoriController::class);
         Route::resource('produk', ProdukController::class);
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
