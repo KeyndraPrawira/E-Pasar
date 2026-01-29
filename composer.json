@@ -12,7 +12,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
-        "nuxtifyts/dash-stack-theme": "v2.x-dev"
+        "nuxtifyts/dash-stack-theme": "v2.x-dev",
+        "realrashid/sweet-alert": "^7.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.6",

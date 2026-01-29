@@ -81,7 +81,9 @@ class KiosController extends Controller
      */
     public function show(Kios $kios)
     {
-        //
+        $pasar = Pasar::first();
+        $pedagang = User::where('role', 'pedagang')->get();
+        return view('admin.kios.show', data: compact('kios', 'pasar', 'pedagang'));
     }
 
     /**
@@ -141,6 +143,8 @@ class KiosController extends Controller
         if($kios->foto && Storage::disk('public')->exists($kios->foto)){
             Storage::disk('public')->delete($kios->foto);
         }
+
+        toast('Kios Berhasil Dihapus', 'success');
         $kios->delete();
         return redirect()->route('admin.kios.index')->with('success', 'Kios Berhasil Dihapus');
     }

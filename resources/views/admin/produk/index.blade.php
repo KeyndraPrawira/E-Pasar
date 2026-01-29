@@ -10,7 +10,7 @@
                     <h4>Data Produk</h4>
                 </div>
                 <div class="col text-end">
-                    <a href="{{ route('produk.create') }}" class="btn btn-primary">
+                    <a href="{{ route('produks.create') }}" class="btn btn-primary">
                         <h5 class="text-white">Tambah Produk</h5>
                     </a>
                 </div>
@@ -45,21 +45,16 @@
                                 @endif
                             </td>
                             <td class="d-flex gap-2">
-                                <a href="{{ route('produk.edit', $p->id) }}" 
+                                <a href="{{ route('produks.edit', $p->id) }}" 
                                    class="btn btn-success">
                                     <i class="ti ti-pencil"></i>
                                 </a>
                             
-
-                                <form action="{{ route('produk.destroy', $p->id) }}" 
-                                      method="POST"
-                                      onsubmit="return confirm('Yakin mau hapus produk ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger">
-                                        <i class="ti ti-trash"></i>
-                                    </button>
-                                </form>
+                                <a href="{{ route('produks.destroy', $p->id) }}" 
+                                   class="btn btn-danger" 
+                                   id="delete-form"
+                                   data-confirm-delete="true">
+                                    <i class="ti ti-trash"></i>
                             </td>
                         </tr>
                         @empty
@@ -84,6 +79,25 @@ $(document).ready(function () {
             responsive: true
         });
     }
+});
+
+$(document).on('submit', '.delete-form', function (e) {
+    e.preventDefault();
+
+    let form = this;
+
+    Swal.fire({
+       
+        showCancelButton: true,
+        confirmButtonColor: 'rgb(252, 10, 10)',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
 });
 </script>
 @endpush

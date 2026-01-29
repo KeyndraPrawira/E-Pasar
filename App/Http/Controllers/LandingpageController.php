@@ -54,15 +54,17 @@ class LandingpageController extends Controller
      * Detail produk
      */
     public function productDetail($id)
-    {
-        $product = Produk::with(['kategori', 'kios'])->findOrFail($id);
-        $relatedProducts = Produk::where('kategori_id', $product->kategori_id)
-                                 ->where('id', '!=', $product->id)
-                                 ->where('stok', '>', 0)
-                                 ->limit(4)
-                                 ->get();
+{
+    $product = Produk::with(['kategori', 'kios'])->findOrFail($id);
 
-        return view('product-details', compact('product', 'relatedProducts'));
+    $relatedProducts = Produk::where('kategori_id', $product->kategori_id)
+        ->where('id', '!=', $product->id)
+        ->where('stok', '>', 0)
+        ->limit(4)
+        ->get();
+
+    return view('product-details', compact('product', 'relatedProducts'));
     }
+
 
 }

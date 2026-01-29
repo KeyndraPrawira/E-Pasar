@@ -15,7 +15,7 @@ use App\Models\User;
 use Filament\Facades\Filament;
 
 Route::get('/', [LandingpageController::class, 'index'])->name('landingpage');
-
+Route::get('/detail-produk/{id}', [LandingpageController::class, 'productDetail'])->name('detail-produk');
 Route::resource('login', LoginController::class);
 
 
@@ -25,9 +25,10 @@ Auth::routes();
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::resource('pasar', PasarController::class);
         Route::resource('pengguna', UserController::class);
-        Route::resource('kios', KiosController::class)->parameters(['kios' => 'kios']);;
+        Route::resource('kios', KiosController::class)->parameters(['kios' => 'kios']);
+        Route::resource('produks', ProdukController::class);
         Route::resource('kategori', KategoriController::class);
-        Route::resource('produk', ProdukController::class);
+        
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 

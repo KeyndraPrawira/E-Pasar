@@ -15,7 +15,6 @@ class Kios extends Model
         'lokasi',
         'pasar_id',
         'user_id',
-        'kontak',
         'deskripsi',
         'foto_kios',
     ];

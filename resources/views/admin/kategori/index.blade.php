@@ -46,13 +46,8 @@
                             -
                         @endif </td>
                         <td><a href="{{ route('kategori.edit', $k->id) }}" class="btn btn-success"><i class="ti ti-pencil"></i></a>
-                         <form action="{{ route('kategori.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="ti ti-trash"></i>
-                                        </button>
-                                    </form></td>
+                      <a href="{{ route('kategori.destroy', $k->id) }}" class="btn btn-danger" data-confirm-delete="true"><i class="ti ti-trash"></i></a>   
+                      </td>
                         
                       </tr>
                       @empty
@@ -84,5 +79,20 @@ $(document).ready(function () {
         });
     }
 });
+
+    // Target the form by its ID
+  
+$(document).on('submit', '.delete-form', function (e) {
+    e.preventDefault();
+
+    let form = this;
+
+    
+});
+
+
+       
+   
 </script>
+
 @endpush

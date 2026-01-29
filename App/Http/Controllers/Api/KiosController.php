@@ -7,6 +7,7 @@ use App\Models\Pasar;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Test\Constraint\ResponseFormatSame;
 
 class KiosController extends Controller
 {
@@ -27,12 +28,7 @@ class KiosController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        $pasar = Pasar::first();
-        $penjual = User::where('role', 'pedagang')->get();
-        return view('admin.kios.create', compact('pasar', 'penjual'));
-    }
+   
 
     /**
      * Store a newly created resource in storage.
@@ -45,7 +41,7 @@ class KiosController extends Controller
             'user_id' => 'required|exists:users,id|unique:kios,user_id',
             'pasar_id' => 'required|exists:pasars,id', 
             'foto_kios' => 'nullable|max:2048',
-            'kontak' => 'nullable|string|max:100',
+            
             'deskripsi' => 'nullable|string',
         ],
         [
@@ -71,7 +67,11 @@ class KiosController extends Controller
 
         Kios::create($data);
 
-        return redirect()->route('kios.index')->with('success', 'Kios Berhasil Ditambahkan');
+        return response()->json([
+            "kios" => $data,
+            "status" => 201,
+            "message" => "Kios Berhasil Ditambahkan"
+        ], 201);
         
 
     }

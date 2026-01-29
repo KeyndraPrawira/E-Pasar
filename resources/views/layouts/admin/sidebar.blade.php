@@ -69,18 +69,20 @@
             <!-- ---------------------------------- -->
             <li class="sidebar-item">
   <a class="sidebar-link has-arrow"
-     data-bs-toggle="collapse"
-     href="#menuProduk"
-     aria-expanded="false">
+   href="javascript:void(0)"
+   data-bs-toggle="collapse"
+   data-bs-target="#menuProduk"
+   aria-expanded="false">
     <span class="rounded-3">
       <i class="ti ti-app-window"></i>
     </span>
     <span class="hide-menu">Produk</span>
-  </a>
+</a>
+
 
   <ul class="collapse first-level" id="menuProduk">
     <li class="sidebar-item">
-      <a href="{{ route('produk.index') }}"  class="sidebar-link">
+      <a href="{{ route('produks.index') }}"  class="sidebar-link">
         <i class="ti ti-circle"></i>
         <span class="hide-menu">Data Produk</span>
       </a>

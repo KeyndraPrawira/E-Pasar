@@ -57,6 +57,20 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
         ]);
 
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'nomor_telepon' => $request->nomor_telepon,
+            'role' => $request->role,
+        ]);
+
+        $token = $user->createToken('api-token')->plainTextToken;
+        return response()->json([
+            'token' => $token,
+            'user' => $user
+        ], 201);
+
     }
 }
 

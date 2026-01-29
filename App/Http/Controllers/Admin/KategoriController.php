@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KategoriController extends Controller
 {
@@ -15,6 +16,9 @@ class KategoriController extends Controller
     public function index()
     {
         $kategori = Kategori::all();
+         $title = 'Hapus data!';
+        $text = 'Apakah anda yakin ingin menghapus data ini?';
+        confirmDelete($title, $text);
         
         return view('admin.kategori.index', compact('kategori'));
     }
@@ -45,6 +49,7 @@ class KategoriController extends Controller
             'nama_kategori' => $request->nama_kategori,
             'deskripsi' => $request->deskripsi,
         ]);
+        Alert::success('Sukses!', 'Kategori berhasil ditambahkan.');
 
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan.');
     }

@@ -92,11 +92,7 @@ class PasarController extends Controller
 
         $pasar->update($data);
         
-        $data = [
-            'data' => $request,
-            'status' => 200,
-            'message' => 'Data pasar berhasil ditampilkan',
-        ];
+        toast('Data pasar berhasil diperbarui', 'success');
         return redirect()->route('pasar.index')->with('success', 'Data pasar berhasil diperbarui.');
     }
 
@@ -107,8 +103,5 @@ class PasarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pasar $pasar)
-    {
-        //
-    }
+   
 }

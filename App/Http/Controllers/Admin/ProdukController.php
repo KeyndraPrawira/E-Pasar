@@ -7,8 +7,12 @@ use App\Models\Produk;
 use App\Models\Kategori;
 use App\Models\Kios;
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
+
+use function Laravel\Prompts\confirm;
 
 class ProdukController extends Controller
 {
@@ -18,7 +22,10 @@ class ProdukController extends Controller
     public function index()
     {
         $produks = Produk::with(['kategori', 'kios'])->get();
+        $title = 'Hapus data!';
+        $text = 'Apakah anda yakin ingin menghapus data ini?';
 
+        confirmDelete($title, $text);;
         return view('admin.produk.index', compact('produks'));
     }
 
@@ -83,8 +90,9 @@ class ProdukController extends Controller
 
         Produk::create($data);
 
+                toast('Produk berhasil disimpan', 'success');
         return redirect()
-            ->route('produk.index')
+            ->route('produks.index')
             ->with('success', 'Produk berhasil ditambahkan');
     }
 
@@ -95,6 +103,7 @@ class ProdukController extends Controller
     {
         $kategori = Kategori::all();
         $kios = Kios::all();
+       
 
         return view('admin.produk.edit', compact('produk', 'kategori', 'kios'));
     }
@@ -152,9 +161,10 @@ class ProdukController extends Controller
 
 
         $produk->update($data);
+        toast('Produk berhasil edit', 'success');
 
         return redirect()
-            ->route('produk.index')
+            ->route('produks.index')
             ->with('success', 'Produk berhasil diperbarui');
     }
 
@@ -170,9 +180,10 @@ class ProdukController extends Controller
         }
 
         $produk->delete();
+        toast('Produk berhasil dihapus', 'success');
 
         return redirect()
-            ->route('produk.index')
+            ->route('produks.index')
             ->with('success', 'Produk berhasil dihapus');
     }
 }

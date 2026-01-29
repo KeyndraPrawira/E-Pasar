@@ -396,7 +396,8 @@
             background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
             padding: 40px;
             border-radius: 20px;
-            margin-bottom: 80px;
+            margin-top: 50px;
+            margin-bottom: 50px;
             border-left: 5px solid #0ea5e9;
         }
 
@@ -994,7 +995,7 @@
             <div class="section-header">
                 <div class="section-label">LOKASI</div>
                 <h2 class="section-title">Temukan Kami</h2>
-                <p class="section-subtitle">Kunjungi pasar kami atau pesan online untuk pengiriman ke rumah</p>
+                <p class="section-subtitle">Pesan online untuk pengiriman ke rumah</p>
             </div>
             <div class="map-container">
                 <div id="map"></div>
@@ -1027,6 +1028,7 @@
             <!-- Products Grid -->
             <div class="products-grid" id="productsGrid">
                 @forelse($products as $produk)
+                <a href="{{ route('detail-produk', $produk->id) }}" style="text-decoration: none; color: inherit;">
                 <div class="product-card" data-category="{{ $produk->kategori_id }}">
                     <div class="product-image-wrapper">
                         @if($produk->foto)
@@ -1059,6 +1061,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
                 @empty
                 <div class="empty-state">
                     <i class="ti ti-basket-off"></i>

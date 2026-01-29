@@ -21,7 +21,8 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.7/css/responsive.dataTables.min.css">
 <link rel="stylesheet" href="{{ asset('template/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css')}}" />
-    
+    <!-- Tambahkan SEBELUM tag </body> -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <title>Admin Pajajap</title>
 </head>
@@ -50,6 +51,8 @@
     </div>
   </div>
 
+@include('sweetalert::alert')
+
 <div class="dark-transparent sidebartoggler"></div>
 </div>
 </body>
@@ -63,7 +66,7 @@
 <script>
 $(document).ready(function(){
   $('.counter-carousel').owlCarousel({
-    loop:true,
+    loop:false,
     margin:10,
     nav:false,
     dots:false,

@@ -14,6 +14,9 @@ class UserController extends Controller
     public function index()
     {
         $user = User::all();
+        $title = 'Hapus data!';
+        $text = 'Apakah anda yakin ingin menghapus data ini?';
+        confirmDelete($title, $text);
         return view('admin.Pengguna.index', compact('user'));
     }
 
@@ -57,7 +60,7 @@ class UserController extends Controller
                 'role' => $request->role,
                 'nomor_telepon' => $request->nomor_telepon,
             ]);
-        
+        toast('Pengguna berhasil ditambahkan', 'success');
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
@@ -107,6 +110,8 @@ class UserController extends Controller
             ]
         );
 
+        toast('Pengguna berhasil diperbarui', 'success');
+
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
@@ -117,6 +122,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
+        toast('Pengguna berhasil dihapus', 'success');
         return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 }
