@@ -108,7 +108,8 @@ class KiosController extends Controller
             'lokasi' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
             'foto_kios' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
-            'kontak' => 'nullable|string|max:100',
+            'jam_buka' => 'required|date_format:H:i:s',
+            'jam_tutup' => 'required|date_format:H:i:s',
             'deskripsi' => 'nullable|string',
         ],
         [

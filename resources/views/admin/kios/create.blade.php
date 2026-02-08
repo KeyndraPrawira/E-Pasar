@@ -52,12 +52,24 @@
                       </div>
                       
                       <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-floating mb-3">
-                            <input type="number" class="form-control" name="kontak" id="tb-nomor_telepon" />
-                            <label for="tb-nomor_telepon" class="text-dark">Nomor telepon</label>
-                            </div>
+                            <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                          <input readonly id="lng" name="jam_buka" type="datetime-local" value="{{ $kios->jam_buka }}" class="form-control {{ $errors->has('jam_buka') ? 'is-invalid' : '' }}" id="tb-pwd" placeholder="jam_buka tidak terisi" />
+                          @error('jam_buka')
+                            <small style="color:red">{{ $message }}</small>
+                            @enderror
+                          <label  class="text-dark" for="tb-pwd">jam_buka</label>
                         </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                          <input readonly id="lat" name="jam_tutup" type="datetime-local" value="{{ $kios->jam_tutup }}" class="form-control {{ $errors->has('jam_tutup') ? 'is-invalid' : '' }}" id="tb-cpwd" placeholder="jam_tutup tidak terisi" />
+                          @error('jam_tutup')
+                            <small style="color:red">{{ $message }}</small>
+                            @enderror
+                          <label  class="text-dark" for="tb-cpwd">Jam tutup</label>
+                        </div>
+                      </div>
                       </div>
 
                       <div class="row">

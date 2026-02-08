@@ -19,7 +19,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/api-kios', controller: KiosController::class);
 });
 
+Route::post('/send-otp', [ApiAuthController::class, 'sendOtp']);
+Route::post('/verify-otp', [ApiAuthController::class, 'verifyOtp']);
+
 Route::get('/ping', function () {
     return response()->json(['msg' => 'api hidup v12']);
 });
+
+
 

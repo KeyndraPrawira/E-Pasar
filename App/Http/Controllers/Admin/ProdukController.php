@@ -25,8 +25,17 @@ class ProdukController extends Controller
         $title = 'Hapus data!';
         $text = 'Apakah anda yakin ingin menghapus data ini?';
 
-        confirmDelete($title, $text);;
+        confirmDelete($title, $text);
         return view('admin.produk.index', compact('produks'));
+    }
+
+    public function downloadPDF()
+    {
+        $produks = Produk::with(['kategori', 'kios'])->get();
+
+        $pdf = Pdf::loadView('admin.produk.produk_pdf', compact('produks'));
+
+        return $pdf->download('produk.pdf');
     }
 
     /**
@@ -166,6 +175,12 @@ class ProdukController extends Controller
         return redirect()
             ->route('produks.index')
             ->with('success', 'Produk berhasil diperbarui');
+    }
+
+    public function show(Produk $produk)
+    {
+        $produk->load(['kategori', 'kios']);
+        return view('admin.produk.show', compact('produk'));
     }
 
     /**

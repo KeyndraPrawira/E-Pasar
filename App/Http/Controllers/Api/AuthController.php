@@ -3,12 +3,40 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmailOtp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Mail\OtpMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
+
+    public function sendOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        // hapus OTP lama
+        EmailOtp::where('email', $request->email)->delete();
+
+        $otp = rand(100000, 999999);
+
+        EmailOtp::create([
+            'email' => $request->email,
+            'otp' => Hash::make($otp),
+            'expired_at' => now()->addMinutes(3)
+        ]);
+
+        Mail::to($request->email)->send(new OtpMail($otp));
+
+        return response()->json([
+            'message' => 'OTP terkirim'
+        ]);
+    }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -38,39 +66,48 @@ class AuthController extends Controller
     }
 
 
-     public function register(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'nomor_telepon' => 'required|string|max:15',
-            'role' => 'required|in:user,pedagang,driver',
-            
-        ], 
-        [
-            'name.required' => 'Nama wajib diisi.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah terdaftar.',
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 8 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-        ]);
+    public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8',
+        'nomor_telepon' => 'required|string|max:15',
+        'otp' => 'required|string',
+        'role' => 'nullable'
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'nomor_telepon' => $request->nomor_telepon,
-            'role' => $request->role,
-        ]);
+   $otpData = EmailOtp::where('email', $request->email)
+    ->where('expired_at', '>', now())
+    ->first();
 
-        $token = $user->createToken('api-token')->plainTextToken;
-        return response()->json([
-            'token' => $token,
-            'user' => $user
-        ], 201);
+        if (!$otpData || !Hash::check($request->otp, $otpData->otp)) {
+            return response()->json([
+                'message' => 'OTP invalid'
+            ], 400);
+        }
 
-    }
+
+    // CREATE USER
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'nomor_telepon' => $request->nomor_telepon,
+        'role' => $request->role ?? 'user',
+    ]);
+
+    //  HAPUS OTP (sekali pakai)
+    $otpData->delete();
+
+    // TOKEN
+    $token = $user->createToken('api-token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Register berhasil',
+        'token' => $token,
+        'user' => $user
+    ], 201);
+}
 }
 

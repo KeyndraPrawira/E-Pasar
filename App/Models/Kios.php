@@ -17,6 +17,8 @@ class Kios extends Model
         'user_id',
         'deskripsi',
         'foto_kios',
+        'jam_buka',
+        'jam_tutup'
     ];
 
     public function pasar()

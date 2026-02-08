@@ -10,6 +10,9 @@
                     <h4>Data Produk</h4>
                 </div>
                 <div class="col text-end">
+                    <a href="{{ route('produks.pdf') }}" class="btn btn-danger">
+                        <i class="ti ti-file-text"></i> Download PDF
+                    </a>
                     <a href="{{ route('produks.create') }}" class="btn btn-primary">
                         <h5 class="text-white">Tambah Produk</h5>
                     </a>

@@ -41,6 +41,7 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="row mb-3">
+                            
                             <div class="col-md-4 text-muted">Jumlah Produk</div>
                             <div class="col-md-8 fw-semibold">
                                 {{ $kios->produk->count() }} Produk

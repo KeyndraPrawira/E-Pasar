@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\KiosController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\LandingpageController;
+use App\Http\Controllers\Pedagang\DashboardController as PedagangDashboardController;
+use App\Http\Controllers\Pedagang\ProdukController as PedagangProdukController;
 use App\Models\User;
 use Filament\Facades\Filament;
 
@@ -22,13 +24,22 @@ Route::resource('login', LoginController::class);
 
 
 Auth::routes();
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->middleware('role:admin')->group(function () {
         Route::resource('pasar', PasarController::class);
         Route::resource('pengguna', UserController::class);
         Route::resource('kios', KiosController::class)->parameters(['kios' => 'kios']);
         Route::resource('produks', ProdukController::class);
+         Route::get('/produks/pdf', [ProdukController::class, 'downloadPdf'])->name('produks.pdf');
         Route::resource('kategori', KategoriController::class);
+       
+        
+
         
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
+
+Route::middleware('role:pedagang')->group(function () {
+    Route::get('/dashboard', [PedagangDashboardController::class, 'index'])->name('pedagang.dashboard');
+    Route::resource('produk', PedagangProdukController::class);
 });
 

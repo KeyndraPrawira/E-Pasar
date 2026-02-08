@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('nama_kios');
             $table->text('lokasi');
             $table->unsignedBigInteger('user_id');
-           
+           $table->time('jam_buka');
+              $table->time('jam_tutup');
             $table->text('deskripsi')->nullable();
             $table->string('foto_kios')->nullable();
 

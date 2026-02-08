@@ -74,9 +74,10 @@ class DatabaseSeeder extends Seeder
             'lokasi' => 'Jl. Pasar No.1, Kota',
             'pasar_id' => 1,
             'user_id' => 2,
-            'kontak' => '081234567890',
             'deskripsi' => 'Kios jualan pakaian.',
             'foto_kios' => '',
+            'jam_buka' => '08:00:00',
+            'jam_tutup' => '20:00:00'
         ]);
 
        
