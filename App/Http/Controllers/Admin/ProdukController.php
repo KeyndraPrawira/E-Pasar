@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use App\Models\Kategori;
 use App\Models\Kios;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class ProdukController extends Controller
         $title = 'Hapus data!';
         $text = 'Apakah anda yakin ingin menghapus data ini?';
 
+        
         confirmDelete($title, $text);
         return view('admin.produk.index', compact('produks'));
     }

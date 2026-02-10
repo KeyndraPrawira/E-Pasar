@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kios;
 use App\Models\Pasar;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,6 +24,17 @@ class KiosController extends Controller
         ];
         return view('admin.kios.index', compact('kios'));
     }
+
+     public function downloadPDF()
+    {
+        $pasar = Pasar::first();
+        $kios = Kios::with(['produk'])->get();
+
+        $pdf = Pdf::loadView('admin.kios.kios_pdf', compact('kios', 'pasar'));
+
+        return $pdf->download('kios.pdf');
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -47,6 +59,8 @@ class KiosController extends Controller
             'foto_kios' => 'nullable|max:2048',
             'kontak' => 'nullable|string|max:100',
             'deskripsi' => 'nullable|string',
+            'jam_buka' => 'required',
+            'jam_tutup' => 'required',
         ],
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
@@ -57,6 +71,8 @@ class KiosController extends Controller
             'pasar_id.required' => 'Pasar wajib diisi.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
             'pasar_id.exists' => 'Pasar tidak valid.',
+            'jam_buka' => 'Jam buka wajib diisi',
+            'jam_tutup' => 'Jam tutup wajib diisi',
         ]);
 
 
@@ -108,8 +124,8 @@ class KiosController extends Controller
             'lokasi' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
             'foto_kios' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
-            'jam_buka' => 'required|date_format:H:i:s',
-            'jam_tutup' => 'required|date_format:H:i:s',
+            'jam_buka' => 'required',
+            'jam_tutup' => 'required',
             'deskripsi' => 'nullable|string',
         ],
         [
@@ -119,6 +135,8 @@ class KiosController extends Controller
             'user_id.required' => 'Pemilik Kios wajib diisi.',
             'user_id.exists' => 'Pemilik Kios tidak valid.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
+            'jam_buka' => 'Jam buka wajib diisi',
+            'jam_tutup' => 'Jam tutup wajib diisi',
         ]);
 
         $data = $request->only(['nama_kios', 'lokasi', 'user_id',  'kontak', 'deskripsi']);

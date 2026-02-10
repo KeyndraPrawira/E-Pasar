@@ -13,29 +13,29 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
 
-    public function sendOtp(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email'
-        ]);
+    // public function sendOtp(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email'
+    //     ]);
 
-        // hapus OTP lama
-        EmailOtp::where('email', $request->email)->delete();
+    //     // hapus OTP lama
+    //     EmailOtp::where('email', $request->email)->delete();
 
-        $otp = rand(100000, 999999);
+    //     $otp = rand(100000, 999999);
 
-        EmailOtp::create([
-            'email' => $request->email,
-            'otp' => Hash::make($otp),
-            'expired_at' => now()->addMinutes(3)
-        ]);
+    //     EmailOtp::create([
+    //         'email' => $request->email,
+    //         'otp' => Hash::make($otp),
+    //         'expired_at' => now()->addMinutes(3)
+    //     ]);
 
-        Mail::to($request->email)->send(new OtpMail($otp));
+    //     Mail::to($request->email)->send(new OtpMail($otp));
 
-        return response()->json([
-            'message' => 'OTP terkirim'
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => 'OTP terkirim'
+    //     ]);
+    // }
 
     public function login(Request $request)
     {
@@ -73,19 +73,19 @@ class AuthController extends Controller
         'email' => 'required|string|email|max:255|unique:users',
         'password' => 'required|string|min:8',
         'nomor_telepon' => 'required|string|max:15',
-        'otp' => 'required|string',
-        'role' => 'nullable'
+        // 'otp' => 'required|string',
+   
     ]);
 
-   $otpData = EmailOtp::where('email', $request->email)
-    ->where('expired_at', '>', now())
-    ->first();
+//    $otpData = EmailOtp::where('email', $request->email)
+//     ->where('expired_at', '>', now())
+//     ->first();
 
-        if (!$otpData || !Hash::check($request->otp, $otpData->otp)) {
-            return response()->json([
-                'message' => 'OTP invalid'
-            ], 400);
-        }
+//         if (!$otpData || !Hash::check($request->otp, $otpData->otp)) {
+//             return response()->json([
+//                 'message' => 'OTP invalid'
+//             ], 400);
+//         }
 
 
     // CREATE USER
@@ -94,19 +94,18 @@ class AuthController extends Controller
         'email' => $request->email,
         'password' => Hash::make($request->password),
         'nomor_telepon' => $request->nomor_telepon,
-        'role' => $request->role ?? 'user',
+        'role' => 'user',
     ]);
 
     //  HAPUS OTP (sekali pakai)
-    $otpData->delete();
+    // $otpData->delete();
 
-    // TOKEN
-    $token = $user->createToken('api-token')->plainTextToken;
+   
 
     return response()->json([
         'message' => 'Register berhasil',
-        'token' => $token,
-        'user' => $user
+        'user' => $user,
+        'status' => 'true'
     ], 201);
 }
 }

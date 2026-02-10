@@ -52,7 +52,7 @@
                        <div class="row">
                             <div class="col-md-6">
                         <div class="form-floating mb-3">
-                          <input readonly id="lng" name="jam_buka" type="datetime-local" value="{{ $kios->jam_buka }}" class="form-control {{ $errors->has('jam_buka') ? 'is-invalid' : '' }}" id="tb-pwd" placeholder="jam_buka tidak terisi" />
+                          <input   name="jam_buka" type="time" value="{{ $kios->jam_buka }}" class="form-control {{ $errors->has('jam_buka') ? 'is-invalid' : '' }}" id="tb-pwd" placeholder="jam_buka tidak terisi" />
                           @error('jam_buka')
                             <small style="color:red">{{ $message }}</small>
                             @enderror
@@ -61,7 +61,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating mb-3">
-                          <input readonly id="lat" name="jam_tutup" type="datetime-local" value="{{ $kios->jam_tutup }}" class="form-control {{ $errors->has('jam_tutup') ? 'is-invalid' : '' }}" id="tb-cpwd" placeholder="jam_tutup tidak terisi" />
+                          <input  name="jam_tutup" type="time" value="{{ $kios->jam_tutup }}" class="form-control {{ $errors->has('jam_tutup') ? 'is-invalid' : '' }}" id="tb-cpwd" placeholder="jam_tutup tidak terisi" />
                           @error('jam_tutup')
                             <small style="color:red">{{ $message }}</small>
                             @enderror

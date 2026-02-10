@@ -21,7 +21,7 @@
 
                         @if ($kios->foto_kios)
                             <img 
-                                src="{{ asset('storage' . $kios->foto_kios) }}" 
+                                src="{{ asset('storage/' . $kios->foto_kios) }}" 
                                 class="img-fluid rounded"
                                 style="max-height: 250px; object-fit: cover;"
                                 alt="Foto Kios"
@@ -44,7 +44,7 @@
                             
                             <div class="col-md-4 text-muted">Jumlah Produk</div>
                             <div class="col-md-8 fw-semibold">
-                                {{ $kios->produk->count() }} Produk
+                               <p>{{ $kios->produk->count() }} produk</p> 
                             </div>
                         </div>
 
@@ -72,21 +72,21 @@
 
                         <div class="row mb-3">
                             <div class="col-md-4 text-muted">Lokasi</div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 fw-semibold">
                                 {{ $kios->lokasi ?? '-' }}
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <div class="col-md-4 text-muted">Nomor Telepon</div>
-                            <div class="col-md-8">
-                                {{ $kios->nomor_telepon ?? '-' }}
+                            <div class="col-md-4 text-muted">Jam Operasional</div>
+                            <div class="col-md-8 fw-semibold">
+                                {{ $kios->jam_buka.  '-' .$kios->jam_tutup}}
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-4 text-muted">Deskripsi</div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 fw-semibold">
                                 {{ $kios->deskripsi ?? '-' }}
                             </div>
                         </div>
@@ -97,12 +97,20 @@
 
         </div>
 
+
         {{-- ACTION --}}
         <div class="d-flex justify-content-end mt-4">
             <a href="{{ route('kios.edit', $kios->id) }}" class="btn btn-warning">
                 <i class="ti ti-edit"></i> Edit Kios
             </a>
         </div>
+
+        <h4 class="card-title mb-0">Daftar Produk</h4>
+        <div class="card">
+            
+        </div>
+
+
 
     </div>
 </div>

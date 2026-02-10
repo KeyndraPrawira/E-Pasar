@@ -16,6 +16,9 @@
                         <h4>Data Kios</h4>
                     </div>
                     <div class="col text-end">
+                      <a href="{{ route('kios.pdf') }}" class="btn btn-danger">
+                        <i class="ti ti-file-text"></i> Download PDF
+                    </a>
                         <a href="{{ route('kios.create') }}" class="btn btn-primary">Tambah Kios</a>
                     </div>
                 </div>

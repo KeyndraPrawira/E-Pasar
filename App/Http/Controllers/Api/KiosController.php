@@ -43,6 +43,8 @@ class KiosController extends Controller
             'foto_kios' => 'nullable|max:2048',
             
             'deskripsi' => 'nullable|string',
+            'jam_buka' => 'required|time:H:i',
+            'jam_tutup' => 'required|time:H:i',
         ],
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
@@ -53,6 +55,8 @@ class KiosController extends Controller
             'pasar_id.required' => 'Pasar wajib diisi.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
             'pasar_id.exists' => 'Pasar tidak valid.',
+            'jam_buka.required' => 'Jam buka wajib diisi',
+            'jam_tutup.required' => 'Jam tutup wajib diisi',
         ]);
 
 
@@ -107,6 +111,8 @@ class KiosController extends Controller
             'foto_kios' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             'kontak' => 'nullable|string|max:100',
             'deskripsi' => 'nullable|string',
+            'jam_buka' => 'required',
+            'jam_tutup' => 'required'
         ],
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',

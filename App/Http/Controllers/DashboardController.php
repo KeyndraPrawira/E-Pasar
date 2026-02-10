@@ -6,6 +6,7 @@ use App\Models\Pasar;
 use App\Models\Kios;
 use App\Models\Produk;
 use App\Models\Kategori;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -17,6 +18,13 @@ class DashboardController extends Controller
         
         // Jumlah Kios
         $totalKios = Kios::count();
+
+        $totalPedagang = User::where('role', 'pedagang')->count();
+
+        $totalDriver = User::where('role', 'driver')->count();
+
+        $totalUser = User::where('role', 'user')->count();
+           
         
         // Jumlah Produk
         $totalProduk = Produk::count();
@@ -40,7 +48,10 @@ class DashboardController extends Controller
             'totalKategori',
             'produkPerKategori',
             'chartLabels',
-            'chartData'
+            'chartData',
+            'totalDriver',
+            'totalPedagang',
+            'totalUser'
         ));
     }
 }

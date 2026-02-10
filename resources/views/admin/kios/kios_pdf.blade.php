@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Data Produk</title>
+    <title>Data Kios {{ $pasar->nama_pasar }}</title>
     <style>
         body {
             font-family: sans-serif;
@@ -33,19 +33,35 @@
     <thead>
         <tr>
             <th>Nama</th>
-            <th>Kategori</th>
-            <th>Harga</th>
-            <th>Kios</th>
+            <th>Jam operasional</th>
+            <th>Produk</th>
+     
             
         </tr>
     </thead>
     <tbody>
-        @forelse ($produks as $p)
+        @forelse ($kios as $k)
         <tr>
-            <td>{{ $p->nama_produk }}</td>
-            <td>{{ $p->kategori->nama_kategori ?? '-' }}</td>
-            <td>Rp {{ number_format($p->harga, 0, ',', '.') }}</td>
-            <td>{{ $p->kios->nama_kios ?? '-' }}</td>
+            <td rowspan="{{ count($k->produk) }}">{{ $k->nama_kios }}</td>
+            <td>
+                @if ($k->jam_buka && $k->jam_tutup)
+                    {{ \Carbon\Carbon::parse($k->jam_buka)->format('H:i') }} - {{ \Carbon\Carbon::parse($k->jam_tutup)->format('H:i') }}
+                @else
+                    -
+                @endif
+
+            </td>
+            <td>
+                @forelse($k->produk as $p)
+                    <tr>
+                        <td>{{ $p->nama_produk ?? '-' }}</td>
+                    </tr>
+                @empty
+                    -
+                @endforelse
+            </td>
+            
+           
         </tr>
         @empty
         <tr>
