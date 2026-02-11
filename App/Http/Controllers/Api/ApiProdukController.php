@@ -17,7 +17,18 @@ class ApiProdukController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+       
+        if ($user->role === 'pedagang') {
+            $kios = Kios::where('user_id', auth()->id())->first();
+            
+        $produks = Produk::with(['kategori', 'kios'])
+        ->where('kios_id', $kios->id)
+        ->get();
+
+        }else{
         $produks = Produk::with(['kategori', 'kios'])->get();
+        }
 
        return response()->json([
             'status' => 'success',
@@ -39,7 +50,6 @@ class ApiProdukController extends Controller
         $request->validate([
             'nama_produk'   => 'required|string|max:255',
             'kategori_id'   => 'required|exists:kategoris,id',
-            'kios_id'       => 'required|exists:kios,id',
             'harga'         => 'required|numeric|min:0',
             'stok'          => 'required|integer|min:0',
             'berat_satuan'  => 'required|string',
@@ -48,7 +58,6 @@ class ApiProdukController extends Controller
         ], [
             'nama_produk.required' => 'Nama produk wajib diisi.',
             'kategori_id.required' => 'Kategori wajib dipilih.',
-            'kios_id.required'     => 'Kios wajib dipilih.',
             'harga.required'       => 'Harga wajib diisi.',
             'berat_satuan.required' => 'Berat satuan wajib diisi.',
             'stok.required'        => 'Stok wajib diisi.',
@@ -58,12 +67,15 @@ class ApiProdukController extends Controller
         $data = $request->only([
             'nama_produk',
             'kategori_id',
-            'kios_id',
             'harga',
             'berat_satuan',
             'stok',
             'deskripsi'
         ]);
+
+        $kios = Kios::where('user_id', auth()->id())->first();
+
+        $data['kios_id'] = $kios->id;
 
         if ($request->hasFile('foto')) {
                 $tanggal = Carbon::now()->format('dmY');

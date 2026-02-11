@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('pasar_id');
             $table->string('nama_kios');
             $table->text('lokasi');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
            $table->time('jam_buka');
               $table->time('jam_tutup');
             $table->text('deskripsi')->nullable();
