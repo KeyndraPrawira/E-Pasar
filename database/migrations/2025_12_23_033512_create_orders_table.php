@@ -19,6 +19,7 @@ return new class extends Migration
     $table->integer('ongkir')->default(0);        // total_harga + ongkir
     $table->enum('status', ['dalam_proses', 'dikirim', 'selesai'])->default('dalam_proses');
     $table->string('metode_pembayaran')->nullable();
+    
     $table->text('alamat_pengiriman');
     $table->decimal('latitude', 12, 8);
     $table->decimal('longitude', 12, 8);
@@ -34,9 +35,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('produk_id');
+            $table->unsignedBigInteger('kios_id');
+            $table->enum('status', ['dalam_proses', 'diantar', 'habis', 'selesai'])->default('dalam_proses');
+            
             $table->integer('jumlah');
             $table->integer('subtotal_harga');
-
+            $table->foreign('produk_id')->references('id')->on('produks')->onDelete('cascade');
+            $table->foreign('kios_id')->references('id')->on('kios')->onDelete('cascade');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->timestamps();
         });

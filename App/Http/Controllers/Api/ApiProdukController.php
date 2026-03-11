@@ -15,27 +15,28 @@ class ApiProdukController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $user = auth()->user();
-       
-        if ($user->role === 'pedagang') {
-            $kios = Kios::where('user_id', auth()->id())->first();
-            
-        $produks = Produk::with(['kategori', 'kios'])
-        ->where('kios_id', $kios->id)
-        ->get();
+       public function index(Request $request)
+{
+    $query = Produk::query();
 
-        }else{
-        $produks = Produk::with(['kategori', 'kios'])->get();
-        }
-
-       return response()->json([
-            'status' => 'success',
-            'message' => 'Semua data produk berhasil ditampilkan',
-            'data' => $produks
-        ], 200);
+    if ($request->kategori_id) {
+        $query->where('kategori_id', $request->kategori_id);
     }
+
+    if ($request->search) {
+        $query->where('nama_produk', 'like', '%' . $request->search . '%');
+    }
+
+    $produk = $query->latest()->get();
+
+    
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Semua data produk berhasil ditampilkan',
+        'data' => $produk
+    ], 200);
+}
 
     /**
      * Show the form for creating a new resource.
@@ -45,6 +46,27 @@ class ApiProdukController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+   public function myProduk($id)
+{
+    $produk = Produk::find($id);
+
+    if (!$produk) {
+        return response()->json(['message' => 'Produk tidak ditemukan'], 404);
+    }
+
+    $userId = auth()->id();
+    $kios = Kios::where('user_id', $userId)->first();
+
+    if (!$kios) {
+        return response()->json(['message' => 'Kios tidak ditemukan'], 404);
+    }
+
+    if ($produk->kios_id !== $kios->id) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    return response()->json($produk, 200);
+}
     public function store(Request $request)
     {
         $request->validate([
@@ -74,7 +96,12 @@ class ApiProdukController extends Controller
         ]);
 
         $kios = Kios::where('user_id', auth()->id())->first();
-
+        if (!$kios) {
+    return response()->json([
+        'status' => 'error',
+        'message' => 'User belum memiliki kios'
+    ], 404);    
+        }
         $data['kios_id'] = $kios->id;
 
         if ($request->hasFile('foto')) {

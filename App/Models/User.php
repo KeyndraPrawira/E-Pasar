@@ -20,4 +20,9 @@ class User extends Authenticatable
         'nomor_telepon',
         
     ];
+
+    public function kios()
+    {
+        return $this->hasMany(Kios::class, 'user_id');
+    }
 }

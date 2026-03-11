@@ -20,11 +20,27 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::create([
-            'name' => 'Admin',
+            'username' => 'Admin',
             'email' => 'admin@epasar.id',
             'password' => Hash::make('Admin123'),
             'role' => 'admin',
             'nomor_telepon' => '081234567890',
+        ]);
+        User::create([
+            'id' => 3,
+            'username' => 'Keyndra',
+            'email' => 'keyndra@gmail.com',
+            'password' => Hash::make('keyndra123'),
+            'role' => 'pedagang',
+            'nomor_telepon' => '081234567890',
+        ]);
+        User::create([
+            'id' => 4,
+            'username' => 'Adi',
+            'email' => 'adi@gmail.com',
+            'password' => Hash::make('adi12345'),
+            'role' => 'user',
+            'nomor_telepon' => '089463527393'
         ]);
 
          Pasar::create([
@@ -61,7 +77,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'id' => 2,
-            'name' => 'Tate',
+            'username' => 'Tate',
             'email' => 'tatemcrae@gmail.com',
             'password' => Hash::make('tate12345'),
             'role' => 'pedagang',

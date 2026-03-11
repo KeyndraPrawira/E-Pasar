@@ -19,16 +19,22 @@ class KiosController extends Controller
 {
     $user = auth()->user();
 
-    if ($user->role === 'pedagang') {
-        $kios = Kios::where('user_id', $user->id)->first();
+    if ($user->role == 'pedagang') {
+        $kios = Kios::where('user_id', $user->id)->get();
     } else {
         $kios = Kios::all();
     }
 
-    return response()->json([
-        'message' => 'kios yang ditemukan',
-        'kios' => $kios
-    ]);
+    return response()->json($kios, 200);
+}
+
+    public function myKios()
+{
+    $user = auth()->user();
+
+    $kios = Kios::where('user_id', $user->id)->get();
+
+    return response()->json($kios, 200);
 }
 
 
@@ -112,6 +118,7 @@ class KiosController extends Controller
      */
     public function update(Request $request, Kios $kios)
     {
+       
         if ($kios->user_id !== auth()->id()) {
             return response()->json([
                 'message' => 'Tidak diizinkan'
@@ -122,7 +129,6 @@ class KiosController extends Controller
             'nama_kios' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
             'foto_kios' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-            'kontak' => 'nullable|string|max:100',
             'deskripsi' => 'nullable|string',
             'jam_buka' => 'required|date_format:H:i',
             'jam_tutup' => 'required|date_format:H:i'
@@ -130,8 +136,6 @@ class KiosController extends Controller
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
             'lokasi.required' => 'Alamat Kios wajib diisi.',
-            'user_id.required' => 'Pemilik Kios wajib diisi.',
-            'user_id.exists' => 'Pemilik Kios tidak valid.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
             'jam_buka.required' => 'Isi jam buka terlebih dahulu',
             'jam_tutup.required' => 'Isi jam tutup terlebih dahulu',

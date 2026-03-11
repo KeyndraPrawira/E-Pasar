@@ -15,7 +15,7 @@ class Produk extends Model
         'kios_id',
         'harga',
         'stok',
-        'berat satuan',
+        'berat_satuan',
         'deskripsi',
         'foto',
     ];

@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('alamats', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->text('alamat_lengkap');
             $table->string('longitude');
             $table->string('latitude');
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

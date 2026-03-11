@@ -35,7 +35,7 @@
                       <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
-                            <input type="password" class="form-control" value="{{ $user->password }}" name="password" id="tb-password" />
+                            <input type="password" class="form-control"  name="password" id="tb-password" />
                             <label for="tb-password" class="text-dark">Password</label>
                             </div>
                         </div>

@@ -24,7 +24,7 @@ Route::resource('login', LoginController::class);
 
 
 Auth::routes();
-Route::prefix('admin')->middleware('role:admin')->group(function () {
+Route::prefix('admin')->middleware('admin:admin')->group(function () {
         Route::resource('pasar', PasarController::class);
         Route::resource('pengguna', UserController::class);
         Route::get('/kios/pdf', [KiosController::class, 'downloadPdf'])->name('kios.pdf');

@@ -48,13 +48,13 @@ class AuthController extends Controller
 
         
             if (! $user) {
-                return response()->json(['err' => 'email not found']);
+                return response()->json(['err' => 'email tidak ditemukan']);
             }
 
             if (! Hash::check($request->password, $user->password)) {
                 return response()->json([
-                    'input' => $request->password,
-                    'db' => $user->password
+                    
+                    'message' => 'password salah'
                 ]);
             }
         $token = $user->createToken('api-token')->plainTextToken;
