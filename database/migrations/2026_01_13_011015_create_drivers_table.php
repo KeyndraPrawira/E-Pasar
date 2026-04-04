@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('nomor_kendaraan')->unique();
             $table->string('jenis_kendaraan');
-            $table->string('foto_diri');
             $table->string('nomor_stnk');
             $table->string('nomor_sim');
             $table->timestamps();

@@ -18,11 +18,22 @@ class User extends Authenticatable
         'password',
         'role',
         'nomor_telepon',
+        'foto_profil',
+        'is_online'
         
+        
+    ];
+
+    protected $casts = [
+        'is_online' => 'boolean',
     ];
 
     public function kios()
     {
         return $this->hasMany(Kios::class, 'user_id');
+    }
+    public function alamat()
+    {
+        return $this->hasOne(Alamat::class, 'user_id');
     }
 }

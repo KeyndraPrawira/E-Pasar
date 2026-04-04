@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->unique();
             $table->text('alamat_lengkap');
-            $table->string('longitude');
-            $table->string('latitude');
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 11, 8)->nullable();
+            $table->decimal('jarak_km', 5, 2)->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

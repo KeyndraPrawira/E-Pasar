@@ -61,7 +61,7 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token,
-            'user' => $user
+            'data' => $user
         ]);
     }
 
@@ -108,5 +108,72 @@ class AuthController extends Controller
         'status' => 'true'
     ], 201);
 }
+
+    public function googleLogin(Request $request)
+    {
+        $request->validate([
+            'id_token' => 'required|string'
+        ]);
+
+        $client = new \Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]);
+        $payload = $client->verifyIdToken($request->id_token);
+
+        if (!$payload) {
+            return response()->json(['message' => 'Token tidak valid'], 401);
+        }
+
+        // Cek by google_id dulu, kalau ga ada cek by email
+        $user = User::where('google_id', $payload['sub'])
+                    ->orWhere('email', $payload['email'])
+                    ->first();
+
+        if (!$user) {
+            // Buat user baru
+            $user = User::create([
+                'name'       => $payload['name'],
+                'email'      => $payload['email'],
+                'google_id'  => $payload['sub'],
+                'foto_profil'=> $payload['picture'],
+                'password'   => null,
+                'role'       => 'user',
+            ]);
+            $isNewUser = true;
+        } else {
+            // Update google_id kalau login email biasa sebelumnya
+            if (!$user->google_id) {
+                $user->update(['google_id' => $payload['sub']]);
+            }
+            $isNewUser = false;
+        }
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'token'       => $token,
+            'user'        => $user,
+            'is_new_user' => $isNewUser,
+        ]);
+    }
+
+    // ==================== COMPLETE PROFILE ====================
+    public function completeProfile(Request $request)
+    {
+        $request->validate([
+            'username'      => 'required|unique:users,username|min:3',
+            'nomor_telepon' => 'required|string|max:15',
+        ]);
+
+        $user = $request->user(); // ambil user dari Sanctum token
+
+        $user->update([
+            'username'      => $request->username,
+            'nomor_telepon' => $request->nomor_telepon,
+        ]);
+
+        return response()->json([
+            'message' => 'Profil berhasil dilengkapi',
+            'user'    => $user,
+        ]);
+    }
 }
 

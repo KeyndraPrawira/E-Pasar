@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Kategori;
 use App\Models\Kios;
 use App\Models\Pasar;
+use App\Models\Produk;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::create([
-            'username' => 'Admin',
+            'name' => 'Admin',
             'email' => 'admin@epasar.id',
             'password' => Hash::make('Admin123'),
             'role' => 'admin',
@@ -28,7 +29,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'id' => 3,
-            'username' => 'Keyndra',
+            'name' => 'Keyndra',
             'email' => 'keyndra@gmail.com',
             'password' => Hash::make('keyndra123'),
             'role' => 'pedagang',
@@ -36,11 +37,19 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'id' => 4,
-            'username' => 'Adi',
+            'name' => 'Adi',
             'email' => 'adi@gmail.com',
             'password' => Hash::make('adi12345'),
             'role' => 'user',
             'nomor_telepon' => '089463527393'
+        ]);
+        User::create([
+            'id' => 6,
+            'name' => 'Rama Sutisna',
+            'email' => 'rama@gmail.com',
+            'password' => Hash::make('rama12345'),
+            'role' => 'driver',
+            'nomor_telepon' => '081234567890',
         ]);
 
          Pasar::create([
@@ -50,7 +59,10 @@ class DatabaseSeeder extends Seeder
             'longitude' => '106.845599',
             'latitude' => '-6.208763',
             'foto_pasar' => 'Pajajap.jpg',
-            'ongkir' => 10000,
+            'ongkir' => 100,
+            'minimal_ongkir' => 5000,
+            'biaya_layanan' => 500,
+            'biaya_berat_barang' => 2000,
             'kontak' => '081234567890',
             'deskripsi' => 'Pasar tradisional terbesar di kota ini.',
         ]);
@@ -77,7 +89,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'id' => 2,
-            'username' => 'Tate',
+            'name' => 'Tate',
             'email' => 'tatemcrae@gmail.com',
             'password' => Hash::make('tate12345'),
             'role' => 'pedagang',
@@ -94,6 +106,17 @@ class DatabaseSeeder extends Seeder
             'foto_kios' => '',
             'jam_buka' => '08:00:00',
             'jam_tutup' => '20:00:00'
+        ]);
+
+        Produk::create([
+            'nama_produk' => 'Keripik Singkong',
+            'harga' => 15000,
+            'berat_satuan' => 200,
+            'stok' => 50,
+            'kios_id' => 1,
+            'kategori_id' => 1,
+            'foto' => '',
+            'deskripsi' => 'Keripik singkong renyah dan gurih.'
         ]);
 
        

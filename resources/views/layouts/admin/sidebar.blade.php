@@ -87,10 +87,16 @@
         <span class="hide-menu">Data Produk</span>
       </a>
     </li>
-    <li class="sidebar-item">
+<li class="sidebar-item">
       <a href="{{ route('kategori.index') }}" class="sidebar-link">
         <i class="ti ti-circle"></i>
         <span class="hide-menu">Kategori</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a href="{{ route('kategori-laporan.index') }}" class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Kategori Laporan</span>
       </a>
     </li>
   </ul>

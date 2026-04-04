@@ -47,7 +47,7 @@
               <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                 <div class="d-flex align-items-center">
                   <div class="user-profile-img">
-                    <img src="../assets/template/images/profile/user-1.jpg" class="rounded-circle" width="35" height="35" alt="modernize-img" />
+                    <img src="{{ asset('img/user-profile.jpg') }}" class="rounded-circle" width="35" height="35" alt="profile admin" />
                   </div>
                 </div>
               </a>
@@ -57,7 +57,7 @@
                     <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                   </div>
                   <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                    <img src="../assets/template/images/profile/user-1.jpg" class="rounded-circle" width="80" height="80" alt="modernize-img" />
+                    <img src="{{ asset('img/user-profile.jpg') }}" class="rounded-circle" width="80" height="80" alt="profile admin" />
                     <div class="ms-3">
                       <h5 class="mb-1 fs-3">{{ Auth::user()->name}}</h5>
                       <span class="mb-1 d-block">{{ Auth::user()->role}}</span>
@@ -66,27 +66,9 @@
                       </p>
                     </div>
                   </div>
-                  <div class="message-body">
-                    <a href="" class="py-8 px-7 mt-8 d-flex align-items-center">
-                      <span class="d-flex align-items-center justify-content-center text-bg-light rounded-1 p-6">
-                        <img src="../assets/template/images/svgs/icon-account.svg" alt="modernize-img" width="24" height="24" />
-                      </span>
-                      <div class="w-100 ps-3">
-                        <h6 class="mb-1 fs-3 fw-semibold lh-base">Profile Saya</h6>
-                        <span class="fs-2 d-block text-body-secondary">Account Settings</span>
-                      </div>
-                    </a>
-                  </div>
+                 
                   <div class="d-grid py-4 px-7 pt-8">
-                    <div class="upgrade-plan bg-primary-subtle position-relative overflow-hidden rounded-4 p-4 mb-9">
-                      <div class="row">
-                        <div class="col-6">
-                          <div class="m-n4 unlimited-img">
-                            <img src="../assets/template/images/backgrounds/unlimited-bg.png" alt="modernize-img" class="w-100" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                       @csrf
                     </form>

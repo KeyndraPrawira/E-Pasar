@@ -95,11 +95,44 @@
                       
                     
                    
-                    <div class="row">
+                      <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
                             <input name="ongkir" type="number" class="form-control {{ $errors->has('ongkir') ? 'is-invalid' : '' }}" id="tb-ongkir" value="{{ $pasar->ongkir }}" />
                             <label for="tb-ongkir" class="text-dark">Ongkir (Per-meter)</label>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                            <input name="minimal_ongkir" type="number" class="form-control {{ $errors->has('minimal_ongkir') ? 'is-invalid' : '' }}" id="tb-minimal-ongkir" value="{{ $pasar->minimal_ongkir }}" />
+                            <label for="tb-minimal-ongkir" class="text-dark">Minimal Ongkir</label>
+                            @error('minimal_ongkir')
+                            <small style="color:red">{{ $message }}</small>
+                            @enderror
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                            <input name="biaya_layanan" type="number" class="form-control {{ $errors->has('biaya_layanan') ? 'is-invalid' : '' }}" id="tb-biaya-layanan" value="{{ $pasar->biaya_layanan }}" />
+                            <label for="tb-biaya-layanan" class="text-dark">Biaya Layanan</label>
+                            @error('biaya_layanan')
+                            <small style="color:red">{{ $message }}</small>
+                            @enderror
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                            <input name="biaya_berat_barang" type="number" class="form-control {{ $errors->has('biaya_berat_barang') ? 'is-invalid' : '' }}" id="tb-biaya-berat" value="{{ $pasar->biaya_berat_barang }}" />
+                            <label for="tb-biaya-berat" class="text-dark">Biaya Berat per Kg</label>
+                            @error('biaya_berat_barang')
+                            <small style="color:red">{{ $message }}</small>
+                            @enderror
                             </div>
                         </div>
                       </div>

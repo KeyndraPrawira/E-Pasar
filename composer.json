@@ -9,12 +9,14 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
         "dotswan/filament-map-picker": "^2.1",
+        "google/apiclient": "^2.19",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
         "maatwebsite/excel": "*",
         "nuxtifyts/dash-stack-theme": "v2.x-dev",
+        "pusher/pusher-php-server": "^7.2",
         "realrashid/sweet-alert": "^7.3"
     },
     "require-dev": {
@@ -32,7 +34,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+        "app/Helpers/HaversineHelper.php" 
+    ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -15,6 +15,9 @@ class Pasar extends Model
         'latitude',
         'foto_pasar',
         'ongkir',
+        'biaya_layanan'.
+        'biaya_berat_barang',
+        'minimal_ongkir',
         'kontak',
         'deskripsi',
     ];

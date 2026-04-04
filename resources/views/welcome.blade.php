@@ -1004,74 +1004,7 @@
     </section>
     @endif
 
-    <!-- Products Section -->
-    <section class="products-section" id="produk">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-label">PRODUK</div>
-                <h2 class="section-title">Katalog Produk Kami</h2>
-                <p class="section-subtitle">Produk segar dan berkualitas langsung dari pedagang terpercaya</p>
-            </div>
-
-            <!-- Category Filter -->
-            <div class="filter-section">
-                <button class="filter-btn active" data-category="all">
-                    <i class="ti ti-category"></i> Semua Produk
-                </button>
-                @foreach($categories as $kategori)
-                <button class="filter-btn" data-category="{{ $kategori->id }}">
-                    {{ $kategori->nama_kategori }}
-                </button>
-                @endforeach
-            </div>
-
-            <!-- Products Grid -->
-            <div class="products-grid" id="productsGrid">
-                @forelse($products as $produk)
-                <a href="{{ route('detail-produk', $produk->id) }}" style="text-decoration: none; color: inherit;">
-                <div class="product-card" data-category="{{ $produk->kategori_id }}">
-                    <div class="product-image-wrapper">
-                        @if($produk->foto)
-                            <img src="{{ asset('storage/' . $produk->foto) }}" alt="{{ $produk->nama_produk }}" class="product-image">
-                        @else
-                            <div class="product-image-placeholder">
-                                <i class="ti ti-shopping-bag"></i>
-                            </div>
-                        @endif
-                        <span class="product-badge">{{ $produk->kategori->nama_kategori ?? 'Umum' }}</span>
-                    </div>
-                    
-                    <div class="product-content">
-                        <h3 class="product-name">{{ $produk->nama_produk }}</h3>
-                        <p>dari {{ $produk->kios->nama_kios }}</p>
-                        <p class="product-description">
-                            {{ $produk->deskripsi ?? 'Produk segar berkualitas tinggi dengan harga terjangkau' }}
-                        </p>
-                        <div class="product-footer">
-                            <div class="product-price">
-                                Rp {{ number_format($produk->harga, 0, ',', '.') }}
-                                @if($produk->berat_satuan)
-                                <small>/ {{ $produk->berat_satuan }}</small>
-                                @endif
-                            </div>
-                            <div class="product-stock">
-                                <i class="ti ti-package"></i>
-                                <span>{{ $produk->stok }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </a>
-                @empty
-                <div class="empty-state">
-                    <i class="ti ti-basket-off"></i>
-                    <h3>Belum Ada Produk</h3>
-                    <p>Produk akan segera ditambahkan</p>
-                </div>
-                @endforelse
-            </div>
-        </div>
-    </section>
+    
     @endif
 
     <!-- Footer -->

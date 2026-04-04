@@ -50,6 +50,7 @@
                         <td>{{ $k->kontak }}</td>
                         <td><img src="{{ asset(path: 'storage/'.$k->foto_kios) }}" width="80px" alt="foto-kios"></td>
                         <td><a href="{{ route('kios.edit', $k->id) }}" class="btn btn-success"><i class="ti ti-pencil"></i></a>
+                        <a href="{{ route('kios.show', $k->id) }}" class="btn btn-warning"><i class="ti ti-eye"></i></a>
                          <form action="{{ route('kios.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus?')">
                                         @csrf
                                         @method('DELETE')

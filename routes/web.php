@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\Pedagang\DashboardController as PedagangDashboardController;
 use App\Http\Controllers\Pedagang\ProdukController as PedagangProdukController;
+use App\Http\Controllers\Admin\KategoriLaporanController;
 use App\Models\User;
 use Filament\Facades\Filament;
 
@@ -32,6 +33,7 @@ Route::prefix('admin')->middleware('admin:admin')->group(function () {
                  Route::get('/produks/pdf', [ProdukController::class, 'downloadPdf'])->name('produks.pdf');
         Route::resource('produks', ProdukController::class);
         Route::resource('kategori', KategoriController::class);
+        Route::resource('kategori-laporan', KategoriLaporanController::class);
        
         
 

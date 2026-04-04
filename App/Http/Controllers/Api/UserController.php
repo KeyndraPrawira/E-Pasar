@@ -143,4 +143,32 @@ class UserController extends Controller
             'message' => 'Pengguna berhasil dihapus',
         ], 200);
     }
+
+    public function setActive(Request $request)
+{
+    $user = $request->user();
+
+    if ($user->role !== 'driver') {
+        return response()->json([
+            'message' => 'Unauthorized'
+        ], 403);
+    }
+
+    $request->validate([
+        'is_online' => 'required|boolean'
+    ]);
+
+    $user->update([
+        'is_online' => $request->is_online
+    ]);
+    if ($user->is_online == 1) {
+        $status = 'online';
+    }else {
+        $status = 'offline';
+    }   
+    return response()->json([
+        'message' => 'Status aktif berhasil diubah',
+        'status' => $status
+    ]);
+}
 }

@@ -35,4 +35,9 @@ class Kios extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function laporans()
+    {
+        return $this->morphMany(Laporan::class, 'reportable');
+    }
 }

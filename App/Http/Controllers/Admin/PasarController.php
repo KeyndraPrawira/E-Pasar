@@ -57,7 +57,10 @@ class PasarController extends Controller
             'kontak' => 'required|string',
             'longitude' => 'required',
             'latitude' => 'required',
-            'ongkir' => 'required|numeric|min:0',
+'ongkir' => 'required|numeric|min:0',
+            'minimal_ongkir' => 'required|numeric|min:0',
+            'biaya_layanan' => 'required|numeric|min:0',
+            'biaya_berat_barang' => 'required|numeric|min:0',
             'foto_pasar' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
         ],
         
@@ -70,6 +73,7 @@ class PasarController extends Controller
             'foto_pasar.image' => 'tolong masukkan gambar valid',
             'latitude.required' => 'Latitude wajib diisi',
             'ongkir.required' => 'Ongkir wajib diisi',
+            'minimal_ongkir.required' => 'Isi biaya dasar ongkir'
         ]);
 
        $data = $request->only(
@@ -80,7 +84,10 @@ class PasarController extends Controller
             'kontak',
             'longitude',
             'latitude',
-            'ongkir',   
+'ongkir',   
+            'minimal_ongkir',
+            'biaya_layanan',
+            'biaya_berat_barang'
 
         ]);
         if($request->hasFile('foto_pasar')){

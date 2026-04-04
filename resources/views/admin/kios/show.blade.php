@@ -105,10 +105,62 @@
             </a>
         </div>
 
-        <h4 class="card-title mb-0">Daftar Produk</h4>
-        <div class="card">
-            
+
+        <h5 class="card-title mb-4 mt-4"> Daftar Produk <strong>{{ $kios->nama_kios }}</strong></h5>
+        
+@forelse($kios->produk as $produk)
+        <div class="row g-4 mb-4">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card h-100 border-0 shadow-sm">
+                    {{-- GAMBAR FULL WIDTH VERTIKAL --}}
+                    <div class="position-relative">
+                        @if($produk->foto)
+                            <img src="{{ asset('storage/' . $produk->foto) }}" 
+                                 class="card-img-top h-100" 
+                                 style="height: 200px; object-fit: cover;"
+                                 alt="{{ $produk->nama_produk }}">
+                        @else
+                            <div class="bg-light d-flex align-items-center justify-content-center" 
+                                 style="height: 200px;">
+                                <i class="ti ti-image-off fs-2 text-muted"></i>
+                            </div>
+                        @endif
+                    </div>
+                    
+                    {{-- INFO FULL WIDTH --}}
+                    <div class="card-body p-3">
+                        <h6 class="card-title mb-2">{{ Str::limit($produk->nama_produk, 35) }}</h6>
+                        
+                        <div class="mb-2">
+                            <span class="badge bg-primary">{{ $produk->kategori->nama_kategori ?? 'Uncategorized' }}</span>
+                        </div>
+                        
+                        <div class="mb-2 small text-muted">
+                            <i class="ti ti-package me-1"></i>
+                            Stok: <strong>{{ number_format($produk->stok) }} {{ $produk->stok > 1 ? 'pcs' : 'pc' }}</strong>
+                        </div>
+                        
+                        <div class="mb-3 fw-semibold text-success fs-5">
+                            Rp {{ number_format($produk->harga, 0, ',', '.') }}
+                        </div>
+                        
+                        <a href="{{ route('produks.show', $produk->id) }}" class="btn btn-primary w-100">
+                            <i class="ti ti-eye"></i> Lihat Detail
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+        @empty
+        <div class="card border-dashed h-100">
+            <div class="card-body text-center py-5 text-muted">
+                <i class="ti ti-package-off fs-1 mb-3 opacity-50"></i>
+                <h6>Belum ada produk di kios ini</h6>
+                <p class="mb-0">Kios {{ $kios->nama_kios }} belum memiliki produk yang terdaftar.</p>
+            </div>
+        </div>
+        @endforelse
+
 
 
 

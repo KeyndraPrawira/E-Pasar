@@ -29,4 +29,8 @@ class Produk extends Model
     {
         return $this->belongsTo(Kios::class, 'kios_id');
     }
+    public function laporans()
+{
+    return $this->morphMany(Laporan::class, 'reportable');
+}
 }

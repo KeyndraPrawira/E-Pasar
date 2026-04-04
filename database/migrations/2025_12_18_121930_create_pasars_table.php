@@ -17,6 +17,9 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('foto_pasar')->nullable();
             $table->integer('ongkir')->default(0);
+            $table->integer('minimal_ongkir')->default(0);
+                    $table->unsignedInteger('biaya_layanan')->default(0);
+                    $table->unsignedInteger('biaya_berat_barang')->default(0);
             $table->string('kontak')->nullable();
             $table->text('deskripsi')->nullable();
             $table->decimal('longitude', 12, 8);
