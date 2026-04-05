@@ -44,14 +44,40 @@
               </a>
             </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ route('pengguna.index') }}"  aria-expanded="false">
-                <span>
-                  <i class="ti ti-users"></i>
-                </span>
-                <span class="hide-menu">Pengguna</span>
-              </a>
-            </li>
+         <li class="sidebar-item">
+  <a class="sidebar-link has-arrow"
+   href="javascript:void(0)"
+   data-bs-toggle="collapse"
+   data-bs-target="#menuPengguna"
+   aria-expanded="false">
+    <span class="rounded-3">
+      <i class="ti ti-app-window"></i>
+    </span>
+    <span class="hide-menu">Pengguna</span>
+</a>
+
+
+  <ul class="collapse first-level" id="menuPengguna">
+    <li class="sidebar-item">
+      <a href="{{ route('pelanggan.index') }}"  class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Data Pelanggan</span>
+      </a>
+    </li>
+<li class="sidebar-item">
+      <a href="{{ route('driver.index') }}" class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Driver</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a href="{{ route('pedagang.index') }}" class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Pedagang</span>
+      </a>
+    </li>
+  </ul>
+</li>
 
 
             <li class="sidebar-item">

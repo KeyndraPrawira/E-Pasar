@@ -13,8 +13,6 @@ class OrderDetail extends Model
         'produk_id',
         'jumlah',
         'status',
-        'produk_pengganti_id',
-        'catatan',
         'catatan_driver',
         'subtotal_harga',
         'harga_satuan',

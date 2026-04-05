@@ -2,49 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 
-class UserController extends Controller
+class PedagangController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $user = User::where('role', 'user')->get();
+     public function index(){
+        $pedagang = User::with('kios')->where('role', 'pedagang')->get();
         $title = 'Hapus data!';
         $text = 'Apakah anda yakin ingin menghapus data ini?';
         confirmDelete($title, $text);
-        return view('admin.Pengguna.index', compact('user'));
+        return view('admin.pedagang.index', compact('pedagang'));
     }
 
-   
-
-
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.Pengguna.create');
+    public function createPedagang(){
+        return view('admin.pedagang.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:user,pedagang,driver',
             'nomor_telepon' => 'required|string|max:15',
-            
         ], [
             'name.required' => 'Nama wajib diisi.',
             'email.required' => 'Email wajib diisi.',
@@ -53,56 +37,43 @@ class UserController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-            'role.required' => 'Role wajib dipilih.',
-            'role.in' => 'Role yang dipilih tidak valid.',
             'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
         ]);
+    
+
+    
+
         User::create(   
             [
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'role' => $request->role,
+                'role' => "pedagang",
                 'nomor_telepon' => $request->nomor_telepon,
             ]);
-        toast('Pengguna berhasil ditambahkan', 'success');
-        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil ditambahkan.');
+        toast('Pedagang berhasil ditambahkan', 'success');
+        return redirect()->route('pedagang.index')->with('success', 'Pedagang berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
+    public function show(User $user){
+        return view('admin.pedagang.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
+    public function edit($id){
         $user = User::findOrFail($id);
-        return view('admin.Pengguna.edit', compact('user'));
+        return view('admin.pedagang.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
+    public function update(Request $request, User $user){
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255' . $user->id,
             'password' => 'nullable',
-            'role' => 'required|in:user,pedagang,driver',
             'nomor_telepon' => 'required|string|max:15',
         ], [
             'name.required' => 'Nama wajib diisi.',
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
-            'role.required' => 'Role wajib dipilih.',
-            'role.in' => 'Role yang dipilih tidak valid.',
             'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
         ]);
 
@@ -111,24 +82,24 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'role' => $request->role,
                 'nomor_telepon' => $request->nomor_telepon,
             ]
         );
 
-        toast('Pengguna berhasil diperbarui', 'success');
+        toast('Pedagang berhasil diperbarui', 'success');
 
-        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil diperbarui.');
+        return redirect()->route('pedagang.index')->with('success', 'Pedagang berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $user = User::findOrFail($id);
         $user->delete();
-        toast('Pengguna berhasil dihapus', 'success');
-        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil dihapus.');
+
+        toast('Pedagang berhasil dihapus', 'success');
+        return redirect()->route('pedagang.index')->with('success', 'Pedagang berhasil dihapus.');
     }
 }

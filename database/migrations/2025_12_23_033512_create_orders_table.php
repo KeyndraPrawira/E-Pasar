@@ -173,6 +173,10 @@ return new class extends Migration
             $table->unsignedBigInteger('harga_satuan');
             $table->unsignedInteger('jumlah');
             $table->unsignedBigInteger('subtotal_harga');
+            $table->enum('status', [
+                'diambil',      // sudah diambil
+                'tidak_ada',    // stok habis
+            ])->default('diambil');
 
             $table->text('catatan')->nullable();
 

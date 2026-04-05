@@ -14,10 +14,18 @@ return new class extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->integer('nomor_kendaraan')->unique();
+            $table->string('nomor_kendaraan')->unique();
             $table->string('jenis_kendaraan');
             $table->string('nomor_stnk');
             $table->string('nomor_sim');
+            $table->string('foto_ktp');
+            $table->string('foto_sim');
+            $table->string('foto_stnk');
+            $table->string('foto_kendaraan');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+
+
             $table->timestamps();
         });
     }

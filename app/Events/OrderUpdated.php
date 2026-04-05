@@ -25,11 +25,17 @@ class OrderUpdated implements ShouldBroadcast
     public function broadcastOn()
 {
     return [
-        new Channel('user.' . $this->order->buyer_id), // untuk buyer
-        new Channel('orders'),  
+       new PrivateChannel('user.' . $this->order->buyer_id), // ✅ PRIVATE
+               new Channel('driver.' . $this->order->driver_id), // driver (kalau sudah ada)
+        new Channel('orders'), //
             // untuk semua driver
     ];
 
     
+}
+
+public function broadcastAs()
+{
+    return 'order.updated';
 }
 }

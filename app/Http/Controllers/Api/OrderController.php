@@ -416,6 +416,20 @@ class OrderController extends Controller
             'data' => $item
         ]);
     }
+    public function OrderHistory()
+    {
+        $orders = Order::where('buyer_id', auth()->id())
+            ->orWhere('driver_id', auth()->id())
+            ->with('orderDetails.produk', 'buyer', 'driver')
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Data order berhasil ditampilkan',
+            'data'    => $orders,
+        ]);
+    }
 
     public function detailOrderHistory($id)
     {
@@ -670,20 +684,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function OrderHistory()
-    {
-        $orders = Order::where('buyer_id', auth()->id())
-            ->orWhere('driver_id', auth()->id())
-            ->with('orderDetails.produk', 'buyer', 'driver')
-            ->latest()
-            ->get();
-
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Data order berhasil ditampilkan',
-            'data'    => $orders,
-        ]);
-    }
+    
 
     // ── HELPER — tentukan role user terhadap order ────────────
     private function resolveRole($user, Order $order): ?string

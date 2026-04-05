@@ -25,37 +25,39 @@ Route::get('/kategori', [KategoriController::class, 'index']);
 Route::apiResource('/produk', ApiProdukController::class)->only(['index', 'show']);
 Route::get('/pasar', [PasarController::class, 'index']);
 
+
+Route::middleware('auth:sanctum', 'role:driver')->group(function(){
+    Route::post('/set-active', [UserController::class, 'setActive']);
+    Route::get('/orders/available', [OrderController::class, 'index']);      // ← spesifik dulu
+    Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
+    Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
+    Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
+    Route::patch('/order-item/{id}', [OrderController::class, 'updateItemStatus']);
+    Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
+    Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
     Route::get('/profile/me', [ProfileController::class, 'show']);
     Route::put('/profile/me', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
-        Route::get('/orders/{id}', [OrderController::class, 'show']);
+        Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
+
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+    
+
 
 });
+
 
 Route::middleware('auth:sanctum', 'role:admin')->group(function () {
     Route::apiResource('user', UserController::class);
     Route::apiResource('laporans', LaporanController::class);
 });
 
-Route::middleware('auth:sanctum', 'role:driver')->group(function(){
-    Route::post('/set-active', [UserController::class, 'setActive']);
-    Route::get('/orders/available', [OrderController::class, 'index']);
-    Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
-    Route::get('/orders/active/{order}', [OrderController::class, 'activeOrder']);
-    Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
-    Route::get('/orders/{id}', [OrderController::class, 'show']);
-        Route::get('/orders/my', [OrderController::class, 'myOrders']);
 
-    Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
-    Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
-    Route::patch('/order-item/{id}', [OrderController::class, 'updateItemStatus']);
-    Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
-   Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
-
-});
 
 Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::get('/kios', [KiosController::class, 'index']);
@@ -64,9 +66,8 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::post('/profile/alamat', [ProfileController::class, 'setAlamat']);
     Route::post('/orders/checkout', [OrderController::class, 'store']);
     Route::get('/orders/my', [OrderController::class, 'myOrders']);
-        Route::get('/orders/{id}', [OrderController::class, 'show']);
-        Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
-
+    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
+    Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
        Route::apiResource('laporans', LaporanController::class)->only(['index', 'store']);
 });
 

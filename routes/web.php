@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\KategoriController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,7 @@ use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\Pedagang\DashboardController as PedagangDashboardController;
 use App\Http\Controllers\Pedagang\ProdukController as PedagangProdukController;
 use App\Http\Controllers\Admin\KategoriLaporanController;
+use App\Http\Controllers\Admin\PedagangController;
 use App\Models\User;
 use Filament\Facades\Filament;
 
@@ -27,14 +29,15 @@ Route::resource('login', LoginController::class);
 Auth::routes();
 Route::prefix('admin')->middleware('admin:admin')->group(function () {
         Route::resource('pasar', PasarController::class);
-        Route::resource('pengguna', UserController::class);
+        Route::resource('pelanggan', UserController::class);
         Route::get('/kios/pdf', [KiosController::class, 'downloadPdf'])->name('kios.pdf');
         Route::resource('kios', KiosController::class)->parameters(['kios' => 'kios']);
                  Route::get('/produks/pdf', [ProdukController::class, 'downloadPdf'])->name('produks.pdf');
         Route::resource('produks', ProdukController::class);
         Route::resource('kategori', KategoriController::class);
         Route::resource('kategori-laporan', KategoriLaporanController::class);
-       
+       Route::resource('pedagang', PedagangController::class)->parameters(['pedagang' => 'pedagang']);
+       Route::resource('driver', DriverController::class)->parameters(['driver' => 'driver']);
         
 
         

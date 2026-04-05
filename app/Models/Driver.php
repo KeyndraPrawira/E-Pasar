@@ -12,7 +12,11 @@ class Driver extends Model
         'nomor_kendaraan',
         'jenis_kendaraan',
         'nomor_stnk',
-        'nomor_sim'
+        'nomor_sim',
+        'foto_ktp',
+        'foto_sim',
+        'foto_stnk',
+        'foto_kendaraan'
 
     ];
 

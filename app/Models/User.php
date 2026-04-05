@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     public function kios()
     {
-        return $this->hasMany(Kios::class, 'user_id');
+        return $this->hasOne(Kios::class, 'user_id');
     }
     public function alamat()
     {
