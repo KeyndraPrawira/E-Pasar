@@ -27,7 +27,7 @@ class ApiProdukController extends Controller
         $query->where('nama_produk', 'like', '%' . $request->search . '%');
     }
 
-    $produk = $query->latest()->get();
+    $produk = $query->with('kios')->latest()->get();
 
     
 
