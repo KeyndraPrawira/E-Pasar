@@ -16,7 +16,7 @@
                         <h4>Data Pengguna</h4>
                     </div>
                     <div class="col text-end">
-                        <a href="{{ route('pengguna.create') }}" class="btn btn-primary">Tambah Pengguna</a>
+                        <a href="{{ route('pelanggan.create') }}" class="btn btn-primary">Tambah Pengguna</a>
                     </div>
                 </div>
                 
@@ -43,8 +43,8 @@
                         <td>{{ $pengguna->role }}</td>
                         <td>{{ $pengguna->email }}</td>
                         <td>{{ $pengguna->nomor_telepon }}</td>
-                        <td align="center"><a href="{{ route('pengguna.edit', $pengguna->id) }}" class="btn btn-success"><i class="ti ti-pencil"></i></a>
-                         <form action="{{ route('pengguna.destroy', $pengguna->id) }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus?')">
+                        <td align="center"><a href="{{ route('pelanggan.edit', $pengguna->id) }}" class="btn btn-success"><i class="ti ti-pencil"></i></a>
+                         <form action="{{ route('pelanggan.destroy', $pengguna->id) }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">

@@ -17,6 +17,7 @@ class DriverController extends Controller
      */
     public function index(): View
     {
+        
         $drivers = Driver::with(['user', 'verifier'])
             ->latest()
             ->get();

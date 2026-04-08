@@ -68,7 +68,7 @@ class RegisterController extends Controller
 
             return back()
                 ->withInput()
-                ->with('error', 'Gagal mengirim OTP ke email. Silakan coba lagi.');
+                ->with('error', 'Gagal mengirim OTP ke email. Silakan coba lagi.'.$exception->getMessage());
         }
 
         session([
