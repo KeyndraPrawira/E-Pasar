@@ -26,7 +26,7 @@
                             
 
                             <p style="margin:0 0 20px; font-size:14px; color:#555; line-height:1.6;">
-                                Gunakan kode OTP di bawah ini untuk melanjutkan proses pendaftaran akun kamu di <b>Pajajap</b>.
+                                Gunakan kode OTP di bawah ini untuk melanjutkan proses registrasi dan pendaftaran driver kamu di <b>Pajajap</b>.
                             </p>
 
                             <!-- OTP BOX -->

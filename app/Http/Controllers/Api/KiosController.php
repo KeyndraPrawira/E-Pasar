@@ -105,8 +105,31 @@ class KiosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Kios $kios)
+    public function updateStatus(Kios $kios, Request $request)
     {
+        if ($kios->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'Tidak diizinkan'
+            ], 403);
+        }
+        
+            $request->validate([
+                'status' => 'required|in:buka,tutup',
+            ], [
+                'status.required' => 'Status kios wajib diisi',
+                'status.in' => 'Status kios harus berupa buka atau tutup',
+            ]);
+
+
+
+        $kios->status = $request->status;
+        $kios->save();
+
+        return response()->json([
+            'message' => 'Status kios berhasil diubah',
+            'data' => $kios,
+            'status' => 200
+        ]);
     }
 
     

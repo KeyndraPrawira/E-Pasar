@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
         "maatwebsite/excel": "*",
+        "midtrans/midtrans-php": "^2.6",
         "nuxtifyts/dash-stack-theme": "v2.x-dev",
         "pusher/pusher-php-server": "^7.2",
         "realrashid/sweet-alert": "^7.3"

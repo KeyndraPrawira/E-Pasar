@@ -54,10 +54,10 @@ class DatabaseSeeder extends Seeder
 
          Pasar::create([
             'id' => 1,
-            'nama_pasar' => 'Pasar Tradisional Kota',
+            'nama_pasar' => 'Pasar Rancamanyar',
             'alamat' => 'Jl. Pasar No.1, Kota',
-            'longitude' => '106.845599',
-            'latitude' => '-6.208763',
+            'longitude' => '107.5949018',
+            'latitude' => '-6.9854158',
             'foto_pasar' => 'Pajajap.jpg',
             'ongkir' => 100,
             'minimal_ongkir' => 5000,

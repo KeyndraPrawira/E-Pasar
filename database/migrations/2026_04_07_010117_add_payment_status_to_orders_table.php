@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_otps', function (Blueprint $table) {
-            $table->id();
-            $table->string('email');
-            $table->string('otp');
-            $table->timestamp('expired_at');
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->enum('payment_status', [
+            'pending',
+            'paid',
+            'failed',
+            'expired',
+        ])->default('pending');
         });
     }
 
@@ -25,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('email_otps');
+        Schema::table('orders', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -127,6 +127,7 @@ class KiosController extends Controller
             'jam_buka' => 'required',
             'jam_tutup' => 'required',
             'deskripsi' => 'nullable|string',
+            
         ],
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
@@ -167,4 +168,5 @@ class KiosController extends Controller
         $kios->delete();
         return redirect()->route('admin.kios.index')->with('success', 'Kios Berhasil Dihapus');
     }
+    
 }

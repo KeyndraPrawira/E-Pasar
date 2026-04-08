@@ -6,6 +6,7 @@ use App\Events\OrderUpdated;
 use App\Helpers\HaversineHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Alamat;
+use App\Models\Driver;
 use App\Models\Keranjang;
 use App\Models\Order;
 use App\Models\Pasar;
@@ -21,6 +22,10 @@ class OrderController extends Controller
     public function index()
     {
         $user = auth()->user();
+        if ($response = $this->ensureApprovedDriver($user)) {
+            return $response;
+        }
+
         if ($user->is_online === false) {
             return response()->json([
                 'status' => 'error',
@@ -177,6 +182,10 @@ class OrderController extends Controller
          
         $user  = auth()->user();
 
+        if ($response = $this->ensureApprovedDriver($user)) {
+            return $response;
+        }
+
         if (!$order) {
             return response()->json([
                 'status'  => 'error',
@@ -222,6 +231,10 @@ class OrderController extends Controller
     public function indexActiveOrders() {
         $user = auth()->user();
         if ($user->role == 'driver') {
+            if ($response = $this->ensureApprovedDriver($user)) {
+                return $response;
+            }
+
             $orders = Order::where('driver_id', $user->id)
                 ->whereIn('status', ['dalam_proses', 'dikirim'])
                 ->with('orderDetails.produk', 'buyer')
@@ -244,13 +257,17 @@ class OrderController extends Controller
         }
     
 
-    public function activeOrder(Request $request)
+public function activeOrder(Request $request)
 {
     $user = auth()->user();
     
     // Hanya driver yang bisa akses
     if ($user->role !== 'driver') {
         return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    if ($response = $this->ensureApprovedDriver($user)) {
+        return $response;
     }
 
     $order = Order::with('orderDetails')
@@ -286,6 +303,10 @@ class OrderController extends Controller
         return response()->json([
             'message' => 'Unauthorized'
         ], 403);
+    }
+
+    if ($response = $this->ensureApprovedDriver($user)) {
+        return $response;
     }
 
     $item = OrderDetail::with('order')->findOrFail($id);
@@ -339,6 +360,10 @@ class OrderController extends Controller
 
         if ($user->role !== 'driver') {
             return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        if ($response = $this->ensureApprovedDriver($user)) {
+            return $response;
         }
 
         $item = OrderDetail::with('order')->findOrFail($id);
@@ -462,6 +487,10 @@ class OrderController extends Controller
         $order = Order::find($id);
         $user  = auth()->user();
 
+        if ($response = $this->ensureApprovedDriver($user)) {
+            return $response;
+        }
+
         if (!$order) {
             return response()->json([
                 'status'  => 'error',
@@ -508,6 +537,10 @@ class OrderController extends Controller
     {
         $order = Order::find($id);
         $user  = auth()->user();
+
+        if ($response = $this->ensureApprovedDriver($user)) {
+            return $response;
+        }
 
         if (!$order) {
             return response()->json([
@@ -691,6 +724,20 @@ class OrderController extends Controller
     {
         if ($user->id === $order->buyer_id) return 'buyer';
         if ($user->id === $order->driver_id) return 'driver';
+        return null;
+    }
+
+    private function ensureApprovedDriver($user)
+    {
+        $user->loadMissing('driver');
+
+        if ($user->driver === null || $user->driver->status !== Driver::STATUS_APPROVED) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Akun driver Anda belum diverifikasi admin.',
+            ], 403);
+        }
+
         return null;
     }
 

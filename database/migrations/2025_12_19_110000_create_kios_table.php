@@ -21,6 +21,7 @@ return new class extends Migration
               $table->time('jam_tutup');
             $table->text('deskripsi')->nullable();
             $table->string('foto_kios')->nullable();
+            $table->enum('status', ['buka', 'tutup'])->default('tutup');
 
             $table->foreign('pasar_id')->references('id')->on('pasars')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

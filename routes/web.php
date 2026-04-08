@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PasarController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\KiosController;
 use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\DriverApplicationController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\Pedagang\DashboardController as PedagangDashboardController;
 use App\Http\Controllers\Pedagang\ProdukController as PedagangProdukController;
@@ -27,6 +28,18 @@ Route::resource('login', LoginController::class);
 
 
 Auth::routes();
+Route::middleware('guest')->group(function () {
+        Route::get('/register/otp', [\App\Http\Controllers\Auth\RegisterController::class, 'showOtpForm'])->name('register.otp.form');
+        Route::post('/register/otp', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyOtp'])->name('register.otp.verify');
+        Route::post('/register/otp/resend', [\App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('register.otp.resend');
+});
+
+Route::middleware('auth')->group(function () {
+        Route::get('/driver/daftar', [DriverApplicationController::class, 'create'])->name('driver.application.create');
+        Route::post('/driver/daftar', [DriverApplicationController::class, 'store'])->name('driver.application.store');
+        Route::get('/driver/status', [DriverApplicationController::class, 'status'])->name('driver.application.status');
+});
+
 Route::prefix('admin')->middleware('admin:admin')->group(function () {
         Route::resource('pasar', PasarController::class);
         Route::resource('pelanggan', UserController::class);
@@ -37,7 +50,8 @@ Route::prefix('admin')->middleware('admin:admin')->group(function () {
         Route::resource('kategori', KategoriController::class);
         Route::resource('kategori-laporan', KategoriLaporanController::class);
        Route::resource('pedagang', PedagangController::class)->parameters(['pedagang' => 'pedagang']);
-       Route::resource('driver', DriverController::class)->parameters(['driver' => 'driver']);
+       Route::resource('driver', DriverController::class)->only(['index', 'show'])->parameters(['driver' => 'driver']);
+       Route::patch('driver/{driver}/verify', [DriverController::class, 'verify'])->name('driver.verify');
         
 
         
@@ -48,4 +62,3 @@ Route::middleware('role:pedagang')->group(function () {
     Route::get('/dashboard', [PedagangDashboardController::class, 'index'])->name('pedagang.dashboard');
     Route::resource('produk', PedagangProdukController::class);
 });
-

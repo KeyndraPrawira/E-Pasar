@@ -2,28 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori;
 use App\Models\Pasar;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 
 class LandingpageController extends Controller
 {
-        public function index()
+    public function index()
     {
-        // Ambil data pasar (asumsi hanya ada 1 pasar atau pasar utama)
         $pasar = Pasar::first();
-        
-        // Ambil semua kategori
-        $categories = Kategori::all();
-        
-        // Ambil semua produk dengan relasi kategori
-        $products = Produk::with('kategori')
-                         ->where('stok', '>', 0) // hanya produk yang ada stoknya
-                         ->orderBy('created_at', 'desc')
-                         ->get();
-        
-        return view('welcome', compact('pasar', 'categories', 'products'));
+
+        return view('welcome', compact('pasar'));
     }
 
     /**

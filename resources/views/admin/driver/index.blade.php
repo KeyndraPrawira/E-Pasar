@@ -1,53 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="datatables">
-    <div class="card mt-5">
-        <div class="card-body">
-            <div class="card-title d-flex justify-content-between mb-4">
-                <div class="col text-start">
-                    <h4>Data Driver</h4>
-                </div>
-                <div class="col text-end">
-                    <a href="{{ route('driver.create') }}" class="btn btn-primary">Tambah Driver</a>
-                </div>
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="card-title mb-1">Pengajuan Driver</h4>
+                <p class="text-muted mb-0">Daftar user yang mengajukan verifikasi driver.</p>
             </div>
+        </div>
 
-            <div class="table-responsive">
-                <table id="default_order" class="table table-striped table-bordered display text-nowrap">
-                    <thead>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+        <div class="table-responsive">
+            <table id="default_order" class="table table-striped table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>No. Telepon</th>
+                        <th>No. Kendaraan</th>
+                        <th>Jenis Kendaraan</th>
+                        <th>Status</th>
+                        <th>Diajukan</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($drivers as $driver)
                         <tr>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>No. Telepon</th>
-                            <th>No. Kendaraan</th>
-                            <th>Jenis</th>
-                            <th class="text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($driver as $item)
-                        <tr>
-                            <td>{{ $item->user->name }}</td>
-                            <td>{{ $item->user->email }}</td>
-                            <td>{{ $item->user->nomor_telepon }}</td>
-                            <td>{{ $item->nomor_kendaraan }}</td>
-                            <td>{{ $item->jenis_kendaraan }}</td>
-                            <td align="center">
-                                <div class="d-flex gap-2 justify-content-center">
-                                    <a href="{{ route('driver.edit', $item->id) }}" class="btn btn-success">
-                                        <i class="ti ti-pencil"></i>
-                                    </a>
-                                    <a href="{{ route('driver.destroy', $item->id) }}" class="btn btn-danger" data-confirm-delete="true">
-                                        <i class="ti ti-trash"></i>
-                                    </a>
-                                </div>
+                            <td>{{ $driver->user->name }}</td>
+                            <td>{{ $driver->user->email }}</td>
+                            <td>{{ $driver->user->nomor_telepon ?? '-' }}</td>
+                            <td>{{ $driver->nomor_kendaraan }}</td>
+                            <td>{{ $driver->jenis_kendaraan }}</td>
+                            <td>
+                                @if ($driver->status === \App\Models\Driver::STATUS_PENDING)
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                @elseif ($driver->status === \App\Models\Driver::STATUS_APPROVED)
+                                    <span class="badge bg-success">Approved</span>
+                                @else
+                                    <span class="badge bg-danger">Rejected</span>
+                                @endif
+                            </td>
+                            <td>{{ $driver->created_at?->format('d M Y H:i') }}</td>
+                            <td class="text-center">
+                                <a href="{{ route('driver.show', $driver) }}" class="btn btn-primary btn-sm">
+                                    Detail
+                                </a>
                             </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">Belum ada pengajuan driver.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

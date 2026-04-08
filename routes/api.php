@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Api\KiosController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\OrderPaymentController;
 use App\Http\Controllers\Api\KeranjangController;
 use App\Http\Controllers\Api\PasarController;
 use App\Http\Controllers\Api\ProfileController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [ApiAuthController::class, 'login']);
 Route::post('/register', [ApiAuthController::class, 'register']);
 Route::post('/google-login', [ApiAuthController::class, 'googleLogin']);
+Route::post('/midtrans/notification', [OrderPaymentController::class, 'notification']);
 
 Route::get('/kategori', [KategoriController::class, 'index']);
 Route::apiResource('/produk', ApiProdukController::class)->only(['index', 'show']);
@@ -65,6 +67,8 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::apiResource('/keranjang', KeranjangController::class);
     Route::post('/profile/alamat', [ProfileController::class, 'setAlamat']);
     Route::post('/orders/checkout', [OrderController::class, 'store']);
+    Route::post('/orders/{order}/payment/midtrans', [OrderPaymentController::class, 'create']);
+    Route::get('/orders/{order}/payment/status', [OrderPaymentController::class, 'status']);
     Route::get('/orders/my', [OrderController::class, 'myOrders']);
     Route::get('/orders/history', [OrderController::class, 'orderHistory']);
     Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
@@ -73,6 +77,7 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
 
 Route::middleware('auth:sanctum', 'role:pedagang')->group(function(){
     Route::get('/kios/me', [KiosController::class, 'myKios']);
+    Route::put('kios/{kios}/status-kios', [KiosController::class, 'updateStatus']);
     Route::apiResource('/kios', KiosController::class)->except(['create', 'edit', 'show'])->parameters([
         'kios' => 'kios'
     ]);
@@ -86,4 +91,3 @@ Route::middleware('auth:sanctum', 'role:pedagang')->group(function(){
 Route::get('/ping', function () {
     return response()->json(['msg' => 'api hidup v12']);
 });
-

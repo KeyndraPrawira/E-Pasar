@@ -461,187 +461,6 @@
             width: 100%;
         }
 
-        /* ===== PRODUCTS SECTION ===== */
-        .products-section {
-            margin-bottom: 100px;
-        }
-
-        .filter-section {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-        }
-
-        .filter-btn {
-            padding: 14px 32px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            color: #4a5568;
-            font-size: 0.95rem;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .filter-btn:hover {
-            border-color: #0ea5e9;
-            color: #0ea5e9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.2);
-        }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 5px 20px rgba(14, 165, 233, 0.3);
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid #f0f0f0;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
-        }
-
-        .product-image-wrapper {
-            position: relative;
-            width: 100%;
-            height: 240px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
-
-        .product-image-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #0ea5e9;
-            font-size: 5rem;
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-            color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .product-content {
-            padding: 25px;
-        }
-
-        .product-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-        }
-
-        .product-description {
-            font-size: 0.95rem;
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
-        }
-
-        .product-price {
-            font-size: 1.6rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .product-price small {
-            font-size: 0.55em;
-            color: #718096;
-            -webkit-text-fill-color: #718096;
-        }
-
-        .product-stock {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
-            color: #10b981;
-            font-weight: 600;
-        }
-
-        .product-stock i {
-            font-size: 1.1rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 100px 20px;
-            color: #718096;
-            grid-column: 1/-1;
-        }
-
-        .empty-state i {
-            font-size: 6rem;
-            margin-bottom: 25px;
-            opacity: 0.2;
-        }
-
-        .empty-state h3 {
-            font-size: 1.8rem;
-            margin-bottom: 12px;
-            color: #1a1a1a;
-        }
-
         /* ===== FOOTER ===== */
         .footer {
             background: #1a1a1a;
@@ -811,24 +630,6 @@
         height: 350px;
     }
 
-    .filter-section {
-        gap: 10px;
-    }
-
-    .filter-btn {
-        padding: 12px 24px;
-        font-size: 0.85rem;
-    }
-
-    .products-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .product-image-wrapper {
-        height: 200px;
-    }
-
     .footer-content {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -870,13 +671,6 @@
         font-size: 1.5rem;
     }
 
-    .product-name {
-        font-size: 1.1rem;
-    }
-
-    .product-price {
-        font-size: 1.3rem;
-    }
 }
     </style>
 </head>
@@ -894,9 +688,8 @@
         <!-- Desktop Menu -->
         <ul class="nav-menu">
             <li><a href="#pasar">Pasar</a></li>
-            <li><a href="#produk">Produk</a></li>
             <li><a href="#lokasi">Lokasi</a></li>
-            <li><a href="#" class="nav-btn">Hubungi Kami</a></li>
+            <li><a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}" class="nav-btn">Daftar Driver</a></li>
         </ul>
 
         <!-- Hamburger -->
@@ -910,9 +703,8 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#pasar" onclick="toggleMenu()">Pasar</a>
-        <a href="#produk" onclick="toggleMenu()">Produk</a>
         <a href="#lokasi" onclick="toggleMenu()">Lokasi</a>
-        <a href="#" onclick="toggleMenu()">Hubungi Kami</a>
+        <a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}" onclick="toggleMenu()">Daftar Driver</a>
     </div>
 </nav>
 
@@ -921,12 +713,12 @@
         <div class="hero-container">
             <div class="hero-content">
                 <div class="hero-badge">✨ Solusi Belanja Modern</div>
-                <h1 class="hero-title">Belanja Produk Segar Jadi Mudah</h1>
-                <p class="hero-subtitle">Nikmati pengalaman berbelanja produk segar dari pasar tradisional langsung ke rumah Anda. Kualitas terjamin, harga bersahabat!</p>
+                <h1 class="hero-title">Belanja pasar jadi lebih mudah</h1>
+                <p class="hero-subtitle">Nikmati pengalaman belanja dari pasar tradisional langsung ke rumah Anda dengan layanan yang cepat, rapi, dan terpercaya.</p>
                 <div class="hero-buttons">
-                    <a href="#produk" class="btn-primary">
-                        <i class="ti ti-shopping-cart"></i>
-                        Belanja Sekarang
+                    <a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}" class="btn-primary">
+                        <i class="ti ti-truck-delivery"></i>
+                        Daftar Menjadi Driver
                     </a>
                     <a href="#lokasi" class="btn-secondary">
                         <i class="ti ti-map-pin"></i>
@@ -1012,13 +804,13 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>PAJAJAP</h3>
-                <p>Solusi belanja modern untuk produk pasar tradisional. Segar, berkualitas, dan terpercaya.</p>
+                <p>Solusi belanja modern untuk pasar tradisional yang lebih cepat, praktis, dan terpercaya.</p>
             </div>
             <div class="footer-section">
                 <h3>Menu</h3>
                 <p><a href="#pasar">Tentang Pasar</a></p>
-                <p><a href="#produk">Produk</a></p>
                 <p><a href="#lokasi">Lokasi</a></p>
+                <p><a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}">Daftar Driver</a></p>
             </div>
             <div class="footer-section">
                 <h3>Kontak</h3>
@@ -1077,45 +869,6 @@
             </div>
         `).openPopup();
         @endif
-
-        // Category Filter
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                const category = this.dataset.category;
-                const products = document.querySelectorAll('.product-card');
-
-                products.forEach(product => {
-                    if (category === 'all' || product.dataset.category === category) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-
-                // Check empty state
-                const visibleProducts = Array.from(products).filter(p => p.style.display !== 'none');
-                const grid = document.getElementById('productsGrid');
-                const existingEmpty = grid.querySelector('.empty-state');
-                
-                if (existingEmpty && !existingEmpty.classList.contains('original-empty')) {
-                    existingEmpty.remove();
-                }
-
-                if (visibleProducts.length === 0 && category !== 'all') {
-                    const emptyState = document.createElement('div');
-                    emptyState.className = 'empty-state';
-                    emptyState.innerHTML = `
-                        <i class="ti ti-basket-off"></i>
-                        <h3>Tidak Ada Produk</h3>
-                        <p>Belum ada produk dalam kategori ini</p>
-                    `;
-                    grid.appendChild(emptyState);
-                }
-            });
-        });
 
         // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

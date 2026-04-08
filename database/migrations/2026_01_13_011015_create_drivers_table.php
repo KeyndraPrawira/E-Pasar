@@ -13,20 +13,29 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained('users')
+                ->cascadeOnDelete();
             $table->string('nomor_kendaraan')->unique();
             $table->string('jenis_kendaraan');
-            $table->string('nomor_stnk');
-            $table->string('nomor_sim');
+            $table->string('nomor_stnk')->unique();
+            $table->string('nomor_sim')->unique();
             $table->string('foto_ktp');
             $table->string('foto_sim');
             $table->string('foto_stnk');
             $table->string('foto_kendaraan');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('verification_notes')->nullable();
+            $table->foreignId('verified_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+            $table->timestamp('verified_at')->nullable();
 
             $table->timestamps();
+
+            $table->index('status');
         });
     }
 
