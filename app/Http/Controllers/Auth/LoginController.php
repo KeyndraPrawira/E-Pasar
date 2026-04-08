@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -36,5 +38,29 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * Batasi login web ini hanya untuk admin.
+     *
+     * @return array<string, string>
+     */
+    protected function credentials(Request $request): array
+    {
+        return [
+            $this->username() => $request->input($this->username()),
+            'password' => $request->input('password'),
+            'role' => 'admin',
+        ];
+    }
+
+    /**
+     * Pesan gagal login khusus admin.
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            $this->username() => ['Email atau password admin salah.'],
+        ]);
     }
 }

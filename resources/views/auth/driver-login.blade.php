@@ -8,9 +8,8 @@
   <link rel="shortcut icon" type="image/png" href="{{ asset('template/images/logos/favicon.png') }}" />
   <link rel="stylesheet" href="{{ asset('template/css/styles.css')}}" />
   <link rel="stylesheet" href="{{ asset('template/libs/owl.carousel/dist/assets/owl.carousel.min.css')}}" />
-  <title>Register Pajajap</title>
+  <title>Login Driver Pajajap</title>
 </head>
-
 <body>
   <div class="preloader">
     <img src="{{ asset('template/images/logos/Pajajap logo.png') }}" alt="loader" class="lds-ripple img-fluid" />
@@ -20,7 +19,7 @@
     <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100 d-flex align-items-center justify-content-center">
       <div class="d-flex align-items-center justify-content-center w-100">
         <div class="row justify-content-center w-100">
-          <div class="col-md-8 col-lg-7 col-xxl-5 auth-card">
+          <div class="col-md-8 col-lg-6 col-xxl-4 auth-card">
             <div class="card mb-0">
               <div class="card-body">
                 <a href="{{ route('landingpage') }}" class="text-nowrap logo-img text-center d-block w-100 mb-4">
@@ -29,30 +28,28 @@
                 </a>
 
                 <div class="text-center mb-4">
-                  <h4 class="mb-1">Buat Akun Driver</h4>
-                  <p class="text-muted mb-0">Daftarkan diri sebagai driver setelah diverifikasi oleh admin.</p>
+                  <h4 class="mb-1">Masuk Sebagai Driver</h4>
+                  <p class="text-muted mb-0">Masuk untuk melanjutkan pendaftaran driver dan memantau status verifikasi.</p>
                 </div>
+
+                @if (session('status'))
+                  <div class="alert alert-success">{{ session('status') }}</div>
+                @endif
+
+                @if (session('success'))
+                  <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
 
                 @if (session('error'))
                   <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
 
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" action="{{ route('driver.login.submit') }}">
                   @csrf
 
                   <div class="mb-3">
-                    <label for="name" class="form-label">{{ __('Name') }}</label>
-                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-                    @error('name')
-                      <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                      </span>
-                    @enderror
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="email" class="form-label">{{ __('Email Address') }}</label>
-                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                    <label for="email" class="form-label">{{ __('Email') }}</label>
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                     @error('email')
                       <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -60,19 +57,12 @@
                     @enderror
                   </div>
 
-                  <div class="mb-3">
-                    <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
-                    <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ old('nomor_telepon') }}" required autocomplete="tel">
-                    @error('nomor_telepon')
-                      <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                      </span>
-                    @enderror
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="password" class="form-label">{{ __('Password') }}</label>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                  <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <label for="password" class="form-label mb-0">{{ __('Password') }}</label>
+                      <a href="{{ route('driver.password.request') }}" class="text-primary small fw-semibold">Lupa password?</a>
+                    </div>
+                    <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="current-password">
                     @error('password')
                       <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -80,18 +70,11 @@
                     @enderror
                   </div>
 
-                  <div class="mb-4">
-                    <label for="password-confirm" class="form-label">{{ __('Confirm Password') }}</label>
-                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                  </div>
-
-                  <button type="submit" class="btn btn-primary w-100 py-8 mb-3 rounded-2">
-                    {{ __('Register') }}
-                  </button>
+                  <button type="submit" class="btn btn-primary w-100 py-8 mb-3 rounded-2">Masuk</button>
 
                   <div class="text-center">
-                    <span class="text-muted">Sudah punya akun?</span>
-                    <a href="{{ route('driver.login') }}" class="text-primary fw-semibold ms-1">Masuk</a>
+                    <span class="text-muted">Belum punya akun?</span>
+                    <a href="{{ route('register') }}" class="text-primary fw-semibold ms-1">Daftar</a>
                   </div>
                 </form>
               </div>

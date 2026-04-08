@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Auth\DriverForgotPasswordController;
+use App\Http\Controllers\Auth\DriverLoginController;
+use App\Http\Controllers\Auth\DriverResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -29,6 +32,12 @@ Route::resource('login', LoginController::class);
 
 Auth::routes();
 Route::middleware('guest')->group(function () {
+        Route::get('/login-driver', [DriverLoginController::class, 'showLoginForm'])->name('driver.login');
+        Route::post('/login-driver', [DriverLoginController::class, 'login'])->name('driver.login.submit');
+        Route::get('/password-driver/reset', [DriverForgotPasswordController::class, 'showLinkRequestForm'])->name('driver.password.request');
+        Route::post('/password-driver/email', [DriverForgotPasswordController::class, 'sendResetLinkEmail'])->name('driver.password.email');
+        Route::get('/password-driver/reset/{token}', [DriverResetPasswordController::class, 'showResetForm'])->name('driver.password.reset');
+        Route::post('/password-driver/reset', [DriverResetPasswordController::class, 'reset'])->name('driver.password.update');
         Route::get('/register/otp', [\App\Http\Controllers\Auth\RegisterController::class, 'showOtpForm'])->name('register.otp.form');
         Route::post('/register/otp', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyOtp'])->name('register.otp.verify');
         Route::post('/register/otp/resend', [\App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('register.otp.resend');

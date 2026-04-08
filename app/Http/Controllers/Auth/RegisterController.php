@@ -68,7 +68,7 @@ class RegisterController extends Controller
 
             return back()
                 ->withInput()
-                ->with('error', 'Gagal mengirim OTP ke email. Silakan coba lagi.'.$exception->getMessage());
+                ->with('error', 'Gagal mengirim OTP ke email. Silakan coba lagi. '.$exception->getMessage());
         }
 
         session([
@@ -133,7 +133,7 @@ class RegisterController extends Controller
             $this->forgetPendingRegistration();
 
             return redirect()
-                ->route('login')
+                ->route('driver.login')
                 ->with('error', 'Email tersebut sudah terdaftar. Silakan login.');
         }
 
@@ -142,7 +142,7 @@ class RegisterController extends Controller
             'email' => $pendingRegistration['email'],
             'nomor_telepon' => $pendingRegistration['nomor_telepon'],
             'password' => $pendingRegistration['password'],
-            'role' => 'user',
+            'role' => 'driver',
         ]);
 
         $otpRecord->update([

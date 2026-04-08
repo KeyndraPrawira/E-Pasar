@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Favicon icon-->
-  <link rel="shortcut icon" type="image/png" href="{{ asset('') }}" />
+  <link rel="shortcut icon" type="image/png" href="{{ asset('template/images/logos/pajajap-gradient.png') }}" />
 
   <!-- Core Css -->
   <link rel="stylesheet" href="{{ asset('template/css/styles.css')}}" />

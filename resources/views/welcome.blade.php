@@ -689,7 +689,7 @@
         <ul class="nav-menu">
             <li><a href="#pasar">Pasar</a></li>
             <li><a href="#lokasi">Lokasi</a></li>
-            <li><a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}" class="nav-btn">Daftar Driver</a></li>
+            <li><a href="{{ auth()->check() ? route('driver.application.create') : route('driver.login') }}" class="nav-btn">Daftar Driver</a></li>
         </ul>
 
         <!-- Hamburger -->
@@ -704,7 +704,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="#pasar" onclick="toggleMenu()">Pasar</a>
         <a href="#lokasi" onclick="toggleMenu()">Lokasi</a>
-        <a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}" onclick="toggleMenu()">Daftar Driver</a>
+        <a href="{{ auth()->check() ? route('driver.application.create') : route('driver.login') }}" onclick="toggleMenu()">Daftar Driver</a>
     </div>
 </nav>
 
@@ -716,7 +716,7 @@
                 <h1 class="hero-title">Belanja pasar jadi lebih mudah</h1>
                 <p class="hero-subtitle">Nikmati pengalaman belanja dari pasar tradisional langsung ke rumah Anda dengan layanan yang cepat, rapi, dan terpercaya.</p>
                 <div class="hero-buttons">
-                    <a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}" class="btn-primary">
+                    <a href="{{ auth()->check() ? route('driver.application.create') : route('driver.login') }}" class="btn-primary">
                         <i class="ti ti-truck-delivery"></i>
                         Daftar Menjadi Driver
                     </a>
@@ -810,7 +810,7 @@
                 <h3>Menu</h3>
                 <p><a href="#pasar">Tentang Pasar</a></p>
                 <p><a href="#lokasi">Lokasi</a></p>
-                <p><a href="{{ auth()->check() ? route('driver.application.create') : route('register') }}">Daftar Driver</a></p>
+                <p><a href="{{ auth()->check() ? route('driver.application.create') : route('driver.login') }}">Daftar Driver</a></p>
             </div>
             <div class="footer-section">
                 <h3>Kontak</h3>

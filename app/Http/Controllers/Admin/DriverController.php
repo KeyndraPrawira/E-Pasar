@@ -57,7 +57,7 @@ class DriverController extends Controller
             ]);
 
             $driver->user()->update([
-                'role' => $status === Driver::STATUS_APPROVED ? 'driver' : 'user',
+                'role' => 'driver',
                 'is_online' => false,
             ]);
         });

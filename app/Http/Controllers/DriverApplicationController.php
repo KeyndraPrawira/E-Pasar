@@ -79,7 +79,7 @@ class DriverApplicationController extends Controller
                 }
 
                 $user->update([
-                    'role' => 'user',
+                    'role' => 'driver',
                     'is_online' => false,
                 ]);
             });
