@@ -8,6 +8,9 @@ class Order extends Model
 {
     protected $table = 'orders';
 
+    public const PAYMENT_METHOD_COD = 'cod';
+    public const PAYMENT_METHOD_MIDTRANS = 'midtrans';
+
     public const PAYMENT_STATUS_PENDING = 'pending';
     public const PAYMENT_STATUS_PAID = 'paid';
     public const PAYMENT_STATUS_FAILED = 'failed';
@@ -32,10 +35,13 @@ class Order extends Model
         'payment_type',
         'paid_at',
         'total_harga',
+        'driver_earning_amount',
+        'driver_wallet_credited_at',
     ];
 
     protected $casts = [
         'paid_at' => 'datetime',
+        'driver_wallet_credited_at' => 'datetime',
     ];
 
     
@@ -69,7 +75,22 @@ class Order extends Model
 
     public function canBePaid(): bool
     {
-        return $this->status === 'dikirim' && $this->payment_status !== self::PAYMENT_STATUS_PAID;
+        return $this->metode_pembayaran === self::PAYMENT_METHOD_MIDTRANS
+            && $this->status === 'dikirim'
+            && $this->payment_status !== self::PAYMENT_STATUS_PAID;
+    }
+
+    public function canCreditDriverWallet(): bool
+    {
+        if (!$this->driver_id || $this->status !== 'selesai' || $this->driver_wallet_credited_at !== null) {
+            return false;
+        }
+
+        if ($this->metode_pembayaran === self::PAYMENT_METHOD_MIDTRANS) {
+            return $this->payment_status === self::PAYMENT_STATUS_PAID;
+        }
+
+        return true;
     }
 
 }

@@ -15,9 +15,15 @@ use App\Models\OrderDetail;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\DriverWalletService;
 
 class OrderController extends Controller
 {
+    public function __construct(
+        private readonly DriverWalletService $driverWalletService
+    ) {
+    }
+
     // ── DRIVER — scan order available ─────────────────────────
     public function index()
     {
@@ -74,6 +80,13 @@ class OrderController extends Controller
     // ── BUYER — checkout dari keranjang ───────────────────────
     public function store(Request $request)
     {
+        $request->validate([
+            'metode_pembayaran' => 'required|in:cod,midtrans',
+        ], [
+            'metode_pembayaran.required' => 'Metode pembayaran wajib dipilih.',
+            'metode_pembayaran.in' => 'Metode pembayaran yang dipilih tidak valid.',
+        ]);
+
         $keranjang = Keranjang::where('user_id', auth()->id())
             ->with('produk')
             ->get();
@@ -116,11 +129,13 @@ class OrderController extends Controller
         $totalHarga = $totalHargaBarang + $ongkir;
         $order = null;
 
-        DB::transaction(function () use ($keranjang, $alamat, $ongkir, $totalHarga, &$order, $totalHargaBarang) {
+        DB::transaction(function () use ($request, $keranjang, $alamat, $ongkir, $totalHarga, &$order, $totalHargaBarang) {
             $order = Order::create([
                 'kode_pesanan'      => 'ORD-' . strtoupper(uniqid()),
                 'buyer_id'          => auth()->id(),
                 'status'            => 'menunggu_driver',
+                'metode_pembayaran' => $request->metode_pembayaran,
+                'payment_status'    => Order::PAYMENT_STATUS_PENDING,
                 'alamat_pengiriman' => $alamat->alamat_lengkap,
                 'latitude'          => $alamat->latitude,
                 'longitude'         => $alamat->longitude,
@@ -128,6 +143,7 @@ class OrderController extends Controller
                 'total_harga_barang'=> $totalHargaBarang,
                 'ongkir'            => $ongkir,
                 'total_harga'       => $totalHarga,
+                'driver_earning_amount' => $ongkir,
             ]);
 
             foreach ($keranjang as $item) {
@@ -563,7 +579,15 @@ public function activeOrder(Request $request)
             ], 400);
         }
 
-        $order->update(['status' => 'selesai']);
+        $payload = ['status' => 'selesai'];
+
+        if ($order->metode_pembayaran !== Order::PAYMENT_METHOD_MIDTRANS && $order->payment_status !== Order::PAYMENT_STATUS_PAID) {
+            $payload['payment_status'] = Order::PAYMENT_STATUS_PAID;
+            $payload['paid_at'] = now();
+        }
+
+        $order->update($payload);
+        $this->driverWalletService->creditCompletedOrder($order->fresh());
 
         return response()->json([
             'status'  => 'success',

@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\ApiProdukController;
 use App\Http\Controllers\Api\AuthController as ApiAuthController;
+use App\Http\Controllers\Api\DriverWithdrawalController;
+use App\Http\Controllers\Api\DriverWalletController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -30,6 +32,10 @@ Route::get('/pasar', [PasarController::class, 'index']);
 
 Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/set-active', [UserController::class, 'setActive']);
+    Route::get('/driver/wallet', [DriverWalletController::class, 'show']);
+    Route::get('/driver/wallet/transactions', [DriverWalletController::class, 'transactions']);
+    Route::get('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'index']);
+    Route::post('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'store']);
     Route::get('/orders/available', [OrderController::class, 'index']);      // ← spesifik dulu
     Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
     Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Driver;
 use App\Models\Kategori;
 use App\Models\Kios;
 use App\Models\Pasar;
@@ -42,7 +43,9 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('adi12345'),
             'role' => 'user',
             'nomor_telepon' => '089463527393'
+            
         ]);
+        
         User::create([
             'id' => 6,
             'name' => 'Rama Sutisna',
@@ -51,6 +54,19 @@ class DatabaseSeeder extends Seeder
             'role' => 'driver',
             'nomor_telepon' => '081234567890',
         ]);
+        Driver::create([
+                'id' => 1,
+                'user_id' => 6,
+                'nomor_kendaraan' => 'B 1234 XYZ',
+                'jenis_kendaraan' => 'Motor',
+                'nomor_stnk' => 'STNK123456',
+                'nomor_sim' => 'SIM123456',
+                'foto_ktp' => 'ktp_rama.jpg',
+                'foto_sim' => 'sim_rama.jpg',
+                'foto_stnk' => 'stnk_rama.jpg',
+                'foto_kendaraan' => 'motor_rama.jpg',
+                'status' => Driver::STATUS_APPROVED,
+            ]);
 
          Pasar::create([
             'id' => 1,

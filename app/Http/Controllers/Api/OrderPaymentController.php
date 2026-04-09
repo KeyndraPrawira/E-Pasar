@@ -11,11 +11,13 @@ use Illuminate\Support\Str;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Transaction;
+use App\Services\DriverWalletService;
 
 class OrderPaymentController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private readonly DriverWalletService $driverWalletService
+    ) {
         $this->configureMidtrans();
     }
 
@@ -24,6 +26,7 @@ class OrderPaymentController extends Controller
      */
     public function create(Order $order, Request $request): JsonResponse
     {
+            $this->configureMidtrans();
         $user = $request->user();
 
         if ($order->buyer_id !== $user->id) {
@@ -37,6 +40,13 @@ class OrderPaymentController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Pembayaran hanya bisa dibuat ketika order berstatus dikirim.',
+            ], 422);
+        }
+
+        if ($order->metode_pembayaran !== Order::PAYMENT_METHOD_MIDTRANS) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order ini tidak menggunakan metode pembayaran Midtrans.',
             ], 422);
         }
 
@@ -60,8 +70,14 @@ class OrderPaymentController extends Controller
 
         $reference = $this->generatePaymentReference($order);
         $grossAmount = (int) $order->total_harga;
+        try{
+            \Log::info('Midtrans CREATE transaction', [
+        'SDK_serverKey' => \Midtrans\Config::$serverKey,
+        'SDK_isProduction' => \Midtrans\Config::$isProduction,
+        'reference' => $reference,
+    ]);
 
-        $transaction = Snap::createTransaction([
+            $transaction = Snap::createTransaction([
             'transaction_details' => [
                 'order_id' => $reference,
                 'gross_amount' => $grossAmount,
@@ -78,9 +94,21 @@ class OrderPaymentController extends Controller
                 'duration' => 1,
             ],
         ]);
+        \Log::info('Midtrans CREATE transaction', [
+        'SDK_serverKey' => \Midtrans\Config::$serverKey,
+        'SDK_isProduction' => \Midtrans\Config::$isProduction,
+        'reference' => $reference,
+    ]);
+
+        }catch(\Exception $e){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal membuat transaksi Midtrans. Silakan coba lagi.',
+                ], 500);
+        }
+        
 
         $order->update([
-            'metode_pembayaran' => 'midtrans',
             'payment_status' => Order::PAYMENT_STATUS_PENDING,
             'payment_reference' => $reference,
             'payment_token' => $transaction->token,
@@ -88,6 +116,10 @@ class OrderPaymentController extends Controller
             'payment_type' => null,
             'paid_at' => null,
         ]);
+        \Log::info('Midtrans notification URL', [
+    'finish_redirect_url' => 'akan dikirim ke: ' . config('app.url') . '/api/midtrans/notification',
+    'ngrok_url' => 'pastikan ngrok aktif',
+]);
 
         return response()->json([
             'status' => 'success',
@@ -101,7 +133,10 @@ class OrderPaymentController extends Controller
      */
     public function status(Order $order, Request $request): JsonResponse
     {
+           
         $user = $request->user();
+        $syncedFromMidtrans = true;
+        $syncError = null;
 
         if ($order->buyer_id !== $user->id) {
             return response()->json([
@@ -118,24 +153,36 @@ class OrderPaymentController extends Controller
         }
 
         try {
+        
             $midtransStatus = Transaction::status($order->payment_reference);
             $this->syncPaymentStatus(
                 $order,
                 (array) $midtransStatus,
             );
+            $syncedFromMidtrans = true;
         } catch (\Throwable $exception) {
+            $syncError = $exception->getMessage();
+
             Log::warning('Gagal mengambil status Midtrans.', [
                 'order_id' => $order->id,
                 'payment_reference' => $order->payment_reference,
-                'error' => $exception->getMessage(),
+                'error' => $syncError,
             ]);
         }
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Status pembayaran berhasil diambil.',
+            'message' => $syncedFromMidtrans
+                ? 'Status pembayaran berhasil diambil dari Midtrans.'
+                : 'Status pembayaran lokal ditampilkan karena sinkronisasi Midtrans gagal.',
             'data' => $this->paymentPayload($order->fresh()),
+            'meta' => [
+                'synced_from_midtrans' => $syncedFromMidtrans,
+                'sync_error' => $syncError,
+            ],
         ]);
+        
+    
     }
 
     /**
@@ -143,6 +190,8 @@ class OrderPaymentController extends Controller
      */
     public function notification(Request $request): JsonResponse
     {
+         \Log::info('NOTIFICATION MASUK', $request->all()); // ← TAMBAH INI
+    $this->configureMidtrans();
         $payload = $request->all();
 
         if (!$this->isValidSignature($payload)) {
@@ -174,6 +223,7 @@ class OrderPaymentController extends Controller
      */
     private function configureMidtrans(): void
     {
+        
         Config::$serverKey = config('midtrans.serverKey');
         Config::$clientKey = config('midtrans.clientKey');
         Config::$isProduction = (bool) config('midtrans.isProduction', false);
@@ -186,7 +236,7 @@ class OrderPaymentController extends Controller
      */
     private function generatePaymentReference(Order $order): string
     {
-        return 'MID-' . $order->id . '-' . Str::upper(Str::random(8));
+        return 'MID-' . $order->id ;
     }
 
     /**
@@ -244,6 +294,10 @@ class OrderPaymentController extends Controller
                 ? ($order->paid_at ?? now())
                 : null,
         ]);
+
+        if ($paymentStatus === Order::PAYMENT_STATUS_PAID) {
+            $this->driverWalletService->creditCompletedOrder($order->fresh());
+        }
     }
 
     /**

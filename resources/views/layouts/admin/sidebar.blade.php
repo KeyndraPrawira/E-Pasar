@@ -72,6 +72,12 @@
       </a>
     </li>
     <li class="sidebar-item">
+      <a href="{{ route('driver-withdrawals.index') }}" class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Withdraw Driver</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
       <a href="{{ route('pedagang.index') }}" class="sidebar-link">
         <i class="ti ti-circle"></i>
         <span class="hide-menu">Pedagang</span>

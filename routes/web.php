@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\DriverWithdrawalController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Auth\DriverForgotPasswordController;
 use App\Http\Controllers\Auth\DriverLoginController;
@@ -61,6 +62,9 @@ Route::prefix('admin')->middleware('admin:admin')->group(function () {
        Route::resource('pedagang', PedagangController::class)->parameters(['pedagang' => 'pedagang']);
        Route::resource('driver', DriverController::class)->only(['index', 'show'])->parameters(['driver' => 'driver']);
        Route::patch('driver/{driver}/verify', [DriverController::class, 'verify'])->name('driver.verify');
+       Route::get('driver-withdrawals', [DriverWithdrawalController::class, 'index'])->name('driver-withdrawals.index');
+       Route::get('driver-withdrawals/{driverWithdrawal}', [DriverWithdrawalController::class, 'show'])->name('driver-withdrawals.show');
+       Route::patch('driver-withdrawals/{driverWithdrawal}', [DriverWithdrawalController::class, 'process'])->name('driver-withdrawals.process');
         
 
         

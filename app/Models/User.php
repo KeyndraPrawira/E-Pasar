@@ -42,6 +42,16 @@ class User extends Authenticatable
         return $this->hasOne(Driver::class, 'user_id');
     }
 
+    public function driverWallet(): HasOne
+    {
+        return $this->hasOne(DriverWallet::class, 'user_id');
+    }
+
+    public function driverWithdrawals()
+    {
+        return $this->hasMany(DriverWithdrawal::class, 'user_id');
+    }
+
     public function isApprovedDriver(): bool
     {
         if ($this->relationLoaded('driver')) {
