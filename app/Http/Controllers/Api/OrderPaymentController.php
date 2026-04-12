@@ -269,7 +269,7 @@ class OrderPaymentController extends Controller
      */
     private function generatePaymentReference(Order $order): string
     {
-        return 'MID-' . $order->id ;
+        return 'MID-' . $order->id . time() ;
     }
 
     /**
