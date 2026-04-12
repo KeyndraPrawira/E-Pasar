@@ -1,35 +1,29 @@
-# TODO: Implementasi Daftar Produk di Kios Show Page
+# TODO.md - Perbaikan Error Seeding Database (Unknown column 'password')
 
-## Status: [REVISION COMPLETE] 
+## ✅ **Selesai**
+- [x] Step 1: Buat file TODO.md dengan progress tracking
 
-### Step 1: [DONE] ✅ Buat rencana edit dan konfirmasi user
-### Step 2: [PENDING] 🔄 Buat TODO.md untuk tracking
+# TODO.md - Fitur Ganti Password dengan OTP (API untuk pedagang/user/driver)
 
-### Step 3: [DONE] ✅ Edit resources/views/admin/kios/show.blade.php 
-     - ✅ Tambah daftar produk dalam bentuk card grid responsive
-     - ✅ 50% gambar (dengan fallback placeholder)
-     - ✅ Info: nama, kategori (badge), stok, harga
-     - ✅ Empty state jika tidak ada produk
-### Step 4: [DONE] ✅ Test tampilan halaman kios detail (pure frontend, sudah match template)
-### Step 5: [DONE] ✅ Update TODO.md ✓
+## ✅ **Selesai - Database Fix**
+- [x] Fix migration users table  
+- [x] Buat TODO.md tracking
 
-### Step 6: [DONE] ✅ Unit test check 
-     - ✅ No failing tests affected by view changes (pure frontend update)
-### Step 7: [REVISION] ✅ Feedback implemented
-     - ✅ Card layout: VERTIKAL (img atas full + info bawah full)
-     - ✅ Tombol link ke {{ route('produks.show', $produk->id) }}
-     - ✅ Grid tetap col-lg-3 responsive
+## ✅ **Fitur Ganti Password - IMPLEMENTASI LENGKAP**
+- [x] Tambah PURPOSE_PASSWORD_CHANGE di EmailOTP model
+- [x] Buat PasswordChangeController.php (sendOtp/verifyOtp/resendOtp)
+- [x] Tambah routes API di routes/api.php  
+- [x] Update ProfileController.updatePassword() (pakai OTP cache)
 
-**FINAL REVISION: Produk Show.blade.php DITAMBAH** 🎉
-```
-✅ Baru dibuat: resources/views/admin/produk/show.blade.php
-✅ Clone layout kios/show.php 
-✅ Field: nama_produk, kategori, stok, berat_satuan ✓
-✅ Controller show() sudah ready: $produk->load(['kategori', 'kios'])
-✅ Link dari kios detail berfungsi perfect
-```
+## 📋 **Testing & Complete**
+- [ ] Step 4: Test API endpoints  
+- [ ] Step 5: Unit tests
+- [ ] Step 6: Dokumentasi Flutter integration
+- [ ] Complete task
 
 
-
-**Next Action:** Edit file show.blade.php
-
+## ⏳ **Belum Dikerjakan**  
+- [ ] Step 3: Jalankan `php artisan migrate:fresh --seed`
+- [ ] Step 4: Test login admin (`admin@epasar.id` / `Admin123`)
+- [ ] Step 5: Unit test User model & seeder
+- [ ] Step 6: Complete task

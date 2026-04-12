@@ -37,8 +37,7 @@ return new class extends Migration
 
             $table->enum('metode_pembayaran', [
                 'cod',
-                'transfer',
-                'ewallet',
+                'midtrans',
             ])->nullable();
 
             $table->text('alamat_pengiriman');

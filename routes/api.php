@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\KeranjangController;
 use App\Http\Controllers\Api\PasarController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\LaporanController;
+use App\Http\Controllers\Api\PasswordChangeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,15 +52,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
+    
     Route::get('/profile/me', [ProfileController::class, 'show']);
     Route::put('/profile/me', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
-        Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
-
-    Route::get('/orders/{id}', [OrderController::class, 'show']);
     
-
-
+    Route::prefix('password-change')->group(function () {
+        Route::post('send-otp', [PasswordChangeController::class, 'sendOtp']);
+        Route::post('verify-otp', [PasswordChangeController::class, 'verifyOtp']);
+        Route::post('resend-otp', [PasswordChangeController::class, 'resendOtp']);
+    });
+    
+    Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
 });
 
 

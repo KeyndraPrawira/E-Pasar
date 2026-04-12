@@ -129,25 +129,34 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
 {
+    $user = Auth::user();
+    
+    $allowedRoles = ['user', 'pedagang', 'driver'];
+    if (!in_array($user->role, $allowedRoles)) {
+        return response()->json(['message' => 'Unauthorized untuk admin'], 403);
+    }
+
     $request->validate([
-        'current_password' => 'required',
         'new_password' => 'required|min:6|confirmed'
     ]);
 
-    $user = Auth::user();
-
-    if (!Hash::check($request->current_password, $user->password)) {
+    // Cek apakah ada pending password change di cache (dari OTP verification)
+    $cacheKey = 'password_change_pending:' . $user->id;
+    $newPasswordHash = Cache::get($cacheKey);
+    
+    if (!$newPasswordHash) {
         return response()->json([
-            'message' => 'Password lama salah'
-        ], 400);
+            'message' => 'Verifikasi OTP dulu dengan /password-change/verify-otp'
+        ], 422);
     }
 
-    $user->update([
-        'password' => Hash::make($request->new_password)
-    ]);
+    // Update password & bersihkan cache
+    $user->update(['password' => $newPasswordHash]);
+    Cache::forget($cacheKey);
 
     return response()->json([
-        'message' => 'Password berhasil diubah'
+        'success' => true,
+        'message' => 'Password berhasil diubah via OTP!'
     ]);
 }
 
