@@ -3,12 +3,11 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\ApiProdukController;
+use App\Http\Controllers\Api\ApiRegisterController;
 use App\Http\Controllers\Api\AuthController as ApiAuthController;
 use App\Http\Controllers\Api\DriverWithdrawalController;
 use App\Http\Controllers\Api\DriverWalletController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Api\KiosController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderPaymentController;
@@ -21,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/login', [ApiAuthController::class, 'login']);
-Route::post('/register', [ApiAuthController::class, 'register']);
+    Route::post('/register',            [ApiRegisterController::class, 'register']);
+    
 Route::post('/google-login', [ApiAuthController::class, 'googleLogin']);
 Route::post('/midtrans/notification', [OrderPaymentController::class, 'notification']);
 
@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::get('/driver/wallet/transactions', [DriverWalletController::class, 'transactions']);
     Route::get('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'index']);
     Route::post('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'store']);
-    Route::get('/orders/available', [OrderController::class, 'index']);      // ← spesifik dulu
+    Route::get('/orders/available', [OrderController::class, 'index']);    
     Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
     Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
     Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
@@ -46,6 +46,9 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/verify-otp',  [ApiRegisterController::class, 'verifyOtp']);
+    Route::post('/resend-otp',  [ApiRegisterController::class, 'resendOtp']);
+    Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
     Route::get('/profile/me', [ProfileController::class, 'show']);

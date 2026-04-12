@@ -21,6 +21,7 @@ use App\Http\Controllers\Pedagang\DashboardController as PedagangDashboardContro
 use App\Http\Controllers\Pedagang\ProdukController as PedagangProdukController;
 use App\Http\Controllers\Admin\KategoriLaporanController;
 use App\Http\Controllers\Admin\PedagangController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Models\User;
 use Filament\Facades\Filament;
 
@@ -39,9 +40,9 @@ Route::middleware('guest')->group(function () {
         Route::post('/password-driver/email', [DriverForgotPasswordController::class, 'sendResetLinkEmail'])->name('driver.password.email');
         Route::get('/password-driver/reset/{token}', [DriverResetPasswordController::class, 'showResetForm'])->name('driver.password.reset');
         Route::post('/password-driver/reset', [DriverResetPasswordController::class, 'reset'])->name('driver.password.update');
-        Route::get('/register/otp', [\App\Http\Controllers\Auth\RegisterController::class, 'showOtpForm'])->name('register.otp.form');
-        Route::post('/register/otp', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyOtp'])->name('register.otp.verify');
-        Route::post('/register/otp/resend', [\App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('register.otp.resend');
+        Route::get('/register/otp', [RegisterController::class, 'showOtpForm'])->name('register.otp.form');
+        Route::post('/register/otp', [RegisterController::class, 'verifyOtp'])->name('register.otp.verify');
+        Route::post('/register/otp/resend', [RegisterController::class, 'resendOtp'])->name('register.otp.resend');
 });
 
 Route::middleware('auth')->group(function () {

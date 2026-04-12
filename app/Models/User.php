@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticable
 {
     use HasApiTokens, Notifiable;
     protected $table = 'users';
@@ -18,6 +17,8 @@ class User extends Authenticatable
         'password',
         'role',
         'nomor_telepon',
+        'foto_profil',
+        'google_id',
         'foto_profil',
         'is_online'
         
@@ -38,6 +39,16 @@ class User extends Authenticatable
     }
 
     public function driver(): HasOne
+    {
+        return $this->hasOne(Driver::class, 'user_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    public function driverInfo()
     {
         return $this->hasOne(Driver::class, 'user_id');
     }

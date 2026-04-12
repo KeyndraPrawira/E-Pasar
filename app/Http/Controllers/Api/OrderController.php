@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\OrderUpdated;
 use App\Helpers\HaversineHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Alamat;
@@ -16,11 +15,13 @@ use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\DriverWalletService;
+use App\Services\FirebaseOrderSyncService;
 
 class OrderController extends Controller
 {
     public function __construct(
-        private readonly DriverWalletService $driverWalletService
+        private readonly DriverWalletService $driverWalletService,
+        private readonly FirebaseOrderSyncService $firebaseOrderSyncService
     ) {
     }
 
@@ -55,7 +56,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::with('orderDetails.produk', 'buyer', 'driver', 'pedagang')
+        $order = Order::with('orderDetails.produk', 'buyer', 'driver', 'orderDetails.produk.kios', 'driver.driverInfo')
             ->find($id);
 
         if (!$order) {
@@ -159,13 +160,8 @@ class OrderController extends Controller
             
         });
         $keranjang->each->delete();
-         // Di OrderController@store, setelah $keranjang->each->delete()
-         // Di OrderController@store, setelah $keranjang->each->delete()
-\Log::info('Broadcasting OrderUpdated', [
-    'order_id' => $order->id,
-    'channels' => ['user.' . $order->buyer_id, 'orders']
-]) ;
-                event(new OrderUpdated($order));
+
+        $this->firebaseOrderSyncService->sync($order);
 
 
         return response()->json([
@@ -234,8 +230,7 @@ class OrderController extends Controller
             'status'    => 'dalam_proses',
             'driver_id' => auth()->id(),
         ]);
-        
-        event(new OrderUpdated($order));
+        $this->firebaseOrderSyncService->sync($order);
 
         return response()->json([
             'status'  => 'success',
@@ -359,8 +354,7 @@ public function activeOrder(Request $request)
 
 
     $item->update($data);
-
-                event(new OrderUpdated($item->order));
+    $this->firebaseOrderSyncService->sync($item->order);
 
     
 
@@ -397,6 +391,7 @@ public function activeOrder(Request $request)
             'status' => 'menunggu_konfirmasi',
             'catatan_driver' => $request->catatan_driver
         ]);
+        $this->firebaseOrderSyncService->sync($item->order);
 
         return response()->json([
             'message' => 'Menunggu konfirmasi user',
@@ -426,6 +421,7 @@ public function activeOrder(Request $request)
             'subtotal_harga' => $produk->harga * $item->jumlah,
             'status' => 'diganti'
         ]);
+        $this->firebaseOrderSyncService->sync($item->order);
 
         return response()->json([
             'message' => 'Produk pengganti dipilih',
@@ -451,6 +447,7 @@ public function activeOrder(Request $request)
         $sum = $item->order->orderDetails()->whereIn('status', ['pending', 'diambil', 'diganti'])->sum('subtotal_harga');
 
          $item->order->update(['total_harga' => $sum]);
+        $this->firebaseOrderSyncService->sync($item->order);
 
         return response()->json([
             'message' => 'Item tidak jadi dibeli',
@@ -539,6 +536,7 @@ public function activeOrder(Request $request)
         }
             $total = $order->orderDetails()->sum('subtotal_harga');
         $order->update(['status' => 'dikirim']);
+        $this->firebaseOrderSyncService->sync($order);
 
         return response()->json([
             'status'  => 'success',
@@ -588,6 +586,7 @@ public function activeOrder(Request $request)
 
         $order->update($payload);
         $this->driverWalletService->creditCompletedOrder($order->fresh());
+        $this->firebaseOrderSyncService->sync($order);
 
         return response()->json([
             'status'  => 'success',
@@ -643,6 +642,7 @@ public function activeOrder(Request $request)
                 'cancel_request_by'   => 'buyer',
                 'cancel_requested_at' => now(),
             ]);
+            $this->firebaseOrderSyncService->sync($order);
 
             return response()->json([
                 'status'  => 'success',
@@ -664,6 +664,7 @@ public function activeOrder(Request $request)
             'cancel_reason'       => $request->reason,
             'cancel_requested_at' => now(),
         ]);
+        $this->firebaseOrderSyncService->sync($order);
 
         // Auto cancel setelah 5 menit kalau tidak direspons
         AutoCancelOrder::dispatch($order->id)->delay(now()->addMinutes(5));
@@ -710,6 +711,7 @@ public function activeOrder(Request $request)
         // Cek expired
         if (now()->diffInMinutes($order->cancel_requested_at) >= 5) {
             $order->update(['status' => 'dibatalkan']);
+            $this->firebaseOrderSyncService->sync($order);
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Permintaan sudah expired, order otomatis dibatalkan',
@@ -719,6 +721,7 @@ public function activeOrder(Request $request)
 
         if ($request->action === 'approve') {
             $order->update(['status' => 'dibatalkan']);
+            $this->firebaseOrderSyncService->sync($order);
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Pembatalan disetujui, order dibatalkan',
@@ -733,6 +736,7 @@ public function activeOrder(Request $request)
             'cancel_reason'       => null,
             'cancel_requested_at' => null,
         ]);
+        $this->firebaseOrderSyncService->sync($order);
 
         return response()->json([
             'status'  => 'success',

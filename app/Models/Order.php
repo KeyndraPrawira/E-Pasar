@@ -50,6 +50,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'driver_id');
     }
 
+    public function driverInfo()
+    {
+        return $this->belongsTo(Driver::class, 'driver_id');
+    }
+
     public function produk(){
             return $this->belongsToMany(Produk::class, 'order_details', 'order_id', 'produk_id')->withPivot('jumlah', 'subtotal_harga')
                     ->withTimestamps();

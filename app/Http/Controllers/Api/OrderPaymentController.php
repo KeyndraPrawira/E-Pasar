@@ -12,11 +12,13 @@ use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Transaction;
 use App\Services\DriverWalletService;
+use App\Services\FirebaseOrderSyncService;
 
 class OrderPaymentController extends Controller
 {
     public function __construct(
-        private readonly DriverWalletService $driverWalletService
+        private readonly DriverWalletService $driverWalletService,
+        private readonly FirebaseOrderSyncService $firebaseOrderSyncService
     ) {
         $this->configureMidtrans();
     }
@@ -82,6 +84,7 @@ class OrderPaymentController extends Controller
                 'order_id' => $reference,
                 'gross_amount' => $grossAmount,
             ],
+            'enabled_payments' => ['qris'],
             'customer_details' => [
                 'first_name' => $order->buyer?->name ?? 'Customer',
                 'email' => $order->buyer?->email,
@@ -116,6 +119,7 @@ class OrderPaymentController extends Controller
             'payment_type' => null,
             'paid_at' => null,
         ]);
+        $this->firebaseOrderSyncService->sync($order);
         \Log::info('Midtrans notification URL', [
     'finish_redirect_url' => 'akan dikirim ke: ' . config('app.url') . '/api/midtrans/notification',
     'ngrok_url' => 'pastikan ngrok aktif',
@@ -298,6 +302,8 @@ class OrderPaymentController extends Controller
         if ($paymentStatus === Order::PAYMENT_STATUS_PAID) {
             $this->driverWalletService->creditCompletedOrder($order->fresh());
         }
+
+        $this->firebaseOrderSyncService->sync($order);
     }
 
     /**

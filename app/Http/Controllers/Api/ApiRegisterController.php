@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OtpMail;
@@ -270,6 +270,53 @@ class RegisterController extends Controller
         ]);
 
         Mail::to($email)->send(new OtpMail($otp));
+    }
+
+
+    // =========================================================================
+    // Step 4 — Cancel: hapus data sementara, OTP, dan rate limit
+    // =========================================================================
+
+    /**
+     * Batalkan registrasi — hapus cache pending, OTP record, dan rate limit.
+     * Dipanggil saat user menekan tombol "Batal" di halaman OTP.
+     *
+     * DELETE /api/register/cancel
+     */
+    public function cancelPendingRegistration(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'string', 'email'],
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.email'    => 'Format email tidak valid.',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator->errors()->toArray());
+        }
+
+        $email = $request->string('email')->toString();
+
+        // Kalau tidak ada sesi aktif, tetap return success
+        // agar Flutter tidak perlu handle kasus ini secara khusus
+        if (! Cache::has($this->pendingCacheKey($email))) {
+            return $this->success('Tidak ada sesi registrasi aktif.');
+        }
+
+        // Hapus cache data registrasi sementara
+        Cache::forget($this->pendingCacheKey($email));
+
+        // Hapus semua OTP yang belum dipakai untuk email ini
+        EmailOtp::where('email', $email)
+            ->where('purpose', EmailOtp::PURPOSE_USER_REGISTRATION)
+            ->whereNull('used_at')
+            ->delete();
+
+        // Hapus rate limit resend OTP
+        Cache::forget($this->resendRateLimitKey($email));
+
+        return $this->success('Registrasi berhasil dibatalkan.');
     }
 
     // =========================================================================
