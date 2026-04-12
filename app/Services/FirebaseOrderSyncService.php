@@ -57,12 +57,21 @@ class FirebaseOrderSyncService
             'payment_status' => $order->payment_status,
             'payment_reference' => $order->payment_reference,
             'payment_token' => $order->payment_token,
-            'payment_url' => $order->payment_url,
+            'payment_url' => $this->normalizePaymentUrl($order->payment_url),
             'payment_type' => $order->payment_type,
             'gross_amount' => (int) $order->total_harga,
             'paid_at' => optional($order->paid_at)->toIso8601String(),
             'updated_at' => optional($order->updated_at)->toIso8601String(),
             'synced_at' => now()->toIso8601String(),
         ];
+    }
+
+    private function normalizePaymentUrl(?string $paymentUrl): ?string
+    {
+        if (!$paymentUrl) {
+            return null;
+        }
+
+        return preg_replace('#/other-qris/?$#', '', trim($paymentUrl));
     }
 }

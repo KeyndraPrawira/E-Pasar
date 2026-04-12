@@ -19,6 +19,13 @@ class Produk extends Model
         'deskripsi',
         'foto',
     ];
+    protected $casts = [
+        'kategori_id' => 'integer',
+        'kios_id' => 'integer',
+        'harga' => 'integer',
+        'stok' => 'integer',
+        'berat_satuan' => 'integer',
+    ];
 
     public function kategori()
     {

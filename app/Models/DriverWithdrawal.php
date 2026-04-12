@@ -27,6 +27,9 @@ class DriverWithdrawal extends Model
     ];
 
     protected $casts = [
+        'driver_wallet_id' => 'integer',
+        'user_id' => 'integer',
+        'amount' => 'integer',
         'processed_at' => 'datetime',
     ];
 

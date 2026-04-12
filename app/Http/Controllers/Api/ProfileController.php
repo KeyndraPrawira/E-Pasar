@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Alamat;
 use app\http\Controllers\Controller;
 use App\Models\Pasar;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller

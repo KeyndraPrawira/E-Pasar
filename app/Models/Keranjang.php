@@ -14,6 +14,12 @@ class Keranjang extends Model
         'jumlah',
         'harga_total',
     ];
+        protected $casts = [
+            'user_id' => 'integer',
+            'produk_id' => 'integer',
+            'jumlah' => 'integer',
+            'harga_total' => 'integer',
+        ];
 
     public function user()
     {

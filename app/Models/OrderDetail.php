@@ -19,6 +19,15 @@ class OrderDetail extends Model
         'kios_id',
     ];
 
+    protected $casts = [
+        'order_id' => 'integer',
+        'produk_id' => 'integer',
+        'jumlah' => 'integer',
+        'subtotal_harga' => 'integer',
+        'harga_satuan' => 'integer',
+        'kios_id' => 'integer',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');

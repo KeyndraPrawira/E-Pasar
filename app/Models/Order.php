@@ -40,6 +40,13 @@ class Order extends Model
     ];
 
     protected $casts = [
+        'buyer_id' => 'integer',
+        'driver_id' => 'integer',
+        'total_harga_barang' => 'integer',
+        'ongkir' => 'integer',
+        'total_harga' => 'integer',
+        'driver_earning_amount' => 'integer',
+
         'paid_at' => 'datetime',
         'driver_wallet_credited_at' => 'datetime',
     ];

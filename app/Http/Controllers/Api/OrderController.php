@@ -235,7 +235,7 @@ class OrderController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Order berhasil diterima',
-            'data'    => $order->fresh()->load('buyer'),
+            'data'    => $order->fresh()->load('buyer', 'orderDetails.produk', 'driver'),
         ]);
     }
 
@@ -248,7 +248,7 @@ class OrderController extends Controller
 
             $orders = Order::where('driver_id', $user->id)
                 ->whereIn('status', ['dalam_proses', 'dikirim'])
-                ->with('orderDetails.produk', 'buyer')
+                ->with('orderDetails.produk', 'buyer', 'driver')
                 ->latest()
                 ->get();
         } elseif($user->role == 'user') {
@@ -304,7 +304,7 @@ public function activeOrder(Request $request)
     {
     
     $request->validate([
-        'status' => 'required|in:diambil,tidak_ada, pending_request, diganti',
+        'status' => 'required|in:diambil,tidak_ada',
         'catatan_driver' => 'nullable|string'
     ]);
 
@@ -326,7 +326,8 @@ public function activeOrder(Request $request)
     //  pastikan driver yang update = yang pegang order
     if ($item->order->driver_id !== $user->id) {
         return response()->json([
-            'message' => 'Bukan order kamu'
+            'message' => 'Bukan order kamu, order ini milik ' . $item->order->driver->id
+            
         ], 403);
     }
 

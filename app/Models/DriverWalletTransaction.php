@@ -24,6 +24,10 @@ class DriverWalletTransaction extends Model
     ];
 
     protected $casts = [
+        'driver_wallet_id' => 'integer',
+        'amount' => 'integer',
+        'balance_before' => 'integer',
+        'balance_after' => 'integer',
         'metadata' => 'array',
     ];
 

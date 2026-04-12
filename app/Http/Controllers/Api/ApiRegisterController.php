@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterController extends Controller
+class ApiRegisterController extends Controller
 {
     /**
      * Batas maksimal percobaan resend OTP per email (dalam window waktu tertentu).

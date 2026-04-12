@@ -17,6 +17,13 @@ class OrderHistory extends Model
         'ongkir',
         'updated_at',
     ];
+    protected $casts = [
+        'order_id' => 'integer',
+        'buyer_id' => 'integer',
+        'driver_id' => 'integer',
+        'total_harga' => 'integer',
+        'ongkir' => 'integer',
+    ];
 
     public function order()
     {

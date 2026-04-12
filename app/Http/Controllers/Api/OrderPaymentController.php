@@ -28,7 +28,7 @@ class OrderPaymentController extends Controller
      */
     public function create(Order $order, Request $request): JsonResponse
     {
-            $this->configureMidtrans();
+        $this->configureMidtrans();
         $user = $request->user();
 
         if ($order->buyer_id !== $user->id) {
@@ -60,11 +60,20 @@ class OrderPaymentController extends Controller
             ]);
         }
 
-        if ($order->payment_status === Order::PAYMENT_STATUS_PENDING && $order->payment_token && $order->payment_url) {
+        $normalizedExistingPaymentUrl = $this->normalizePaymentUrl($order->payment_url);
+
+        if ($order->payment_status === Order::PAYMENT_STATUS_PENDING && $order->payment_token && $normalizedExistingPaymentUrl) {
+            if ($normalizedExistingPaymentUrl !== $order->payment_url) {
+                $order->update([
+                    'payment_url' => $normalizedExistingPaymentUrl,
+                ]);
+                $this->firebaseOrderSyncService->sync($order);
+            }
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Transaksi Midtrans sudah tersedia.',
-                'data' => $this->paymentPayload($order),
+                'data' => $this->paymentPayload($order->fresh()),
             ]);
         }
 
@@ -72,58 +81,78 @@ class OrderPaymentController extends Controller
 
         $reference = $this->generatePaymentReference($order);
         $grossAmount = (int) $order->total_harga;
-        try{
+        try {
             \Log::info('Midtrans CREATE transaction', [
-        'SDK_serverKey' => \Midtrans\Config::$serverKey,
-        'SDK_isProduction' => \Midtrans\Config::$isProduction,
-        'reference' => $reference,
-    ]);
+                'SDK_serverKey' => \Midtrans\Config::$serverKey,
+                'SDK_isProduction' => \Midtrans\Config::$isProduction,
+                'reference' => $reference,
+            ]);
 
             $transaction = Snap::createTransaction([
-            'transaction_details' => [
-                'order_id' => $reference,
-                'gross_amount' => $grossAmount,
-            ],
-            'enabled_payments' => ['qris'],
-            'customer_details' => [
-                'first_name' => $order->buyer?->name ?? 'Customer',
-                'email' => $order->buyer?->email,
-                'phone' => $order->buyer?->nomor_telepon,
-            ],
-            'item_details' => $this->buildItemDetails($order),
-            'expiry' => [
-                'start_time' => now()->format('Y-m-d H:i:s O'),
-                'unit' => 'day',
-                'duration' => 1,
-            ],
-        ]);
-        \Log::info('Midtrans CREATE transaction', [
-        'SDK_serverKey' => \Midtrans\Config::$serverKey,
-        'SDK_isProduction' => \Midtrans\Config::$isProduction,
-        'reference' => $reference,
-    ]);
+                'transaction_details' => [
+                    'order_id' => $reference,
+                    'gross_amount' => $grossAmount,
+                ],
+                'enabled_payments' => ['qris'],
+                'customer_details' => [
+                    'first_name' => $order->buyer?->name ?? 'Customer',
+                    'email' => $order->buyer?->email,
+                    'phone' => $order->buyer?->nomor_telepon,
+                ],
+                'item_details' => $this->buildItemDetails($order),
+                'expiry' => [
+                    'start_time' => now()->format('Y-m-d H:i:s O'),
+                    'unit' => 'day',
+                    'duration' => 1,
+                ],
+            ]);
 
-        }catch(\Exception $e){
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Gagal membuat transaksi Midtrans. Silakan coba lagi.',
-                ], 500);
+            \Log::info('Midtrans transaction created', [
+                'reference' => $reference,
+                'redirect_url' => $transaction->redirect_url ?? null,
+                'token' => $transaction->token ?? null,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal membuat transaksi Midtrans.', [
+                'order_id' => $order->id,
+                'reference' => $reference,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal membuat transaksi Midtrans. Silakan coba lagi.',
+            ], 500);
         }
-        
+
+        $paymentUrl = $this->normalizePaymentUrl($transaction->redirect_url ?? null);
+
+        if (!$paymentUrl) {
+            Log::error('Midtrans tidak mengembalikan redirect_url.', [
+                'order_id' => $order->id,
+                'reference' => $reference,
+                'transaction' => (array) $transaction,
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'URL pembayaran QRIS tidak tersedia dari Midtrans.',
+            ], 500);
+        }
 
         $order->update([
             'payment_status' => Order::PAYMENT_STATUS_PENDING,
             'payment_reference' => $reference,
             'payment_token' => $transaction->token,
-            'payment_url' => $transaction->redirect_url,
+            'payment_url' => $paymentUrl,
             'payment_type' => null,
             'paid_at' => null,
         ]);
         $this->firebaseOrderSyncService->sync($order);
         \Log::info('Midtrans notification URL', [
-    'finish_redirect_url' => 'akan dikirim ke: ' . config('app.url') . '/api/midtrans/notification',
-    'ngrok_url' => 'pastikan ngrok aktif',
-]);
+            'finish_redirect_url' => 'akan dikirim ke: ' . config('app.url') . '/api/midtrans/notification',
+            'ngrok_url' => 'pastikan ngrok aktif',
+        ]);
 
         return response()->json([
             'status' => 'success',
@@ -340,10 +369,19 @@ class OrderPaymentController extends Controller
             'payment_status' => $order->payment_status,
             'payment_type' => $order->payment_type,
             'payment_token' => $order->payment_token,
-            'payment_url' => $order->payment_url,
+            'payment_url' => $this->normalizePaymentUrl($order->payment_url),
             'gross_amount' => (int) $order->total_harga,
             'paid_at' => $order->paid_at,
             'client_key' => config('midtrans.clientKey'),
         ];
+    }
+
+    private function normalizePaymentUrl(?string $paymentUrl): ?string
+    {
+        if (!$paymentUrl) {
+            return null;
+        }
+
+        return preg_replace('#/other-qris/?$#', '', trim($paymentUrl));
     }
 }
