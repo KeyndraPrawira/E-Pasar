@@ -8,6 +8,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class KiosController extends Controller
 {
@@ -42,7 +43,10 @@ class KiosController extends Controller
     public function create()
     {
         $pasar = Pasar::first();
-        $penjual = User::where('role', 'pedagang')->get();
+        $penjual = User::where('role', 'pedagang')
+            ->doesntHave('kios')
+            ->orderBy('name')
+            ->get();
         return view('admin.kios.create', compact('pasar', 'penjual'));
     }
 
@@ -54,7 +58,7 @@ class KiosController extends Controller
         $request->validate([
             'nama_kios' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id|unique:kios,user_id',
+            'user_id' => ['nullable', 'exists:users,id', 'unique:kios,user_id'],
             'pasar_id' => 'required|exists:pasars,id', 
             'foto_kios' => 'nullable|max:2048',
             'kontak' => 'nullable|string|max:100',
@@ -65,20 +69,20 @@ class KiosController extends Controller
         [
             'nama_kios.required' => 'Nama Kios wajib diisi.',
             'lokasi.required' => 'Alamat Kios wajib diisi.',
-            'user_id.required' => 'Pemilik Kios wajib diisi.',
             'user_id.exists' => 'Pemilik Kios tidak valid.',
             'user_id.unique' => 'Pedagang ini sudah memiliki kios.',
             'pasar_id.required' => 'Pasar wajib diisi.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
             'pasar_id.exists' => 'Pasar tidak valid.',
-            'jam_buka' => 'Jam buka wajib diisi',
-            'jam_tutup' => 'Jam tutup wajib diisi',
+            'jam_buka.required' => 'Jam buka wajib diisi.',
+            'jam_tutup.required' => 'Jam tutup wajib diisi.',
         ]);
 
 
 
         
-        $data = $request->only(['nama_kios', 'lokasi', 'user_id', 'pasar_id', 'kontak', 'deskripsi']);
+        $data = $request->only(['nama_kios', 'lokasi', 'pasar_id', 'kontak', 'deskripsi', 'jam_buka', 'jam_tutup']);
+        $data['user_id'] = $request->input('user_id');
 
 
         if($request->hasFile('foto_kios')){
@@ -108,7 +112,13 @@ class KiosController extends Controller
     public function edit(Kios $kios)
     {
         $pasar = Pasar::first();
-        $pedagang = User::where('role', 'pedagang')->get();
+        $pedagang = User::where('role', 'pedagang')
+            ->where(function ($query) use ($kios) {
+                $query->doesntHave('kios')
+                    ->orWhere('id', $kios->user_id);
+            })
+            ->orderBy('name')
+            ->get();
         
         $selectedPedagangid = $kios->user_id;
         return view('admin.kios.edit', data: compact('kios', 'pasar', 'pedagang', 'selectedPedagangid'));
@@ -122,7 +132,11 @@ class KiosController extends Controller
         $request->validate([
             'nama_kios' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => [
+                'nullable',
+                'exists:users,id',
+                Rule::unique('kios', 'user_id')->ignore($kios->id),
+            ],
             'foto_kios' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
             'jam_buka' => 'required',
             'jam_tutup' => 'required',
@@ -133,14 +147,15 @@ class KiosController extends Controller
             'nama_kios.required' => 'Nama Kios wajib diisi.',
             'lokasi.required' => 'Alamat Kios wajib diisi.',
             'foto_kios.mimes' => 'Format foto harus berupa jpeg, png, jpg, atau svg.',
-            'user_id.required' => 'Pemilik Kios wajib diisi.',
             'user_id.exists' => 'Pemilik Kios tidak valid.',
+            'user_id.unique' => 'Pedagang ini sudah memiliki kios.',
             'foto_kios.max' => 'Ukuran foto maksimal 2MB.',
-            'jam_buka' => 'Jam buka wajib diisi',
-            'jam_tutup' => 'Jam tutup wajib diisi',
+            'jam_buka.required' => 'Jam buka wajib diisi.',
+            'jam_tutup.required' => 'Jam tutup wajib diisi.',
         ]);
 
-        $data = $request->only(['nama_kios', 'lokasi', 'user_id',  'kontak', 'deskripsi']);
+        $data = $request->only(['nama_kios', 'lokasi', 'kontak', 'deskripsi', 'jam_buka', 'jam_tutup']);
+        $data['user_id'] = $request->input('user_id');
 
         if($request->hasFile('foto_kios')){
             if($kios->foto && Storage::disk('public')->exists($kios->foto)){

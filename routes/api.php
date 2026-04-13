@@ -80,7 +80,7 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::get('/orders/{order}/payment/status', [OrderPaymentController::class, 'status']);
     Route::get('/orders/my', [OrderController::class, 'myOrders']);
           Route::apiResource('laporans', LaporanController::class)->only(['index', 'store']);
-    Route::put('/orders/{order}/cancel', [OrderController::class, 'requestCancel']);
+    Route::put('/orders/{order}/cancel', [OrderController::class, 'orderCancel']);
 });
 
 Route::middleware('auth:sanctum', 'role:pedagang')->group(function(){

@@ -15,7 +15,7 @@
         </ul>
     </div>
 @endif
-                  <form action="{{ route('kios.store') }}" method="POST">
+                  <form action="{{ route('kios.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                    
                     <div class="row">
@@ -31,30 +31,33 @@
                       <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
-                            <select name="user_id" id="tb-pedagang" class="form-control">
-                              <option value="" selected disabled>Pilih pedagang</option>
+                            <select name="user_id" id="tb-pedagang" class="form-control @error('user_id') is-invalid @enderror">
+                              <option value="">Pilih pedagang jika sudah ada</option>
                               @foreach($penjual as $p)
-                                <option value="{{ $p->id }}" >{{ $p->name }}</option>
+                                <option value="{{ $p->id }}" {{ old('user_id') == $p->id ? 'selected' : '' }}>{{ $p->name }}</option>
                                 @endforeach
                             </select>
-                            <label for="tb-pedagang" class="text-dark">Pedagang</label>
+                            <label for="tb-pedagang" class="text-dark">Pedagang (opsional)</label>
+                            @error('user_id')
+                              <small style="color:red">{{ $message }}</small>
+                            @enderror
                             </div>
                         </div>
                       </div>
 
                        <div class="row">
                         <div class="col-md-12">
-                            <div class="form-floating mb-3">
-                            <textarea class="form-control" name="lokasi" id="tb-lokasi"></textarea>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" name="lokasi" id="tb-lokasi">{{ old('lokasi') }}</textarea>
                             <label for="tb-lokasi" class="text-dark">Lokasi</label>
-                            </div>
+                        </div>
                         </div>
                       </div>
                       
                       <div class="row">
                             <div class="col-md-6">
                         <div class="form-floating mb-3">
-                          <input readonly id="lng" name="jam_buka" type="datetime-local" value="{{ $kios->jam_buka }}" class="form-control {{ $errors->has('jam_buka') ? 'is-invalid' : '' }}" id="tb-pwd" placeholder="jam_buka tidak terisi" />
+                          <input name="jam_buka" type="time" value="{{ old('jam_buka') }}" class="form-control {{ $errors->has('jam_buka') ? 'is-invalid' : '' }}" id="tb-pwd" placeholder="jam_buka tidak terisi" />
                           @error('jam_buka')
                             <small style="color:red">{{ $message }}</small>
                             @enderror
@@ -63,7 +66,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-floating mb-3">
-                          <input readonly id="lat" name="jam_tutup" type="datetime-local" value="{{ $kios->jam_tutup }}" class="form-control {{ $errors->has('jam_tutup') ? 'is-invalid' : '' }}" id="tb-cpwd" placeholder="jam_tutup tidak terisi" />
+                          <input name="jam_tutup" type="time" value="{{ old('jam_tutup') }}" class="form-control {{ $errors->has('jam_tutup') ? 'is-invalid' : '' }}" id="tb-cpwd" placeholder="jam_tutup tidak terisi" />
                           @error('jam_tutup')
                             <small style="color:red">{{ $message }}</small>
                             @enderror
@@ -75,7 +78,7 @@
                       <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
-                              <textarea name="deskripsi" class="form-control"  id="tb_deskripsi"></textarea>
+                              <textarea name="deskripsi" class="form-control"  id="tb_deskripsi">{{ old('deskripsi') }}</textarea>
                             <label for="tb-deskripsi" class="text-dark">Deskripsi (opsional)</label>
                             </div>
                         </div>

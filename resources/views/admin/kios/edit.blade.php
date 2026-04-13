@@ -29,13 +29,16 @@
                       <div class="row">
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
-                            <select name="user_id" id="tb-pedagang" class="form-control">
-                              <option value="" selected disabled >Pilih pedagang</option>
+                            <select name="user_id" id="tb-pedagang" class="form-control @error('user_id') is-invalid @enderror">
+                              <option value="">Pilih pedagang jika sudah ada</option>
                               @foreach($pedagang as $p)
- <option value="{{ $p->id }}" {{ $p->id === $selectedPedagangid  ? 'selected' : ''}}>{{ $p->name }}</option> 
+ <option value="{{ $p->id }}" {{ (string) old('user_id', $selectedPedagangid) === (string) $p->id ? 'selected' : ''}}>{{ $p->name }}</option> 
                               @endforeach 
                            </select>
-                            <label for="tb-pedagang" class="text-dark">Pedagang</label>
+                            <label for="tb-pedagang" class="text-dark">Pedagang (opsional)</label>
+                            @error('user_id')
+                              <small style="color:red">{{ $message }}</small>
+                            @enderror
                             </div>
                         </div>
                       </div>
