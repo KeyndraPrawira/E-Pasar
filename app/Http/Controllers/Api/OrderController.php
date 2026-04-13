@@ -14,6 +14,7 @@ use App\Models\OrderDetail;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use App\Services\DriverWalletService;
 use App\Services\FirebaseOrderSyncService;
 
@@ -93,16 +94,19 @@ class OrderController extends Controller
             ->get();
 
         $alamat = Alamat::where('user_id', auth()->id())->first();
-        if ($keranjang->produk->stok->isEmpty()) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Stok produk tidak tersedia, silakan perbarui keranjang Anda',
-            ], 400);
-        }
+
         if ($keranjang->isEmpty()) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Keranjang kosong',
+            ], 400);
+        }
+
+        $produkTidakTersedia = $keranjang->first(fn ($item) => !$item->produk);
+        if ($produkTidakTersedia) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Ada produk di keranjang yang sudah tidak tersedia, silakan perbarui keranjang Anda',
             ], 400);
         }
 
@@ -121,7 +125,7 @@ class OrderController extends Controller
             ], 500);
         }
 
-        $totalBerat = $keranjang->sum(fn($item) => $item->produk->berat * $item->jumlah);
+        $totalBerat = $keranjang->sum(fn ($item) => (int) ($item->produk->berat_satuan ?? 0) * $item->jumlah);
         $totalHargaBarang = $keranjang->sum('harga_total');
         $ongkir = HaversineHelper::hitungOngkir(
             $alamat->jarak_km,
@@ -135,9 +139,9 @@ class OrderController extends Controller
         $totalHarga = $totalHargaBarang + $ongkir;
         $order = null;
 
-        DB::transaction(function () use ($request, $keranjang, $alamat, $ongkir, $totalHarga, &$order, $totalHargaBarang) {
+        DB::transaction(function () use ($request, $keranjang, $alamat, $ongkir, &$order, $totalHargaBarang) {
             $order = Order::create([
-                'kode_pesanan'      => 'ORD-' . strtoupper(uniqid()),
+                'kode_pesanan'      => 'ORD-' . strtoupper(uniqid(5)),
                 'buyer_id'          => auth()->id(),
                 'status'            => 'menunggu_driver',
                 'metode_pembayaran' => $request->metode_pembayaran,
@@ -152,20 +156,35 @@ class OrderController extends Controller
                 'driver_earning_amount' => $ongkir,
             ]);
 
+            $totalHargaBarangAktual = 0;
+
             foreach ($keranjang as $item) {
+                $produk = Produk::lockForUpdate()->findOrFail($item->produk_id);
+
+                if ($produk->stok < $item->jumlah) {
+                    throw ValidationException::withMessages([
+                        'stok' => ["Stok {$produk->nama_produk} tidak mencukupi untuk checkout."],
+                    ]);
+                }
+
+                $subtotalHarga = $produk->harga * $item->jumlah;
+
                 $order->orderDetails()->create([
-                    'produk_id'      => $item->produk_id,
-                    'kios_id'        => $item->produk->kios_id,
-                    'harga_satuan'   => $item->produk->harga,
+                    'produk_id'      => $produk->id,
+                    'kios_id'        => $produk->kios_id,
+                    'harga_satuan'   => $produk->harga,
                     'jumlah'         => $item->jumlah,
-                    'subtotal_harga' => $item->harga_total,
+                    'subtotal_harga' => $subtotalHarga,
                 ]);
-                $produk = Produk::find($item->produk_id);
-                $stok = $produk->stok - $item->jumlah;
-                $produk->update(['stok' => $stok]);
+
+                $totalHargaBarangAktual += $subtotalHarga;
+                $produk->decrement('stok', $item->jumlah);
             }
 
-            
+            $order->update([
+                'total_harga_barang' => $totalHargaBarangAktual,
+                'total_harga' => $totalHargaBarangAktual + (int) $ongkir,
+            ]);
         });
         $keranjang->each->delete();
 
@@ -355,15 +374,13 @@ public function activeOrder(Request $request)
     if ($request->status === 'diambil') {
         $data['subtotal_harga'] = $item->harga_satuan * $item->jumlah;
     }
-        if ($request->status === 'tidak_ada') {
-            $data['subtotal_harga'] = 0;
-        }
 
-
-
+    if ($request->status === 'tidak_ada') {
+        $data['subtotal_harga'] = 0;
+    }
 
     $item->update($data);
-    $this->firebaseOrderSyncService->sync($item->order);
+    $this->refreshOrderAfterItemStatusChange($item->order);
 
     
 
@@ -453,10 +470,7 @@ public function activeOrder(Request $request)
             'subtotal_harga' => 0
         ]);
 
-        $sum = $item->order->orderDetails()->whereIn('status', ['pending', 'diambil', 'diganti'])->sum('subtotal_harga');
-
-         $item->order->update(['total_harga' => $sum]);
-        $this->firebaseOrderSyncService->sync($item->order);
+        $this->refreshOrderAfterItemStatusChange($item->order);
 
         return response()->json([
             'message' => 'Item tidak jadi dibeli',
@@ -600,11 +614,9 @@ public function activeOrder(Request $request)
     }
 
     // ── BUYER/DRIVER — request pembatalan ─────────────────────
-    public function requestCancel(Request $request, $id)
+    public function requestCancel( $id)
     {
-        $request->validate([
-            'reason' => 'required|string|max:500',
-        ]);
+       
 
         $order = Order::find($id);
         $user  = auth()->user();
@@ -624,10 +636,10 @@ public function activeOrder(Request $request)
             ], 403);
         }
 
-        if (!in_array($order->status, ['dalam_proses', 'dikirim'])) {
+        if ($order->status != 'menunggu_driver') {
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Order tidak dapat dibatalkan pada status: ' . $order->status,
+                'message' => 'Order tidak dapat dibatalkan, status: ' . $order->status,
             ], 400);
         }
 
@@ -641,10 +653,8 @@ public function activeOrder(Request $request)
             }
 
             $order->update([
-                'status'              => 'dibatalkan',
-                'cancel_reason'       => $request->reason,
-                'cancel_request_by'   => 'buyer',
-                'cancel_requested_at' => now(),
+                'status'   => 'dibatalkan',
+                
             ]);
             $this->firebaseOrderSyncService->sync($order);
 
@@ -655,29 +665,10 @@ public function activeOrder(Request $request)
             ]);
         }
 
-        if ($order->status === 'menunggu_konfirmasi_batal') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sudah ada permintaan pembatalan yang menunggu konfirmasi',
-            ], 400);
-        }
+        
 
-        $order->update([
-            'status'              => 'menunggu_konfirmasi_batal',
-            'cancel_request_by'   => $role,
-            'cancel_reason'       => $request->reason,
-            'cancel_requested_at' => now(),
-        ]);
-        $this->firebaseOrderSyncService->sync($order);
-
-        // Auto cancel setelah 5 menit kalau tidak direspons
-        AutoCancelOrder::dispatch($order->id)->delay(now()->addMinutes(5));
-
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Permintaan pembatalan dikirim, menunggu konfirmasi',
-            'data'    => $order,
-        ]);
+       
+       
     }
 
     // ── BUYER/DRIVER — konfirmasi pembatalan ──────────────────
@@ -757,6 +748,36 @@ public function activeOrder(Request $request)
         if ($user->id === $order->buyer_id) return 'buyer';
         if ($user->id === $order->driver_id) return 'driver';
         return null;
+    }
+
+    private function refreshOrderAfterItemStatusChange(Order $order): Order
+    {
+        $order = $order->fresh(['orderDetails']);
+
+        $semuaItemTidakAda = $order->orderDetails->isNotEmpty()
+            && $order->orderDetails->every(fn (OrderDetail $detail) => $detail->status === 'tidak_ada');
+
+        $totalHargaBarang = $semuaItemTidakAda
+            ? 0
+            : (int) $order->orderDetails->sum('subtotal_harga');
+
+        $payload = [
+            'total_harga_barang' => $totalHargaBarang,
+            'total_harga' => $semuaItemTidakAda
+                ? 0
+                : $totalHargaBarang + (int) $order->ongkir,
+        ];
+
+        if ($semuaItemTidakAda) {
+            $payload['status'] = 'dibatalkan';
+        }
+
+        $order->update($payload);
+        $order = $order->fresh();
+
+        $this->firebaseOrderSyncService->sync($order);
+
+        return $order;
     }
 
     private function ensureApprovedDriver($user)
