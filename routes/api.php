@@ -15,7 +15,6 @@ use App\Http\Controllers\Api\KeranjangController;
 use App\Http\Controllers\Api\PasarController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\LaporanController;
-use App\Http\Controllers\Api\PasswordChangeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +40,7 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
     Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
     Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
+    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
     Route::patch('/order-item/{id}', [OrderController::class, 'updateItemStatus']);
     Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
     Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
@@ -56,13 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile/me', [ProfileController::class, 'show']);
     Route::put('/profile/me', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
-    
-    Route::prefix('password-change')->group(function () {
-        Route::post('send-otp', [PasswordChangeController::class, 'sendOtp']);
-        Route::post('verify-otp', [PasswordChangeController::class, 'verifyOtp']);
-        Route::post('resend-otp', [PasswordChangeController::class, 'resendOtp']);
-    });
-    
+
     Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
 });

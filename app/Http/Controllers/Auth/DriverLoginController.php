@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 
 class DriverLoginController extends Controller
 {
@@ -24,9 +24,9 @@ class DriverLoginController extends Controller
     /**
      * Tampilkan halaman login driver.
      */
-    public function showLoginForm(): View
+    public function showLoginForm(): RedirectResponse
     {
-        return view('auth.driver-login');
+        return redirect()->route('login', ['as' => 'driver']);
     }
 
     /**
@@ -63,7 +63,7 @@ class DriverLoginController extends Controller
      */
     protected function redirectTo(): string
     {
-        $user = auth()->user()?->loadMissing('driver');
+        $user = auth()->user()->loadMissing('driver');
 
         if ($user === null) {
             return route('landingpage');

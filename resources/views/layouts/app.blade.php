@@ -31,7 +31,13 @@
     <img src="{{ asset('template/images/logos/Pajajap logo.png')}}" alt="loader" class="lds-ripple img-fluid" />
   </div>
   <div id="main-wrapper">
-         @include('layouts.admin.sidebar')
+    @if (Auth::check() && Auth::user()->role === 'admin')
+      @include('layouts.admin.sidebar')
+    @elseif (Auth::check() && Auth::user()->role === 'user' || Auth::check() && Auth::user()->role === 'driver')
+      @include('layouts.driver.sidebar')
+    @endif
+
+         
          
 <div class="page-wrapper">
   

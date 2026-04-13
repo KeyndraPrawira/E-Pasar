@@ -457,7 +457,7 @@ public function activeOrder(Request $request)
     }
     public function OrderHistory()
     {
-        $orders = Order::where('buyer_id', auth()->id())
+        $orders = Order::where('buyer_id', auth()->id() || 'driver_id', auth()->id())
             ->orWhere('driver_id', auth()->id())
             ->with('orderDetails.produk', 'buyer', 'driver')
             ->latest()

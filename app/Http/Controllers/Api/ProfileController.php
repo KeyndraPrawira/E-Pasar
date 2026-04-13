@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Alamat;
 use app\http\Controllers\Controller;
 use App\Models\Pasar;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -138,26 +138,23 @@ class ProfileController extends Controller
     }
 
     $request->validate([
-        'new_password' => 'required|min:6|confirmed'
+        'current_password' => 'required|string',
+        'new_password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
     ]);
 
-    // Cek apakah ada pending password change di cache (dari OTP verification)
-    $cacheKey = 'password_change_pending:' . $user->id;
-    $newPasswordHash = Cache::get($cacheKey);
-    
-    if (!$newPasswordHash) {
+    if (!Hash::check($request->current_password, $user->password)) {
         return response()->json([
-            'message' => 'Verifikasi OTP dulu dengan /password-change/verify-otp'
+            'message' => 'Password saat ini tidak sesuai'
         ], 422);
     }
 
-    // Update password & bersihkan cache
-    $user->update(['password' => $newPasswordHash]);
-    Cache::forget($cacheKey);
+    $user->update([
+        'password' => Hash::make($request->new_password),
+    ]);
 
     return response()->json([
         'success' => true,
-        'message' => 'Password berhasil diubah via OTP!'
+        'message' => 'Password berhasil diubah.'
     ]);
 }
 

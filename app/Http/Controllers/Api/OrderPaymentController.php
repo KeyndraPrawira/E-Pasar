@@ -102,8 +102,8 @@ class OrderPaymentController extends Controller
                 'item_details' => $this->buildItemDetails($order),
                 'expiry' => [
                     'start_time' => now()->format('Y-m-d H:i:s O'),
-                    'unit' => 'day',
-                    'duration' => 1,
+                    'unit' => 'minute',
+                    'duration' => 10,
                 ],
             ]);
 

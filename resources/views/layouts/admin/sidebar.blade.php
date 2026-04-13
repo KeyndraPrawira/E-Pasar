@@ -139,29 +139,7 @@
            
           
            
-          @elseif(Auth::check())
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Driver</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ route('driver.application.status') }}" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-check"></i>
-                </span>
-                <span class="hide-menu">Status Driver</span>
-              </a>
-            </li>
-            @if(Auth::user()->role === 'user')
-              <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ route('driver.application.create') }}" aria-expanded="false">
-                  <span>
-                    <i class="ti ti-license"></i>
-                  </span>
-                  <span class="hide-menu">Daftar Driver</span>
-                </a>
-              </li>
-            @endif
+          
           @endif
           </ul>
         </nav>
