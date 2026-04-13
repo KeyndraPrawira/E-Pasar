@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
     Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
     Route::get('/orders/history', [OrderController::class, 'orderHistory']);
+        Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
     Route::patch('/order-item/{id}', [OrderController::class, 'updateItemStatus']);
     Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
     Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
