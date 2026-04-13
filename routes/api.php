@@ -32,9 +32,7 @@ Route::get('/pasar', [PasarController::class, 'index']);
 
 Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/set-active', [UserController::class, 'setActive']);
-    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
-        Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
-    Route::get('/driver/wallet', [DriverWalletController::class, 'show']);
+       Route::get('/driver/wallet', [DriverWalletController::class, 'show']);
     Route::get('/driver/wallet/transactions', [DriverWalletController::class, 'transactions']);
     Route::get('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'index']);
     Route::post('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'store']);
@@ -81,9 +79,7 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::post('/orders/{order}/payment/midtrans', [OrderPaymentController::class, 'create']);
     Route::get('/orders/{order}/payment/status', [OrderPaymentController::class, 'status']);
     Route::get('/orders/my', [OrderController::class, 'myOrders']);
-    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
-    Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
-       Route::apiResource('laporans', LaporanController::class)->only(['index', 'store']);
+          Route::apiResource('laporans', LaporanController::class)->only(['index', 'store']);
 });
 
 Route::middleware('auth:sanctum', 'role:pedagang')->group(function(){
