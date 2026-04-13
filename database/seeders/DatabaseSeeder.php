@@ -65,6 +65,7 @@ class DatabaseSeeder extends Seeder
                 'foto_sim' => 'sim_rama.jpg',
                 'foto_stnk' => 'stnk_rama.jpg',
                 'foto_kendaraan' => 'motor_rama.jpg',
+                'foto_diri' => 'rama.jpg',
                 'status' => Driver::STATUS_APPROVED,
             ]);
 

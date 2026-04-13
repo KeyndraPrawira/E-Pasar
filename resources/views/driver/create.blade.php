@@ -23,6 +23,12 @@
                     </div>
                 @endif
 
+                @if ($isApproved)
+                    <div class="alert alert-success">
+                        Pengajuan driver Anda sudah disetujui. Data dan dokumen tidak dapat diubah lagi melalui form ini.
+                    </div>
+                @endif
+
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul class="mb-0 ps-3">
@@ -39,7 +45,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control @error('nomor_kendaraan') is-invalid @enderror" id="nomor_kendaraan" name="nomor_kendaraan" value="{{ old('nomor_kendaraan', $driver?->nomor_kendaraan) }}" placeholder="Nomor Kendaraan">
+                                <input type="text" class="form-control @error('nomor_kendaraan') is-invalid @enderror" id="nomor_kendaraan" name="nomor_kendaraan" value="{{ old('nomor_kendaraan', $driver?->nomor_kendaraan) }}" placeholder="Nomor Kendaraan" @disabled($isApproved)>
                                 <label for="nomor_kendaraan">Nomor Kendaraan</label>
                                 @error('nomor_kendaraan')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -48,7 +54,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control @error('jenis_kendaraan') is-invalid @enderror" id="jenis_kendaraan" name="jenis_kendaraan" value="{{ old('jenis_kendaraan', $driver?->jenis_kendaraan) }}" placeholder="Jenis Kendaraan">
+                                <input type="text" class="form-control @error('jenis_kendaraan') is-invalid @enderror" id="jenis_kendaraan" name="jenis_kendaraan" value="{{ old('jenis_kendaraan', $driver?->jenis_kendaraan) }}" placeholder="Jenis Kendaraan" @disabled($isApproved)>
                                 <label for="jenis_kendaraan">Jenis Kendaraan</label>
                                 @error('jenis_kendaraan')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -57,7 +63,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control @error('nomor_stnk') is-invalid @enderror" id="nomor_stnk" name="nomor_stnk" value="{{ old('nomor_stnk', $driver?->nomor_stnk) }}" placeholder="Nomor STNK">
+                                <input type="text" class="form-control @error('nomor_stnk') is-invalid @enderror" id="nomor_stnk" name="nomor_stnk" value="{{ old('nomor_stnk', $driver?->nomor_stnk) }}" placeholder="Nomor STNK" @disabled($isApproved)>
                                 <label for="nomor_stnk">Nomor STNK</label>
                                 @error('nomor_stnk')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -66,7 +72,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control @error('nomor_sim') is-invalid @enderror" id="nomor_sim" name="nomor_sim" value="{{ old('nomor_sim', $driver?->nomor_sim) }}" placeholder="Nomor SIM">
+                                <input type="text" class="form-control @error('nomor_sim') is-invalid @enderror" id="nomor_sim" name="nomor_sim" value="{{ old('nomor_sim', $driver?->nomor_sim) }}" placeholder="Nomor SIM" @disabled($isApproved)>
                                 <label for="nomor_sim">Nomor SIM</label>
                                 @error('nomor_sim')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -78,29 +84,36 @@
                     <div class="row">
                         <div class="col-md-3 mb-3">
                             <label for="foto_ktp" class="form-label">Foto KTP</label>
-                            <input type="file" name="foto_ktp" id="foto_ktp" class="form-control @error('foto_ktp') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*">
+                            <input type="file" name="foto_ktp" id="foto_ktp" class="form-control @error('foto_ktp') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*" @disabled($isApproved)>
                             @error('foto_ktp')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="foto_sim" class="form-label">Foto SIM</label>
-                            <input type="file" name="foto_sim" id="foto_sim" class="form-control @error('foto_sim') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*">
+                            <input type="file" name="foto_sim" id="foto_sim" class="form-control @error('foto_sim') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*" @disabled($isApproved)>
                             @error('foto_sim')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="foto_stnk" class="form-label">Foto STNK</label>
-                            <input type="file" name="foto_stnk" id="foto_stnk" class="form-control @error('foto_stnk') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*">
+                            <input type="file" name="foto_stnk" id="foto_stnk" class="form-control @error('foto_stnk') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*" @disabled($isApproved)>
                             @error('foto_stnk')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="foto_kendaraan" class="form-label">Foto Kendaraan</label>
-                            <input type="file" name="foto_kendaraan" id="foto_kendaraan" class="form-control @error('foto_kendaraan') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*">
+                            <input type="file" name="foto_kendaraan" id="foto_kendaraan" class="form-control @error('foto_kendaraan') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*" @disabled($isApproved)>
                             @error('foto_kendaraan')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                         <div class="col-md-3 mb-3">
+                            <label for="foto_diri" class="form-label">Foto Diri (Baju bebas sopan, wajah terlihat, tidak buram atau gelap)</label>
+                            <input type="file" name="foto_diri" id="foto_diri" class="form-control @error('foto_diri') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*" @disabled($isApproved)>
+                            @error('foto_diri')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -112,7 +125,7 @@
 
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('driver.application.status') }}" class="btn btn-light">Batal</a>
-                        <button type="submit" class="btn btn-primary">Kirim Pengajuan Driver</button>
+                        <button type="submit" class="btn btn-primary" @disabled($isApproved)>Kirim Pengajuan Driver</button>
                     </div>
                 </form>
             </div>

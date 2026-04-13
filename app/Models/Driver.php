@@ -25,6 +25,7 @@ class Driver extends Model
         'foto_sim',
         'foto_stnk',
         'foto_kendaraan',
+        'foto_diri',
         'status',
         'verification_notes',
         'verified_by',
@@ -32,6 +33,7 @@ class Driver extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'int',
         'verified_at' => 'datetime',
     ];
 

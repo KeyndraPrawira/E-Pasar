@@ -48,6 +48,7 @@ class StoreDriverApplicationRequest extends FormRequest
             'foto_sim' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_stnk' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_kendaraan' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'foto_diri' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 
@@ -72,6 +73,8 @@ class StoreDriverApplicationRequest extends FormRequest
             'foto_stnk.image' => 'Foto STNK harus berupa gambar.',
             'foto_kendaraan.required' => 'Foto kendaraan wajib diunggah.',
             'foto_kendaraan.image' => 'Foto kendaraan harus berupa gambar.',
+            'foto_diri.required' => 'Foto diri wajib diunggah.',
+            'foto_diri.image' => 'Foto diri harus berupa gambar.',
         ];
     }
 

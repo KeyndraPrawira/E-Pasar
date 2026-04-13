@@ -18,13 +18,15 @@ class DriverApplicationController extends Controller
     {
         $driver = auth()->user()->loadMissing('driver')->driver;
 
-        if ($driver !== null && !$driver->isRejected()) {
+        if ($driver !== null && $driver->isPending()) {
             return redirect()
                 ->route('driver.application.status')
-                ->with('info', 'Pengajuan driver Anda sedang diproses atau sudah disetujui.');
+                ->with('info', 'Pengajuan driver Anda sedang diproses admin.');
         }
 
-        return view('driver.create', compact('driver'));
+        $isApproved = $driver?->isApproved() ?? false;
+
+        return view('driver.create', compact('driver', 'isApproved'));
     }
 
     /**
@@ -35,10 +37,16 @@ class DriverApplicationController extends Controller
         $user = $request->user()->loadMissing('driver');
         $existingDriver = $user->driver;
 
-        if ($existingDriver !== null && !$existingDriver->isRejected()) {
+        if ($existingDriver !== null && $existingDriver->isPending()) {
             return redirect()
                 ->route('driver.application.status')
                 ->with('error', 'Anda sudah memiliki pengajuan driver yang aktif.');
+        }
+
+        if ($existingDriver !== null && $existingDriver->isApproved()) {
+            return redirect()
+                ->route('driver.application.status')
+                ->with('error', 'Pengajuan driver Anda sudah disetujui dan tidak bisa diajukan ulang.');
         }
 
         $storedFiles = [];
@@ -48,6 +56,7 @@ class DriverApplicationController extends Controller
                 $existingDriver->foto_sim,
                 $existingDriver->foto_stnk,
                 $existingDriver->foto_kendaraan,
+                $existingDriver->foto_diri,
             ])
             : [];
 
@@ -66,6 +75,7 @@ class DriverApplicationController extends Controller
                     'foto_sim' => $storedFiles['foto_sim'],
                     'foto_stnk' => $storedFiles['foto_stnk'],
                     'foto_kendaraan' => $storedFiles['foto_kendaraan'],
+                    'foto_diri' => $storedFiles['foto_diri'],
                     'status' => Driver::STATUS_PENDING,
                     'verification_notes' => null,
                     'verified_by' => null,
@@ -128,6 +138,7 @@ class DriverApplicationController extends Controller
             'foto_sim' => 'drivers/sim',
             'foto_stnk' => 'drivers/stnk',
             'foto_kendaraan' => 'drivers/kendaraan',
+            'foto_diri' => 'drivers/diri',
         ];
     }
 }

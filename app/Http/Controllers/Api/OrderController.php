@@ -664,10 +664,7 @@ public function activeOrder(Request $request)
                 'data'    => $order,
             ]);
         }
-
-        
-
-       
+        return;
        
     }
 
@@ -727,9 +724,6 @@ public function activeOrder(Request $request)
         // Reject → balik ke dikirim
         $order->update([
             'status'              => 'dikirim',
-            'cancel_request_by'   => null,
-            'cancel_reason'       => null,
-            'cancel_requested_at' => null,
         ]);
         $this->firebaseOrderSyncService->sync($order);
 

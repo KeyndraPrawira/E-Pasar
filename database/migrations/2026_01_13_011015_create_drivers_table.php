@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('foto_sim');
             $table->string('foto_stnk');
             $table->string('foto_kendaraan');
+            $table->string('foto_diri');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('verification_notes')->nullable();
             $table->foreignId('verified_by')
