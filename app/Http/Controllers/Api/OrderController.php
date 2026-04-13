@@ -139,7 +139,7 @@ class OrderController extends Controller
         $totalHarga = $totalHargaBarang + $ongkir;
         $order = null;
 
-        DB::transaction(function () use ($request, $keranjang, $alamat, $ongkir, &$order, $totalHargaBarang) {
+        DB::transaction(function () use ($request, $keranjang, $alamat, $ongkir, &$order, $totalHargaBarang, $totalHarga) {
             $order = Order::create([
                 'kode_pesanan'      => 'ORD-' . strtoupper(uniqid(5)),
                 'buyer_id'          => auth()->id(),
