@@ -30,9 +30,8 @@ class CheckRole
         }
 
         // 4. Jika tidak memiliki akses
-        return response()->json(['message' => 'Ditolak: Anda tidak memiliki akses',
-        'role' => $user->role,
+        return response()->json(['message' => 'Ditolak: Anda tidak memiliki akses, khusus untuk role: ' . implode(', ', $roles)], 403);
+
         
-        ], 403);
     }
 }
