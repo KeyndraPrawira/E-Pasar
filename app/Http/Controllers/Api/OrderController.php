@@ -19,7 +19,11 @@ use App\Services\FirebaseOrderSyncService;
 
 class OrderController extends Controller
 {
-   
+    public function __construct(
+        private readonly DriverWalletService $driverWalletService,
+        private readonly FirebaseOrderSyncService $firebaseOrderSyncService
+    ) {
+    }
 
     // ── DRIVER — scan order available ─────────────────────────
     public function index()
@@ -89,7 +93,12 @@ class OrderController extends Controller
             ->get();
 
         $alamat = Alamat::where('user_id', auth()->id())->first();
-
+        if ($keranjang->produk->stok->isEmpty()) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Stok produk tidak tersedia, silakan perbarui keranjang Anda',
+            ], 400);
+        }
         if ($keranjang->isEmpty()) {
             return response()->json([
                 'status'  => 'error',
@@ -151,6 +160,9 @@ class OrderController extends Controller
                     'jumlah'         => $item->jumlah,
                     'subtotal_harga' => $item->harga_total,
                 ]);
+                $produk = Produk::find($item->produk_id);
+                $stok = $produk->stok - $item->jumlah;
+                $produk->update(['stok' => $stok]);
             }
 
             

@@ -95,6 +95,14 @@
                 <span class="hide-menu">Kios</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('transaksi.index') }}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-receipt-2"></i>
+                </span>
+                <span class="hide-menu">Transaksi</span>
+              </a>
+            </li>
            
            
             <!-- ---------------------------------- -->

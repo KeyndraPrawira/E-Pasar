@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\PasarController;
+use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\KiosController;
 use App\Http\Controllers\Admin\ProdukController;
@@ -66,6 +67,7 @@ Route::prefix('admin')->middleware('admin:admin')->group(function () {
        Route::get('driver-withdrawals', [DriverWithdrawalController::class, 'index'])->name('driver-withdrawals.index');
        Route::get('driver-withdrawals/{driverWithdrawal}', [DriverWithdrawalController::class, 'show'])->name('driver-withdrawals.show');
        Route::patch('driver-withdrawals/{driverWithdrawal}', [DriverWithdrawalController::class, 'process'])->name('driver-withdrawals.process');
+       Route::resource('transaksi', TransaksiController::class)->only(['index', 'show']);
         
 
         
