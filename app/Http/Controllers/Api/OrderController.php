@@ -614,59 +614,45 @@ public function activeOrder(Request $request)
     }
 
     // ── BUYER/DRIVER — request pembatalan ─────────────────────
-    public function requestCancel( $id)
-    {
-       
+   public function orderCancel($id)
+{
+    $order = Order::find($id);
+    $user  = auth()->user();
 
-        $order = Order::find($id);
-        $user  = auth()->user();
-
-        if (!$order) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Order tidak ditemukan',
-            ], 404);
-        }
-
-        $role = $this->resolveRole($user, $order);
-        if (!$role) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Anda tidak memiliki akses untuk membatalkan order ini',
-            ], 403);
-        }
-
-        if ($order->status != 'menunggu_driver') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Order tidak dapat dibatalkan, status: ' . $order->status,
-            ], 400);
-        }
-
-        // Buyer batalkan saat belum ada driver → langsung batal
-        if ($order->status === 'dalam_proses' && is_null($order->driver_id)) {
-            if ($role !== 'buyer') {
-                return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Hanya buyer yang dapat membatalkan order yang belum diambil driver',
-                ], 403);
-            }
-
-            $order->update([
-                'status'   => 'dibatalkan',
-                
-            ]);
-            $this->firebaseOrderSyncService->sync($order);
-
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Order berhasil dibatalkan',
-                'data'    => $order,
-            ]);
-        }
-        return;
-       
+    if (!$order) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => 'Order tidak ditemukan',
+        ], 404);
     }
+
+    $role = $this->resolveRole($user, $order);
+    if (!$role) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => 'Anda tidak memiliki akses untuk membatalkan order ini',
+        ], 403);
+    }
+
+    // menunggu_driver → langsung bisa dibatalkan
+    if ($order->status === 'menunggu_driver') {
+        $order->update(['status' => 'dibatalkan']);
+        $this->firebaseOrderSyncService->sync($order);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Order berhasil dibatalkan',
+            'data'    => $order,
+        ]);
+    }
+
+   
+    // Status lain → tidak bisa dibatalkan
+    return response()->json([
+        'status'  => 'error',
+        'message' => 'Order tidak dapat dibatalkan, status: ' . $order->status,
+    ], 400);
+}
 
     // ── BUYER/DRIVER — konfirmasi pembatalan ──────────────────
     public function confirmCancel(Request $request, $id)
