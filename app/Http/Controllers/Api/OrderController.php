@@ -19,11 +19,7 @@ use App\Services\FirebaseOrderSyncService;
 
 class OrderController extends Controller
 {
-    public function __construct(
-        private readonly DriverWalletService $driverWalletService,
-        private readonly FirebaseOrderSyncService $firebaseOrderSyncService
-    ) {
-    }
+   
 
     // ── DRIVER — scan order available ─────────────────────────
     public function index()
