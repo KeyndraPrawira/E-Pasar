@@ -17,8 +17,6 @@ use App\Services\FirebaseOrderSyncService;
 class OrderPaymentController extends Controller
 {
     public function __construct(
-        private readonly DriverWalletService $driverWalletService,
-        private readonly FirebaseOrderSyncService $firebaseOrderSyncService
     ) {
         $this->configureMidtrans();
     }
