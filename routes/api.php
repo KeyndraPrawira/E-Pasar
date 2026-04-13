@@ -54,7 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
-    
+    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
+        Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
     Route::get('/profile/me', [ProfileController::class, 'show']);
     Route::put('/profile/me', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);

@@ -482,12 +482,7 @@ public function activeOrder(Request $request)
             ], 404);
         }
 
-        if ($order->buyer_id !== auth()->id() && $order->driver_id !== auth()->id()) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Anda tidak memiliki akses untuk melihat order ini',
-            ], 403);
-        }
+       
 
         return response()->json([
             'status'  => 'success',
