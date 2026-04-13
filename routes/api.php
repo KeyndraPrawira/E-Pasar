@@ -32,6 +32,8 @@ Route::get('/pasar', [PasarController::class, 'index']);
 
 Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/set-active', [UserController::class, 'setActive']);
+    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
+        Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
     Route::get('/driver/wallet', [DriverWalletController::class, 'show']);
     Route::get('/driver/wallet/transactions', [DriverWalletController::class, 'transactions']);
     Route::get('/driver/wallet/withdrawals', [DriverWithdrawalController::class, 'index']);
@@ -40,8 +42,7 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
     Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
     Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
-    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
-        Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
+    
     Route::patch('/order-item/{id}', [OrderController::class, 'updateItemStatus']);
     Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
     Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
