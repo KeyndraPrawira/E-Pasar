@@ -35,7 +35,7 @@ class ProfileController extends Controller
         
         $request->validate([
             'name' => 'required|string|max:255',
-            'nomor_telepon' => 'required|string|max:20'
+            'nomor_telepon' => 'required|string|max:20',
         ]);
 
         $user = Auth::user();
@@ -43,6 +43,7 @@ class ProfileController extends Controller
         $user->update([
             'name' => $request->name,
             'nomor_telepon' => $request->nomor_telepon
+            
         ]);
 
         return response()->json([
@@ -60,12 +61,7 @@ class ProfileController extends Controller
         'foto_profil' => 'required|image|mimes:jpg,jpeg,png|max:2048'
     ]);
 
-    // cek role (kalau driver/pedagang wajib)
-    if (in_array($user->role, ['driver', 'pedagang']) && !$request->hasFile('foto_profil')) {
-        return response()->json([
-            'message' => 'Foto profil wajib untuk driver dan pedagang'
-        ], 422);
-    }
+   
 
     // hapus foto lama (biar storage ga jadi kuburan file)
     if ($user->foto_profil && file_exists(storage_path('app/public/' . $user->foto_profil))) {

@@ -135,8 +135,8 @@
                             <label for="status" class="form-label">Keputusan</label>
                             <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                                 <option value="">Pilih keputusan</option>
-                                <option value="approved" @selected(old('status') === 'approved')>Approve</option>
-                                <option value="rejected" @selected(old('status') === 'rejected')>Reject</option>
+                                <option value="approved" @selected(old('status') === 'approved')>Terima</option>
+                                <option value="rejected" @selected(old('status') === 'rejected')>Tolak</option>
                             </select>
                             @error('status')
                                 <div class="invalid-feedback">{{ $message }}</div>

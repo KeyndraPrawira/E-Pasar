@@ -106,8 +106,8 @@
                             <label for="status" class="form-label">Keputusan</label>
                             <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
                                 <option value="">Pilih keputusan</option>
-                                <option value="approved" @selected(old('status') === 'approved')>Approve</option>
-                                <option value="rejected" @selected(old('status') === 'rejected')>Reject</option>
+                                <option value="approved" @selected(old('status') === 'approved')>Terima</option>
+                                <option value="rejected" @selected(old('status') === 'rejected')>Tolak</option>
                             </select>
                             @error('status')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -124,7 +124,7 @@
 
                         <div class="mb-3">
                             <label for="admin_notes" class="form-label">Catatan Admin</label>
-                            <textarea name="admin_notes" id="admin_notes" rows="4" class="form-control @error('admin_notes') is-invalid @enderror" placeholder="Wajib diisi saat reject, opsional saat approve">{{ old('admin_notes') }}</textarea>
+                            <textarea name="admin_notes" id="admin_notes" rows="4" class="form-control @error('admin_notes') is-invalid @enderror" placeholder="Wajib diisi saat ditolak, opsional saat approve">{{ old('admin_notes') }}</textarea>
                             @error('admin_notes')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

@@ -41,12 +41,14 @@ Route::middleware('guest')->group(function () {
         Route::post('/password-driver/email', [DriverForgotPasswordController::class, 'sendResetLinkEmail'])->name('driver.password.email');
         Route::get('/password-driver/reset/{token}', [DriverResetPasswordController::class, 'showResetForm'])->name('driver.password.reset');
         Route::post('/password-driver/reset', [DriverResetPasswordController::class, 'reset'])->name('driver.password.update');
+                Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+
         Route::get('/register/otp', [RegisterController::class, 'showOtpForm'])->name('register.otp.form');
         Route::post('/register/otp', [RegisterController::class, 'verifyOtp'])->name('register.otp.verify');
         Route::post('/register/otp/resend', [RegisterController::class, 'resendOtp'])->name('register.otp.resend');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:sanctum', 'role:driver')->group(function () {
         Route::get('/driver/daftar', [DriverApplicationController::class, 'create'])->name('driver.application.create');
         Route::post('/driver/daftar', [DriverApplicationController::class, 'store'])->name('driver.application.store');
         Route::get('/driver/status', [DriverApplicationController::class, 'status'])->name('driver.application.status');

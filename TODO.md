@@ -1,29 +1,20 @@
-# TODO.md - Perbaikan Error Seeding Database (Unknown column 'password')
+# TODO: Fix Auth/RegisterController ke View-based Flow
 
-## ✅ **Selesai**
-- [x] Step 1: Buat file TODO.md dengan progress tracking
+## Status: 📋 In Progress
 
-# TODO.md - Fitur Ganti Password dengan OTP (API untuk pedagang/user/driver)
+### Steps:
+- [x] 1. Explorasi repo (search_files + read_file)
+- [x] 2. Analisis struktur & buat edit plan  
+- [x] 3. Konfirmasi plan dengan user
+- [x] 4. Edit RegisterController.php (fix verifyOtp + resendOtp ke view flow)
+- [ ] 5. Test manual: /register → OTP → verify → success
+- [ ] 6. Jalankan unit test (jika ada)
+- [ ] 7. Complete task ✅
 
-## ✅ **Selesai - Database Fix**
-- [x] Fix migration users table  
-- [x] Buat TODO.md tracking
+**Current focus:** Step 4 - Edit file controller
 
-## ✅ **Fitur Ganti Password - IMPLEMENTASI LENGKAP**
-- [x] Tambah PURPOSE_PASSWORD_CHANGE di EmailOTP model
-- [x] Buat PasswordChangeController.php (sendOtp/verifyOtp/resendOtp)
-- [x] Tambah routes API di routes/api.php  
-- [x] Update ProfileController.updatePassword() (pakai OTP cache)
+**Path:** app/Http/Controllers/Auth/RegisterController.php
+**Changes:** 
+• Fix bug email di verifyOtp()
+• Ubah resendOtp() dari JSON ke redirect()->with('success/error')
 
-## 📋 **Testing & Complete**
-- [ ] Step 4: Test API endpoints  
-- [ ] Step 5: Unit tests
-- [ ] Step 6: Dokumentasi Flutter integration
-- [ ] Complete task
-
-
-## ⏳ **Belum Dikerjakan**  
-- [ ] Step 3: Jalankan `php artisan migrate:fresh --seed`
-- [ ] Step 4: Test login admin (`admin@epasar.id` / `Admin123`)
-- [ ] Step 5: Unit test User model & seeder
-- [ ] Step 6: Complete task

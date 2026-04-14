@@ -44,6 +44,14 @@
                 <span class="hide-menu">Pasar</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('kios.index') }}"  aria-expanded="false">
+                <span>
+                  <i class="ti ti-door"></i>
+                </span>
+                <span class="hide-menu">Kios</span>
+              </a>
+            </li>
 
          <li class="sidebar-item">
   <a class="sidebar-link has-arrow"
@@ -87,14 +95,7 @@
 </li>
 
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ route('kios.index') }}"  aria-expanded="false">
-                <span>
-                  <i class="ti ti-door"></i>
-                </span>
-                <span class="hide-menu">Kios</span>
-              </a>
-            </li>
+            
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('transaksi.index') }}" aria-expanded="false">
                 <span>
@@ -128,18 +129,7 @@
         <span class="hide-menu">Data Produk</span>
       </a>
     </li>
-<li class="sidebar-item">
-      <a href="{{ route('kategori.index') }}" class="sidebar-link">
-        <i class="ti ti-circle"></i>
-        <span class="hide-menu">Kategori</span>
-      </a>
-    </li>
-    <li class="sidebar-item">
-      <a href="{{ route('kategori-laporan.index') }}" class="sidebar-link">
-        <i class="ti ti-circle"></i>
-        <span class="hide-menu">Kategori Laporan</span>
-      </a>
-    </li>
+
   </ul>
 </li>
 

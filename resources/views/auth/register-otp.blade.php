@@ -45,6 +45,7 @@
 
                 <form method="POST" action="{{ route('register.otp.verify') }}">
                   @csrf
+                  <input type="hidden" name="email" value="{{ $email }}">
 
                   <div class="mb-4">
                     <label for="otp" class="form-label">Kode OTP</label>
@@ -63,6 +64,7 @@
 
                 <form method="POST" action="{{ route('register.otp.resend') }}" class="text-center">
                   @csrf
+                  <input type="hidden" name="email" value="{{ $email }}">
                   <button type="submit" class="btn btn-link text-primary text-decoration-none fw-semibold">
                     Kirim Ulang OTP
                   </button>

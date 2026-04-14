@@ -8,7 +8,7 @@
   <link rel="shortcut icon" type="image/png" href="{{ asset('template/images/logos/favicon.png') }}" />
   <link rel="stylesheet" href="{{ asset('template/css/styles.css')}}" />
   <link rel="stylesheet" href="{{ asset('template/libs/owl.carousel/dist/assets/owl.carousel.min.css')}}" />
-  <title>Register Pajajap</title>
+  <title>Register Driver Pajajap</title>
 </head>
 
 <body>
@@ -41,7 +41,7 @@
                   @csrf
 
                   <div class="mb-3">
-                    <label for="name" class="form-label">{{ __('Name') }}</label>
+                    <label for="name" class="form-label">{{ __('Nama') }}</label>
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                     @error('name')
                       <span class="invalid-feedback" role="alert">
@@ -51,7 +51,7 @@
                   </div>
 
                   <div class="mb-3">
-                    <label for="email" class="form-label">{{ __('Email Address') }}</label>
+                    <label for="email" class="form-label">{{ __('Email') }}</label>
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
                     @error('email')
                       <span class="invalid-feedback" role="alert">
@@ -81,7 +81,7 @@
                   </div>
 
                   <div class="mb-4">
-                    <label for="password-confirm" class="form-label">{{ __('Confirm Password') }}</label>
+                    <label for="password-confirm" class="form-label">{{ __('Konfirmasi Password') }}</label>
                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                   </div>
 

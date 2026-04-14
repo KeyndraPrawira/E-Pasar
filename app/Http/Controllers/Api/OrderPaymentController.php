@@ -93,7 +93,7 @@ class OrderPaymentController extends Controller
                     'order_id' => $reference,
                     'gross_amount' => $grossAmount,
                 ],
-                'enabled_payments' => ['qris'],
+                'enabled_payments' => ['qris', 'gopay'],
                 'customer_details' => [
                     'first_name' => $order->buyer?->name ?? 'Customer',
                     'email' => $order->buyer?->email,

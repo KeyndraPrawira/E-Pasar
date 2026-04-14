@@ -74,6 +74,7 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::get('/kios', [KiosController::class, 'index']);
     Route::post('/keranjang/{produkId}', [KeranjangController::class, 'store']);
     Route::apiResource('/keranjang', KeranjangController::class);
+    Route::put('/profile/foto-profil', [ProfileController::class, 'uploadFotoProfil']);
     Route::post('/profile/alamat', [ProfileController::class, 'setAlamat']);
     Route::post('/orders/checkout', [OrderController::class, 'store']);
     Route::post('/orders/{order}/payment/midtrans', [OrderPaymentController::class, 'create']);

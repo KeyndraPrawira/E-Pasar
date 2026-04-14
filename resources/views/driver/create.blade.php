@@ -110,7 +110,10 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                         <div class="col-md-3 mb-3">
+                         
+                    </div>
+                    <div class="row">
+                        <div class="col">
                             <label for="foto_diri" class="form-label">Foto Diri (Baju bebas sopan, wajah terlihat, tidak buram atau gelap)</label>
                             <input type="file" name="foto_diri" id="foto_diri" class="form-control @error('foto_diri') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/*" @disabled($isApproved)>
                             @error('foto_diri')

@@ -19,7 +19,6 @@
                         <tr>
                             <th>Nama</th>
                             <th>Email</th>
-                            <th>Nomor Telepon</th>
                             <th>Nama Kios</th>
                             <th class="text-center">Aksi</th>
                         </tr>
@@ -29,7 +28,6 @@
                         <tr>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
-                            <td>{{ $item->nomor_telepon }}</td>
                             <td>
                                 {{ $item->kios->nama_kios ?? 'Belum Ada Kios' }}
                             </td>

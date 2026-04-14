@@ -35,6 +35,7 @@ class ApiRegisterController extends Controller
      *
      * POST /api/register
      */
+
     public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
