@@ -369,6 +369,12 @@ public function activeOrder(Request $request)
         ], 403);
     }
 
+    if (!$item->order->id) {
+       return response()->json([
+            'message' => 'Order tidak ditemukan'
+        ], 404);
+    }
+
     $data = [
         'status' => $request->status,
     ];
