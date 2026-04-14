@@ -522,6 +522,13 @@ public function activeOrder(Request $request)
             ], 400);
         }
 
+        if ($order->metode_pembayaran == "midtrans" && $order->payment_status == "pending") {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Order tidak dapat diselesaikan, buyer belum membayar',
+            ], 400);
+        }
+
         $payload = ['status' => 'selesai'];
 
         if ($order->metode_pembayaran !== Order::PAYMENT_METHOD_MIDTRANS && $order->payment_status !== Order::PAYMENT_STATUS_PAID) {
