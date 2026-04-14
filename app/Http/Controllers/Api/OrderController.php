@@ -375,12 +375,7 @@ public function activeOrder(Request $request)
 
     
 
-    //  kalau diambil (biar aman, hitung ulang)
-    if ($request->status == 'pending_request'){
-        return response()->json([
-            'message' => 'Menunggu konfirmasi ganti barang'
-        ], 200);
-    }
+    
 
     if ($request->status === 'diambil') {
         $data['subtotal_harga'] = $item->harga_satuan * $item->jumlah;
@@ -392,6 +387,7 @@ public function activeOrder(Request $request)
 
     $item->update($data);
     $this->refreshOrderAfterItemStatusChange($item->order);
+    $item = $item->fresh(['order']);
 
     
 
@@ -401,93 +397,7 @@ public function activeOrder(Request $request)
         ]);
     }
 
-    public function requestTidakDiambil(Request $request, $id)
-    {
-        $user = auth()->user();
-
-        if ($user->role !== 'driver') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        if ($response = $this->ensureApprovedDriver($user)) {
-            return $response;
-        }
-
-        $item = OrderDetail::with('order')->findOrFail($id);
-
-        if ($item->order->driver_id !== $user->id) {
-            return response()->json(['message' => 'Bukan order kamu'], 403);
-        }
-        $request->validate([
-            'catatan_driver' => 'required|string'
-        ],
-        [
-            'catatan_driver.required' => 'Catatan driver wajib diisi jika barang tidak diambil'
-        ]);
-        $item->update([
-            'status' => 'menunggu_konfirmasi',
-            'catatan_driver' => $request->catatan_driver
-        ]);
-        $this->firebaseOrderSyncService->sync($item->order);
-
-        return response()->json([
-            'message' => 'Menunggu konfirmasi user',
-            'data' => $item
-        ]);
-    }
-
-    public function pilihPengganti(Request $request, $id)
-    {
-        $request->validate([
-            'produk_pengganti_id' => 'required|exists:produks,id'
-        ]);     
-
-        $user = auth()->user();
-
-        $item = OrderDetail::with('order')->findOrFail($id);
-
-        if ($item->order->buyer_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $produk = Produk::findOrFail($request->produk_pengganti_id);
-
-        $item->update([
-            'produk_pengganti_id' => $produk->id,
-            'harga_satuan' => $produk->harga,
-            'subtotal_harga' => $produk->harga * $item->jumlah,
-            'status' => 'diganti'
-        ]);
-        $this->firebaseOrderSyncService->sync($item->order);
-
-        return response()->json([
-            'message' => 'Produk pengganti dipilih',
-            'data' => $item
-        ]);
-    }
-
-    public function tidakJadiGanti(Request $request, $id)
-    {
-        $user = auth()->user();
-
-        $item = OrderDetail::with('order')->findOrFail($id);
-
-        if ($item->order->user_id !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $item->update([
-            'status' => 'tidak_ada',
-            'subtotal_harga' => 0
-        ]);
-
-        $this->refreshOrderAfterItemStatusChange($item->order);
-
-        return response()->json([
-            'message' => 'Item tidak jadi dibeli',
-            'data' => $item
-        ]);
-    }
+    
     public function OrderHistory()
     {
         $orders = Order::where('buyer_id', auth()->id())
@@ -625,111 +535,47 @@ public function activeOrder(Request $request)
     }
 
     // ── BUYER/DRIVER — request pembatalan ─────────────────────
-   public function orderCancel($id)
-{
-    $order = Order::find($id);
-    $user  = auth()->user();
-
-    if (!$order) {
-        return response()->json([
-            'status'  => 'error',
-            'message' => 'Order tidak ditemukan',
-        ], 404);
-    }
-
-    $role = $this->resolveRole($user, $order);
-    if (!$role) {
-        return response()->json([
-            'status'  => 'error',
-            'message' => 'Anda tidak memiliki akses untuk membatalkan order ini',
-        ], 403);
-    }
-
-    // menunggu_driver → langsung bisa dibatalkan
-    if ($order->status === 'menunggu_driver') {
-        $order->update(['status' => 'dibatalkan']);
-        $this->firebaseOrderSyncService->sync($order);
-
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Order berhasil dibatalkan',
-            'data'    => $order,
-        ]);
-    }
-
-   
-    // Status lain → tidak bisa dibatalkan
-    return response()->json([
-        'status'  => 'error',
-        'message' => 'Order tidak dapat dibatalkan, status: ' . $order->status,
-    ], 400);
-}
-
-    // ── BUYER/DRIVER — konfirmasi pembatalan ──────────────────
-    public function confirmCancel(Request $request, $id)
+       public function orderCancel($id)
     {
-        $request->validate([
-            'action' => 'required|in:approve,reject',
-        ]);
-
         $order = Order::find($id);
         $user  = auth()->user();
-
+ 
         if (!$order) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Order tidak ditemukan',
             ], 404);
         }
-
-        if ($order->status !== 'menunggu_konfirmasi_batal') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Tidak ada permintaan pembatalan aktif',
-            ], 400);
-        }
-
+ 
         $role = $this->resolveRole($user, $order);
-        if (!$role || $role === $order->cancel_request_by) {
+        if (!$role) {
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Anda tidak berhak mengkonfirmasi permintaan ini',
+                'message' => 'Anda tidak memiliki akses untuk membatalkan order ini',
             ], 403);
         }
-
-        // Cek expired
-        if (now()->diffInMinutes($order->cancel_requested_at) >= 5) {
+ 
+        // menunggu_driver → langsung bisa dibatalkan
+        if ($order->status === 'menunggu_driver') {
+            $this->restoreStock($order);
             $order->update(['status' => 'dibatalkan']);
             $this->firebaseOrderSyncService->sync($order);
+ 
             return response()->json([
                 'status'  => 'success',
-                'message' => 'Permintaan sudah expired, order otomatis dibatalkan',
+                'message' => 'Order berhasil dibatalkan',
                 'data'    => $order,
             ]);
         }
-
-        if ($request->action === 'approve') {
-            $order->update(['status' => 'dibatalkan']);
-            $this->firebaseOrderSyncService->sync($order);
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Pembatalan disetujui, order dibatalkan',
-                'data'    => $order,
-            ]);
-        }
-
-        // Reject → balik ke dikirim
-        $order->update([
-            'status'              => 'dikirim',
-        ]);
-        $this->firebaseOrderSyncService->sync($order);
-
+ 
+        // Status lain → tidak bisa dibatalkan
         return response()->json([
-            'status'  => 'success',
-            'message' => 'Pembatalan ditolak, order dilanjutkan',
-            'data'    => $order,
-        ]);
+            'status'  => 'error',
+            'message' => 'Order tidak dapat dibatalkan, status: ' . $order->status,
+        ], 400);
     }
+
+    
 
     
 
@@ -769,6 +615,15 @@ public function activeOrder(Request $request)
         $this->firebaseOrderSyncService->sync($order);
 
         return $order;
+    }
+        private function restoreStock(Order $order): void
+    {
+        $order->loadMissing('orderDetails');
+ 
+        foreach ($order->orderDetails as $detail) {
+            Produk::where('id', $detail->produk_id)
+                ->increment('stok', $detail->jumlah);
+        }
     }
 
     private function ensureApprovedDriver($user)
