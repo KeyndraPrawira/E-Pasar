@@ -45,11 +45,11 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
     Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
 });
+    Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/verify-otp',  [ApiRegisterController::class, 'verifyOtp']);
+    Route::post('/register/verify-otp',  [ApiRegisterController::class, 'verifyOtp']);
     Route::post('/resend-otp',  [ApiRegisterController::class, 'resendOtp']);
-    Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
     Route::get('/orders/history', [OrderController::class, 'orderHistory']);
