@@ -600,7 +600,7 @@ public function activeOrder(Request $request)
 
         $payload = [
             'total_harga_barang' => $totalHargaBarang,
-            'ongkir' => $order->ongkir,
+
             'total_harga' => $semuaItemTidakAda
                 ? 0
                 : $totalHargaBarang + (int) $order->ongkir,
