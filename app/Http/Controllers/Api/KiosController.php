@@ -142,9 +142,10 @@ class KiosController extends Controller
     public function update(Request $request, Kios $kios)
     {
        
-        if ($kios->user_id !== auth()->id()) {
+        if ($kios->user_id != auth()->id()) {
             return response()->json([
-                'message' => 'Tidak diizinkan'
+                'message' => 'Tidak diizinkan, id anda :'.auth()->id().'. id yang diperlukan :'. $kios->user_id
+
             ], 403);
         }
 

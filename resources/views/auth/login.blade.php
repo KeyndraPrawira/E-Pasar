@@ -29,10 +29,8 @@
                   <a href="{{ route('landingpage') }}" class="text-center d-block mb-4">
                     <img src="{{ asset('template/images/logos/Pajajap logo.png') }}" width="220" alt="Pajajap Logo" class="img-fluid" />
                   </a>
-                  <h3 class="text-white mb-3">Satu halaman login untuk admin dan driver.</h3>
-                  <p class="mb-0 opacity-75" id="login-description">
-                    {{ $selectedRole === 'driver' ? 'Masuk sebagai driver untuk lanjut pendaftaran dan cek status verifikasi.' : 'Masuk sebagai admin untuk mengelola data pasar, pengguna, dan operasional.' }}
-                  </p>
+                  <h3 class="text-white mb-3">Login untuk melanjutkan</h3>
+                  
                 </div>
 
                 <div class="col-md-7">
@@ -41,7 +39,6 @@
                       <h4 class="mb-1" id="login-title">
                         {{ $selectedRole === 'driver' ? 'Masuk Sebagai Driver' : 'Masuk Sebagai Admin' }}
                       </h4>
-                      <p class="text-muted mb-0">Pilih jenis akun terlebih dahulu, lalu lanjut login.</p>
                     </div>
 
                     @if (session('status'))

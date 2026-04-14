@@ -76,15 +76,7 @@
                         <label class="form-label text-muted">Diajukan Pada</label>
                         <div class="fw-semibold">{{ $driver->created_at?->format('d M Y H:i') }}</div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Diverifikasi Oleh</label>
-                        <div class="fw-semibold">
-                            {{ $driver->verifier?->name ?? '-' }}
-                            @if ($driver->verified_at)
-                                <span class="text-muted d-block">{{ $driver->verified_at->format('d M Y H:i') }}</span>
-                            @endif
-                        </div>
-                    </div>
+                   
                 </div>
 
                 @if ($driver->verification_notes)
