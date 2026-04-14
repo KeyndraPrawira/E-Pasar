@@ -600,12 +600,14 @@ public function activeOrder(Request $request)
 
         $payload = [
             'total_harga_barang' => $totalHargaBarang,
+            'ongkir' => $totalHargaBarang,
             'total_harga' => $semuaItemTidakAda
                 ? 0
                 : $totalHargaBarang + (int) $order->ongkir,
         ];
 
         if ($semuaItemTidakAda) {
+            $payload['ongkir'] = 0;
             $payload['status'] = 'dibatalkan';
         }
 
