@@ -8,6 +8,7 @@
                 <h4 class="card-title mb-1">Pengajuan Driver</h4>
                 <p class="text-muted mb-0">Daftar user yang mengajukan verifikasi driver.</p>
             </div>
+            <a href="{{ route('driver.create') }}" class="btn btn-primary">Tambah Driver</a>
         </div>
 
         @if (session('success'))
@@ -53,6 +54,9 @@
                             <td class="text-center">
                                 <a href="{{ route('driver.show', $driver) }}" class="btn btn-primary btn-sm">
                                     Detail
+                                </a>
+                                <a href="{{ route('driver.edit', $driver) }}" class="btn btn-outline-secondary btn-sm">
+                                    Edit
                                 </a>
                             </td>
                         </tr>

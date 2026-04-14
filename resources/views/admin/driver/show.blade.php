@@ -10,7 +10,15 @@
                         <h4 class="card-title mb-1">Detail Pengajuan Driver</h4>
                         <p class="text-muted mb-0">{{ $driver->user->name }} • {{ $driver->user->email }}</p>
                     </div>
-                    <a href="{{ route('driver.index') }}" class="btn btn-outline-secondary">Kembali</a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('driver.edit', $driver) }}" class="btn btn-outline-primary">Edit</a>
+                        <form action="{{ route('driver.destroy', $driver) }}" method="POST" onsubmit="return confirm('Hapus driver ini? Dokumen juga akan dihapus.');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger">Hapus</button>
+                        </form>
+                        <a href="{{ route('driver.index') }}" class="btn btn-outline-secondary">Kembali</a>
+                    </div>
                 </div>
 
                 @if (session('success'))
@@ -114,6 +122,12 @@
                         <label class="form-label">Foto Kendaraan</label>
                         <a href="{{ asset('storage/' . $driver->foto_kendaraan) }}" target="_blank" class="d-block">
                             <img src="{{ asset('storage/' . $driver->foto_kendaraan) }}" alt="Foto Kendaraan" class="img-fluid rounded border">
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Foto Diri</label>
+                        <a href="{{ asset('storage/' . $driver->foto_diri) }}" target="_blank" class="d-block">
+                            <img src="{{ asset('storage/' . $driver->foto_diri) }}" alt="Foto Diri" class="img-fluid rounded border">
                         </a>
                     </div>
                 </div>

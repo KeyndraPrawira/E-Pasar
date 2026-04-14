@@ -64,7 +64,7 @@ Route::prefix('admin')->middleware('admin:admin')->group(function () {
         Route::resource('kategori', KategoriController::class);
         Route::resource('kategori-laporan', KategoriLaporanController::class);
        Route::resource('pedagang', PedagangController::class)->parameters(['pedagang' => 'pedagang']);
-       Route::resource('driver', DriverController::class)->only(['index', 'show'])->parameters(['driver' => 'driver']);
+       Route::resource('driver', DriverController::class)->parameters(['driver' => 'driver']);
        Route::patch('driver/{driver}/verify', [DriverController::class, 'verify'])->name('driver.verify');
        Route::get('driver-withdrawals', [DriverWithdrawalController::class, 'index'])->name('driver-withdrawals.index');
        Route::get('driver-withdrawals/{driverWithdrawal}', [DriverWithdrawalController::class, 'show'])->name('driver-withdrawals.show');
