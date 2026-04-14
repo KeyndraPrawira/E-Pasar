@@ -246,13 +246,16 @@ class OrderController extends Controller
             ], 400);
         }
 
-        $orderDriver = Order::where('driver_id', auth()->id())->get();
-        if ($orderDriver->status == 'dalam_proses' || $orderDriver->status == 'dikirim') {
-            return response()->json([
-                'status' => 'error',
-                'message' =>'anda memiliki pesanan yang belum selesai'
-            ], 400);
-        }
+       $orderDriver = Order::where('driver_id', auth()->id())
+    ->whereIn('status', ['dalam_proses', 'dikirim'])
+    ->exists();
+
+if ($orderDriver) {
+    return response()->json([
+        'status'  => 'error',
+        'message' => 'Anda memiliki pesanan yang belum selesai',
+    ], 400);
+}
 
         if ($order->status !== 'menunggu_driver') {
             return response()->json([
