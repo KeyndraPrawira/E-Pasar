@@ -21,8 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [ApiAuthController::class, 'login']);
     Route::post('/register',            [ApiRegisterController::class, 'register']);
-        Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
-
+    Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
+    Route::post('/register/verify-otp',  [ApiRegisterController::class, 'verifyOtp']);
+    Route::post('/resend-otp',  [ApiRegisterController::class, 'resendOtp']);
     
 Route::post('/google-login', [ApiAuthController::class, 'googleLogin']);
 Route::post('/midtrans/notification', [OrderPaymentController::class, 'notification']);
@@ -49,8 +50,7 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/register/verify-otp',  [ApiRegisterController::class, 'verifyOtp']);
-    Route::post('/resend-otp',  [ApiRegisterController::class, 'resendOtp']);
+    
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
     Route::get('/orders/history', [OrderController::class, 'orderHistory']);
