@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [ApiAuthController::class, 'login']);
     Route::post('/register',            [ApiRegisterController::class, 'register']);
+        Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
+
     
 Route::post('/google-login', [ApiAuthController::class, 'googleLogin']);
 Route::post('/midtrans/notification', [OrderPaymentController::class, 'notification']);
@@ -45,7 +47,6 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
     Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
 });
-    Route::delete('/register/cancel', [ApiRegisterController::class, 'cancelPendingRegistration']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/register/verify-otp',  [ApiRegisterController::class, 'verifyOtp']);
