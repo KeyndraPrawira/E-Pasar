@@ -43,24 +43,25 @@ Route::middleware('auth:sanctum', 'role:driver')->group(function(){
     Route::post('/orders/{order}/accept', [OrderController::class, 'acceptOrder']);
     Route::post('/orders/{id}/send', [OrderController::class, 'sendDelivery']); 
     Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']); 
-    
+
     Route::patch('/order-item/{id}', [OrderController::class, 'updateItemStatus']);
     Route::patch('/order-item/{id}/request-ganti', [OrderController::class, 'requestGantiItem']);
     Route::patch('/order-item/{id}/pilih-pengganti/{produk}', [OrderController::class, 'pilihPengganti']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    
+    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
+        Route::get('/orders/history/{id}', [OrderController::class, 'orderDetailHistory']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
     Route::post('/complete-profile', [AuthController::class, 'completeProfile']);
-    Route::get('/orders/history', [OrderController::class, 'orderHistory']);
-        Route::get('/orders/history/{id}', [OrderController::class, 'detailOrderHistory']);
+    
     Route::get('/profile/me', [ProfileController::class, 'show']);
     Route::put('/profile/me', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
 
     Route::get('/orders/active', [OrderController::class, 'indexActiveOrders']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
+    
 });
 
 
@@ -77,6 +78,7 @@ Route::middleware('auth:sanctum', 'role:user')->group(function () {
     Route::apiResource('/keranjang', KeranjangController::class);
     Route::put('/profile/foto-profil', [ProfileController::class, 'uploadFotoProfil']);
     Route::post('/profile/alamat', [ProfileController::class, 'setAlamat']);
+    
     Route::post('/orders/checkout', [OrderController::class, 'store']);
     Route::post('/orders/{order}/payment/midtrans', [OrderPaymentController::class, 'create']);
     Route::get('/orders/{order}/payment/status', [OrderPaymentController::class, 'status']);

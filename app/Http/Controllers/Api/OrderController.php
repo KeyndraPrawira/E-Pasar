@@ -11,6 +11,8 @@ use App\Models\Order;
 use App\Models\Pasar;
 use App\Jobs\AutoCancelOrder;
 use App\Models\OrderDetail;
+use App\Models\OrderDetailHistory;
+use App\Models\OrderHistory;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -406,11 +408,12 @@ public function activeOrder(Request $request)
     
     public function OrderHistory()
     {
-        $orders = Order::where('buyer_id', auth()->id())
+        $orders = OrderHistory::where('buyer_id', auth()->id())
             ->orWhere('driver_id', auth()->id())
-            ->with('orderDetails.produk', 'buyer', 'driver')
+            ->with('orderDetailHistory', 'buyer', 'driver')
             ->latest()
             ->get();
+        
 
         return response()->json([
             'status'  => 'success',
@@ -419,9 +422,9 @@ public function activeOrder(Request $request)
         ]);
     }
 
-    public function detailOrderHistory($id)
+    public function orderDetailHistory($id)
     {
-        $order = Order::with('orderDetails.produk', 'buyer', 'driver')
+        $order = OrderHistory::with('orderDetailHistory', 'buyer', 'driver')
             ->find($id);
 
         if (!$order) {
@@ -493,59 +496,91 @@ public function activeOrder(Request $request)
    
 
     public function completeOrder($id)
-    {
-        $order = Order::find($id);
-        $user  = auth()->user();
+{
+   $order = Order::with('orderDetails.produk', 'orderDetails.kios')->find($id);
+    $user  = auth()->user();
 
-        if ($response = $this->ensureApprovedDriver($user)) {
-            return $response;
-        }
+    if ($response = $this->ensureApprovedDriver($user)) {
+        return $response;
+    }
 
-        if (!$order) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Order tidak ditemukan',
-            ], 404);
-        }
-
-        if ($user->id !== $order->driver_id) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Hanya driver yang dapat menyelesaikan order',
-            ], 403);
-        }
-
-        if ($order->status !== 'dikirim') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Order tidak dapat diselesaikan, status: ' . $order->status,
-            ], 400);
-        }
-
-        if ($order->metode_pembayaran == "midtrans" && $order->payment_status == "pending") {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Order tidak dapat diselesaikan, buyer belum membayar',
-            ], 400);
-        }
-
-        $payload = ['status' => 'selesai'];
-
-        if ($order->metode_pembayaran !== Order::PAYMENT_METHOD_MIDTRANS && $order->payment_status !== Order::PAYMENT_STATUS_PAID) {
-            $payload['payment_status'] = Order::PAYMENT_STATUS_PAID;
-            $payload['paid_at'] = now();
-        }
-
-        $order->update($payload);
-        $this->driverWalletService->creditCompletedOrder($order->fresh());
-        $this->firebaseOrderSyncService->sync($order);
-
+    if (!$order) {
         return response()->json([
-            'status'  => 'success',
-            'message' => 'Order berhasil diselesaikan',
-            'data'    => $order,
+            'status'  => 'error',
+            'message' => 'Order tidak ditemukan',
+        ], 404);
+    }
+
+    if ($user->id !== $order->driver_id) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => 'Hanya driver yang dapat menyelesaikan order',
+        ], 403);
+    }
+
+    if ($order->status !== 'dikirim') {
+        return response()->json([
+            'status'  => 'error',
+            'message' => 'Order tidak dapat diselesaikan, status: ' . $order->status,
+        ], 400);
+    }
+
+    if ($order->metode_pembayaran == "midtrans" && $order->payment_status == "pending") {
+        return response()->json([
+            'status'  => 'error',
+            'message' => 'Order tidak dapat diselesaikan, buyer belum membayar',
+        ], 400);
+    }
+
+    // Buat OrderHistory
+    $orderHistory = OrderHistory::create([
+        'order_id'          => $order->id,
+        'buyer_id'          => $order->buyer_id,
+        'kode_pesanan'      => $order->kode_pesanan,
+        'driver_id'         => $order->driver_id,
+        'total_harga'       => $order->total_harga,
+        'alamat_pengiriman' => $order->alamat_pengiriman,
+        'latitude'          => $order->latitude,
+        'longitude'          => $order->longitude,
+        'metode_pembayaran' => $order->metode_pembayaran,
+        'jarak_km'          => $order->jarak_km,
+
+        'ongkir'            => $order->ongkir,
+    ]);
+
+    // Salin semua detail order ke OrderDetailHistory
+    foreach ($order->orderDetails as $detail) {
+        OrderDetailHistory::create([
+            'order_history_id' => $orderHistory->id,
+            'nama_produk'      => $detail->produk->nama_produk ?? null,
+            'nama_kios'        => $detail->kios->nama_kios ?? null,
+            'harga_satuan'     => $detail->produk->harga,
+            'jumlah'           => $detail->jumlah,
+            'subtotal_harga'   => $detail->subtotal_harga,
+            'status'           => $detail->status,
+            'catatan'          => $detail->catatan_driver,
         ]);
     }
+
+    // Update status order
+    $payload = ['status' => 'selesai'];
+
+    if ($order->metode_pembayaran !== Order::PAYMENT_METHOD_MIDTRANS && $order->payment_status !== Order::PAYMENT_STATUS_PAID) {
+        $payload['payment_status'] = Order::PAYMENT_STATUS_PAID;
+        $payload['paid_at']        = now();
+    }
+
+    $order->update($payload);
+
+    $this->driverWalletService->creditCompletedOrder($order->fresh());
+    $this->firebaseOrderSyncService->sync($order);
+
+    return response()->json([
+        'status'  => 'success',
+        'message' => 'Order berhasil diselesaikan',
+        'data'    => $order,
+    ]);
+}
 
     // ── BUYER/DRIVER — request pembatalan ─────────────────────
        public function orderCancel($id)

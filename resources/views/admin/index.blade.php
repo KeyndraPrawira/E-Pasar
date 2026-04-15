@@ -175,60 +175,7 @@
             </div>
         </div>
 
-        <!-- Detail Produk per Kategori -->
-        <div class="col-lg-12 d-flex align-items-stretch">
-            <div class="card w-100">
-                <div class="card-body">
-                    <h5 class="card-title fw-semibold mb-4">Detail Produk per Kategori</h5>
-                    <div class="table-responsive">
-                        <table class="table align-middle text-nowrap mb-0">
-                            <thead>
-                                <tr class="text-muted fw-semibold">
-                                    <th scope="col" class="ps-0">Kategori</th>
-                                    <th scope="col">Jumlah Produk</th>
-                                    <th scope="col">Persentase</th>
-                                </tr>
-                            </thead>
-                            <tbody class="border-top">
-                                @forelse($produkPerKategori as $item)
-                                <tr>
-                                    <td class="ps-0">
-                                        <div class="d-flex align-items-center">
-                                            <div class="me-2 pe-1">
-                                                <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                    <i class="ti ti-category text-primary"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <h6 class="fw-semibold mb-0">{{ $item->nama_kategori }}</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <h6 class="fw-semibold mb-0">{{ $item->total }} Produk</h6>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="progress w-100 me-3" style="height: 8px;">
-                                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $totalProduk > 0 ? ($item->total / $totalProduk * 100) : 0 }}%" aria-valuenow="{{ $item->total }}" aria-valuemin="0" aria-valuemax="{{ $totalProduk }}"></div>
-                                            </div>
-                                            <span class="fw-semibold">{{ $totalProduk > 0 ? number_format(($item->total / $totalProduk * 100), 1) : 0 }}%</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="3" class="text-center py-4">
-                                        <p class="text-muted mb-0">Belum ada data produk</p>
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
     </div>
 </div>
 

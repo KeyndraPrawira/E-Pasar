@@ -47,9 +47,15 @@ class HaversineHelper
         float $totalBeratKg,
         int $biayaPerKg
     ): int {
-        $biayaJarak = (int) ceil($jarakKm) * $ongkirPerKm;
+       if ($jarakKm > 1) {
+        $selisih = $jarakKm - 1;
+        $kmTambahan = (int) floor($selisih + 0.5);
+        $biayaJarak = $kmTambahan * $ongkirPerKm;
+    } else {
+        $biayaJarak = 0;
+    }
         $beratKena  = max(0, $totalBeratKg - self::BATAS_BERAT_GRATIS_KG);
-        $biayaBerat = (int) ceil($beratKena) * $biayaPerKg;
+        $biayaBerat = (int) floor($beratKena) * $biayaPerKg;
 
         return $minimalOngkir + $biayaJarak + $biayaLayanan + $biayaBerat;
     }

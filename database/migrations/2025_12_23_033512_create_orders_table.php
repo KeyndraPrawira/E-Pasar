@@ -139,6 +139,7 @@ return new class extends Migration
             $table->decimal('longitude', 12, 8);
             $table->decimal('jarak_km', 5, 2);
             $table->string('metode_pembayaran')->nullable();
+            $table->unsignedBigInteger('total_harga_barang');
             $table->unsignedBigInteger('ongkir');
             $table->unsignedBigInteger('total_harga');
             $table->text('catatan')->nullable();

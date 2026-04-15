@@ -60,7 +60,7 @@
    data-bs-target="#menuPengguna"
    aria-expanded="false">
     <span class="rounded-3">
-      <i class="ti ti-app-window"></i>
+      <i class="ti ti-user"></i>
     </span>
     <span class="hide-menu">Pengguna</span>
 </a>
@@ -127,6 +127,12 @@
       <a href="{{ route('produks.index') }}"  class="sidebar-link">
         <i class="ti ti-circle"></i>
         <span class="hide-menu">Data Produk</span>
+      </a>
+    </li>
+     <li class="sidebar-item">
+      <a href="{{ route('kategori.index') }}"  class="sidebar-link">
+        <i class="ti ti-circle"></i>
+        <span class="hide-menu">Data Kategori</span>
       </a>
     </li>
 
