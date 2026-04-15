@@ -66,13 +66,26 @@
                             </div>
                         </div>
                       </div>
+                      @if ($user->foto_profil)
+                        <img src="{{ asset('storage/'. $user->foto_profil) }}" width=300px alt="">
+                        @else
+                        <p>Tidak ada foto profil</p>
+                      @endif
+                      <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-floating mb-3">
+                            <input type="file" class="form-control" name="foto_profil" id="tb-foto_profil" />
+                            <label for="tb-foto_profil" class="text-dark">Foto Profil</label>
+                            </div>
+                        </div>
+                      </div>
                       
                     <div class="row d-flex justify-content-between">
                         <div class="col text-start">
                         <button type="submit" class="btn btn-success">Edit Pengguna</button>
                       </div>
                       <div class="col text-end">
-                        <a href="{{ route('pengguna.index') }}" style="background-color: grey;color:white;" class="btn">Batal</a>
+                        <a href="{{ route('pelanggan.index') }}" style="background-color: grey;color:white;" class="btn">Batal</a>
                       </div>
                     </div>
                     

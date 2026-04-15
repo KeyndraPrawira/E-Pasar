@@ -70,7 +70,7 @@
     <li class="sidebar-item">
       <a href="{{ route('pelanggan.index') }}"  class="sidebar-link">
         <i class="ti ti-circle"></i>
-        <span class="hide-menu">Data Pelanggan</span>
+        <span class="hide-menu">Data Pengguna</span>
       </a>
     </li>
 <li class="sidebar-item">
@@ -82,7 +82,7 @@
     <li class="sidebar-item">
       <a href="{{ route('driver-withdrawals.index') }}" class="sidebar-link">
         <i class="ti ti-circle"></i>
-        <span class="hide-menu">Withdraw Driver</span>
+        <span class="hide-menu">Penarikan Driver</span>
       </a>
     </li>
     <li class="sidebar-item">

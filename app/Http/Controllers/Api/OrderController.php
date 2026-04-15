@@ -538,10 +538,12 @@ public function activeOrder(Request $request)
         'buyer_id'          => $order->buyer_id,
         'kode_pesanan'      => $order->kode_pesanan,
         'driver_id'         => $order->driver_id,
+        'nama_driver'       => $order->driver->name,
         'total_harga'       => $order->total_harga,
         'alamat_pengiriman' => $order->alamat_pengiriman,
         'latitude'          => $order->latitude,
         'longitude'          => $order->longitude,
+        'total_harga_barang' => $order->total_harga_barang,
         'metode_pembayaran' => $order->metode_pembayaran,
         'jarak_km'          => $order->jarak_km,
 
@@ -621,6 +623,27 @@ public function activeOrder(Request $request)
             'status'  => 'error',
             'message' => 'Order tidak dapat dibatalkan, status: ' . $order->status,
         ], 400);
+    }
+
+    public function orderHistoryDestroy($id) {
+        
+        $order = OrderHistory::with('orderDetailHistory');
+        if ($order->buyer_id != auth()->id() || $order->driver_id != auth()->id()) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'anda tidak berhak menghapus pesanan ini'
+                ], 403
+            );
+        }
+
+        $order = OrderHistory::destroy($id);
+        return response()->json(
+            [
+                'status' => 'berhasil',
+                'message' => 'pesanan berhasil dihapus'
+            ], 200
+        );
     }
 
     

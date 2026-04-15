@@ -131,6 +131,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
+            $table->string('nama_driver');
 
             // Snapshot data order (disimpan agar tidak berubah walau order diedit)
             $table->string('kode_pesanan');

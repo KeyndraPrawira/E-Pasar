@@ -45,10 +45,15 @@
                       <!-- start row-->
                       <tr>
                         <td>{{ $k->nama_kios }}</td>
-                        <td>{{ $k->user->name }}</td>
+                        <td>{{ $k->user->name ?? 'tidak ada pedagang' }}</td>
                         <td>{{ $k->lokasi }}</td>
                         <td>{{ $k->kontak }}</td>
-                        <td><img src="{{ asset(path: 'storage/'.$k->foto_kios) }}" width="80px" alt="foto-kios"></td>
+                        <td>
+                        @if ($k->foto_kios)
+                          <img src="{{ asset(path: 'storage/'.$k->foto_kios) }}" width="80px" alt="foto-kios"></td>
+                        @else
+                          <p>tidak ada foto kios</p>
+                        @endif  
                         <td><a href="{{ route('kios.edit', $k->id) }}" class="btn btn-success"><i class="ti ti-pencil"></i></a>
                         <a href="{{ route('kios.show', $k->id) }}" class="btn btn-warning"><i class="ti ti-eye"></i></a>
                          <form action="{{ route('kios.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah kamu yakin ingin menghapus?')">

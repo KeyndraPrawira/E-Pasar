@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderHistory;
 
 class TransaksiController extends Controller
 {
     public function index()
     {
-        $orders = Order::with([
+        $orders = OrderHistory::with([
             'buyer',
             'driver',
-            'orderDetails.produk',
+            'orderDetailHistory',
         ])
             ->latest()
             ->get();

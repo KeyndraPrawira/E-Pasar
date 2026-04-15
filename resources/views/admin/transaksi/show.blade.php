@@ -28,36 +28,7 @@
                             <div class="text-muted">Belum ada driver yang mengambil order ini.</div>
                         @endif
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Status Order</label>
-                        @php
-                            $statusOrderClass = match ($order->status) {
-                                'menunggu_driver' => 'warning text-dark',
-                                'dalam_proses' => 'info',
-                                'dikirim' => 'primary',
-                                'selesai' => 'success',
-                                'dibatalkan' => 'danger',
-                                default => 'secondary',
-                            };
-                        @endphp
-                        <div>
-                            <span class="badge bg-{{ $statusOrderClass }}">{{ \Illuminate\Support\Str::headline($order->status) }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted">Status Pembayaran</label>
-                        @php
-                            $statusBayarClass = match ($order->payment_status) {
-                                'paid' => 'success',
-                                'pending' => 'warning text-dark',
-                                'failed', 'expired' => 'danger',
-                                default => 'secondary',
-                            };
-                        @endphp
-                        <div>
-                            <span class="badge bg-{{ $statusBayarClass }}">{{ \Illuminate\Support\Str::headline($order->payment_status ?? 'belum ada') }}</span>
-                        </div>
-                    </div>
+                    
                     <div class="col-md-6">
                         <label class="form-label text-muted">Metode Pembayaran</label>
                         <div class="fw-semibold">{{ strtoupper($order->metode_pembayaran ?? '-') }}</div>

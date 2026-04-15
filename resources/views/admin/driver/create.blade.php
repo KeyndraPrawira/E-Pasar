@@ -125,27 +125,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
-                                <option value="">Pilih status</option>
-                                <option value="pending" @selected(old('status') === 'pending')>Pending</option>
-                                <option value="approved" @selected(old('status') === 'approved')>Approved</option>
-                                <option value="rejected" @selected(old('status') === 'rejected')>Rejected</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label for="verification_notes" class="form-label">Catatan Verifikasi</label>
-                            <textarea name="verification_notes" id="verification_notes" rows="3" class="form-control @error('verification_notes') is-invalid @enderror">{{ old('verification_notes') }}</textarea>
-                            @error('verification_notes')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+                  
 
                     <div class="d-flex justify-content-end mt-4">
                         <button type="submit" class="btn btn-primary">Simpan Driver</button>

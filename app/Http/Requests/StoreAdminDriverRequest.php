@@ -26,7 +26,6 @@ class StoreAdminDriverRequest extends FormRequest
             'foto_stnk' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_kendaraan' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_diri' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'status' => ['required', Rule::in([Driver::STATUS_PENDING, Driver::STATUS_APPROVED, Driver::STATUS_REJECTED])],
             'verification_notes' => ['nullable', 'string', 'max:1000'],
         ];
     }
@@ -49,8 +48,6 @@ class StoreAdminDriverRequest extends FormRequest
             'foto_stnk.required' => 'Foto STNK wajib diunggah.',
             'foto_kendaraan.required' => 'Foto kendaraan wajib diunggah.',
             'foto_diri.required' => 'Foto diri wajib diunggah.',
-            'status.required' => 'Status driver wajib dipilih.',
-            'status.in' => 'Status driver tidak valid.',
         ];
     }
 }

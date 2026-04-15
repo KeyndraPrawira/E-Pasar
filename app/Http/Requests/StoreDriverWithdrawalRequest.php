@@ -15,9 +15,9 @@ class StoreDriverWithdrawalRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'integer', 'min:1'],
-            'bank_name' => ['required', 'string', 'max:100'],
-            'account_name' => ['required', 'string', 'max:100'],
-            'account_number' => ['required', 'string', 'max:50'],
+            'bank_name' => ['required', 'string'],
+            'account_name' => ['required', 'string'],
+            'account_number' => ['required', 'string'],
             'requested_notes' => ['nullable', 'string', 'max:1000'],
         ];
     }

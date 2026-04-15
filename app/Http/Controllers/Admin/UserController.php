@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -36,39 +37,51 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|in:user,pedagang,driver',
-            'nomor_telepon' => 'required|string|max:15',
-            
-        ], [
-            'name.required' => 'Nama wajib diisi.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah terdaftar.',
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 8 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
-            'role.required' => 'Role wajib dipilih.',
-            'role.in' => 'Role yang dipilih tidak valid.',
-            'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
-        ]);
-        User::create(   
-            [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role' => $request->role,
-                'nomor_telepon' => $request->nomor_telepon,
-            ]);
-        toast('Pengguna berhasil ditambahkan', 'success');
-        return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil ditambahkan.');
+   public function store(Request $request)
+{
+    $request->validate([
+        'name'          => 'required|string|max:255',
+        'email'         => 'required|string|email|max:255|unique:users',
+        'password'      => 'required|string|min:8',
+        'role'          => 'required|in:user,pedagang,driver',
+        'nomor_telepon' => 'required|string|max:15',
+        'foto_profil'   => 'nullable|mimes:jpg,png,jpeg,svg'
+    ], [
+        'name.required'         => 'Nama wajib diisi.',
+        'email.required'        => 'Email wajib diisi.',
+        'email.email'           => 'Format email tidak valid.',
+        'email.unique'          => 'Email sudah terdaftar.',
+        'password.required'     => 'Password wajib diisi.',
+        'password.min'          => 'Password minimal 8 karakter.',
+        'role.required'         => 'Role wajib dipilih.',
+        'role.in'               => 'Role yang dipilih tidak valid.',
+        'nomor_telepon.required'=> 'Nomor telepon wajib diisi.',
+        'foto_profil.mimes'     => 'File harus berupa gambar jpg, png, jpeg, atau svg.',
+    ]);
+
+    $data = [
+        'name'          => $request->name,
+        'email'         => $request->email,
+        'password'      => bcrypt($request->password),
+        'role'          => $request->role,
+        'nomor_telepon' => $request->nomor_telepon,
+        'foto_profil'   => null,
+    ];
+
+    if ($request->hasFile('foto_profil')) {
+        $tanggal  = Carbon::now()->format('dmY');
+        $urutan   = User::whereDate('created_at', Carbon::today())->count() + 1;
+        $ext      = $request->file('foto_profil')->getClientOriginalExtension();
+        $namaFile = $tanggal . '_' . $urutan . '.' . $ext;
+        $data['foto_profil'] = $request->file('foto_profil')
+            ->storeAs('foto_profil', $namaFile, 'public');
     }
 
+    User::create($data);
+
+    toast('Pengguna berhasil ditambahkan', 'success');
+    return redirect()->route('pengguna.index')->with('success', 'Pengguna berhasil ditambahkan.');
+}
     /**
      * Display the specified resource.
      */
@@ -97,6 +110,7 @@ class UserController extends Controller
             'password' => 'nullable',
             'role' => 'required|in:user,pedagang,driver',
             'nomor_telepon' => 'required|string|max:15',
+            'foto'
         ], [
             'name.required' => 'Nama wajib diisi.',
             'email.required' => 'Email wajib diisi.',

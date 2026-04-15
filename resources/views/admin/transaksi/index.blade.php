@@ -23,8 +23,7 @@
                         <th>Driver</th>
                         <th>Total Item</th>
                         <th>Total Bayar</th>
-                        <th>Status Order</th>
-                        <th>Status Pembayaran</th>
+                        <th>Metode Pembayaran</th>
                         <th>Tanggal</th>
                         <th class="text-center">Aksi</th>
                     </tr>
@@ -48,34 +47,20 @@
                                     <span class="text-muted">Belum ada driver</span>
                                 @endif
                             </td>
-                            <td>{{ $order->orderDetails->sum('jumlah') }} item</td>
+                            <td>{{ $order->orderDetailHistory->sum('jumlah') }} item</td>
                             <td>Rp {{ number_format($order->total_harga, 0, ',', '.') }}</td>
+                           
                             <td>
                                 @php
-                                    $statusOrderClass = match ($order->status) {
-                                        'menunggu_driver' => 'warning text-dark',
-                                        'dalam_proses' => 'info',
-                                        'dikirim' => 'primary',
-                                        'selesai' => 'success',
-                                        'dibatalkan' => 'danger',
+                                    $metodePembayaran = match ($order->metode_pembayaran) {
+                                        'cod' => 'warning text-dark',
+                                        'midtrans' => 'info',
                                         default => 'secondary',
                                     };
+                                    
                                 @endphp
-                                <span class="badge bg-{{ $statusOrderClass }}">
-                                    {{ \Illuminate\Support\Str::headline($order->status) }}
-                                </span>
-                            </td>
-                            <td>
-                                @php
-                                    $statusBayarClass = match ($order->payment_status) {
-                                        'paid' => 'success',
-                                        'pending' => 'warning text-dark',
-                                        'failed', 'expired' => 'danger',
-                                        default => 'secondary',
-                                    };
-                                @endphp
-                                <span class="badge bg-{{ $statusBayarClass }}">
-                                    {{ \Illuminate\Support\Str::headline($order->payment_status ?? 'belum ada') }}
+                                <span class="badge bg-{{ $metodePembayaran }}">
+                                    {{ \Illuminate\Support\Str::headline($order->metode_pembayaran ?? 'belum ada') }}
                                 </span>
                             </td>
                             <td>{{ $order->created_at?->format('d M Y H:i') }}</td>

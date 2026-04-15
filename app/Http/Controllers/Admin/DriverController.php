@@ -31,7 +31,7 @@ class DriverController extends Controller
     /**
      * Tampilkan form tambah driver oleh admin.
      */
-    public function create(): View
+    public function create()
     {
         $users = User::query()
             ->doesntHave('driver')
@@ -44,7 +44,7 @@ class DriverController extends Controller
     /**
      * Simpan data driver baru dari admin.
      */
-    public function store(StoreAdminDriverRequest $request): RedirectResponse
+    public function store(StoreAdminDriverRequest $request)
     {
         $storedFiles = [];
 
@@ -54,10 +54,9 @@ class DriverController extends Controller
             }
 
             $driver = null;
-            DB::transaction(function () use ($request, &$driver, $storedFiles): void {
-                $status = $request->validated('status');
-                $verifiedBy = $status === Driver::STATUS_PENDING ? null : auth()->id();
-                $verifiedAt = $status === Driver::STATUS_PENDING ? null : now();
+            DB::transaction(function () use ($request, &$driver, $storedFiles) {
+                $verifiedBy =  auth()->id();
+                $verifiedAt = now();
 
                 $driver = Driver::create([
                     'user_id' => $request->validated('user_id'),
@@ -70,7 +69,7 @@ class DriverController extends Controller
                     'foto_stnk' => $storedFiles['foto_stnk'],
                     'foto_kendaraan' => $storedFiles['foto_kendaraan'],
                     'foto_diri' => $storedFiles['foto_diri'],
-                    'status' => $status,
+                    'status' => 'approved',
                     'verification_notes' => $request->validated('verification_notes'),
                     'verified_by' => $verifiedBy,
                     'verified_at' => $verifiedAt,
@@ -79,6 +78,7 @@ class DriverController extends Controller
                 $driver->user()->update([
                     'role' => 'driver',
                     'is_online' => false,
+                    'foto_profile'  => $driver->foto_diri
                 ]);
             });
 
@@ -101,7 +101,7 @@ class DriverController extends Controller
     /**
      * Tampilkan detail pengajuan driver.
      */
-    public function show(Driver $driver): View
+    public function show(Driver $driver)
     {
         $driver->loadMissing(['user', 'verifier']);
 
@@ -111,7 +111,7 @@ class DriverController extends Controller
     /**
      * Tampilkan form edit driver.
      */
-    public function edit(Driver $driver): View
+    public function edit(Driver $driver)
     {
         $driver->loadMissing(['user', 'verifier']);
 
@@ -121,7 +121,7 @@ class DriverController extends Controller
     /**
      * Update data driver oleh admin.
      */
-    public function update(UpdateAdminDriverRequest $request, Driver $driver): RedirectResponse
+    public function update(UpdateAdminDriverRequest $request, Driver $driver)
     {
         $driver->loadMissing('user');
         $storedFiles = [];
@@ -155,6 +155,8 @@ class DriverController extends Controller
                     $payload[$field] = $path;
                 }
 
+
+
                 $driver->update($payload);
                 $driver->user()->update([
                     'role' => 'driver',
@@ -185,7 +187,7 @@ class DriverController extends Controller
     /**
      * Hapus data driver beserta dokumen.
      */
-    public function destroy(Driver $driver): RedirectResponse
+    public function destroy(Driver $driver)
     {
         $driver->loadMissing('user');
         $files = array_filter([
@@ -196,7 +198,7 @@ class DriverController extends Controller
             $driver->foto_diri,
         ]);
 
-        DB::transaction(function () use ($driver): void {
+        DB::transaction(function () use ($driver) {
             $driver->user()->update([
                 'role' => 'user',
                 'is_online' => false,
@@ -217,7 +219,7 @@ class DriverController extends Controller
     /**
      * Verifikasi pengajuan driver oleh admin.
      */
-    public function verify(VerifyDriverRequest $request, Driver $driver): RedirectResponse
+    public function verify(VerifyDriverRequest $request, Driver $driver)
     {
         if (!$driver->isPending()) {
             return redirect()
@@ -238,6 +240,7 @@ class DriverController extends Controller
             $driver->user()->update([
                 'role' => 'driver',
                 'is_online' => false,
+            
             ]);
         });
 
@@ -255,7 +258,7 @@ class DriverController extends Controller
      *
      * @return array<string, string>
      */
-    private function documentDirectories(): array
+    private function documentDirectories()
     {
         return [
             'foto_ktp' => 'drivers/ktp',

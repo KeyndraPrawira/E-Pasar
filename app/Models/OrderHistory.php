@@ -13,6 +13,7 @@ class OrderHistory extends Model
         'buyer_id',
         'kode_pesanan',
         'driver_id',
+        'nama_driver',
         'alamat_pengiriman',
         'latitude',
         'longitude',

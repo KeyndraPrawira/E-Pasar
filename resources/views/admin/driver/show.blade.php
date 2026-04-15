@@ -94,31 +94,31 @@
                 <div class="row g-4">
                     <div class="col-md-6">
                         <label class="form-label">Foto KTP</label>
-                        <a href="{{ asset('storage/' . $driver->foto_ktp) }}" target="_blank" class="d-block">
+                        <a href="{{ asset('storage/' . $driver->foto_ktp) }}" class="d-block">
                             <img src="{{ asset('storage/' . $driver->foto_ktp) }}" alt="Foto KTP" class="img-fluid rounded border">
                         </a>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Foto SIM</label>
-                        <a href="{{ asset('storage/' . $driver->foto_sim) }}" target="_blank" class="d-block">
+                        <a href="{{ asset('storage/' . $driver->foto_sim) }}" class="d-block">
                             <img src="{{ asset('storage/' . $driver->foto_sim) }}" alt="Foto SIM" class="img-fluid rounded border">
                         </a>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Foto STNK</label>
-                        <a href="{{ asset('storage/' . $driver->foto_stnk) }}" target="_blank" class="d-block">
+                        <a href="{{ asset('storage/' . $driver->foto_stnk) }}" class="d-block">
                             <img src="{{ asset('storage/' . $driver->foto_stnk) }}" alt="Foto STNK" class="img-fluid rounded border">
                         </a>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Foto Kendaraan</label>
-                        <a href="{{ asset('storage/' . $driver->foto_kendaraan) }}" target="_blank" class="d-block">
+                        <a href="{{ asset('storage/' . $driver->foto_kendaraan) }}" class="d-block">
                             <img src="{{ asset('storage/' . $driver->foto_kendaraan) }}" alt="Foto Kendaraan" class="img-fluid rounded border">
                         </a>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Foto Diri</label>
-                        <a href="{{ asset('storage/' . $driver->foto_diri) }}" target="_blank" class="d-block">
+                        <a href="{{ asset('storage/' . $driver->foto_diri) }}" class="d-block">
                             <img src="{{ asset('storage/' . $driver->foto_diri) }}" alt="Foto Diri" class="img-fluid rounded border">
                         </a>
                     </div>

@@ -42,7 +42,6 @@ class UpdateAdminDriverRequest extends FormRequest
             'foto_stnk' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_kendaraan' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_diri' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'status' => ['required', Rule::in([Driver::STATUS_PENDING, Driver::STATUS_APPROVED, Driver::STATUS_REJECTED])],
             'verification_notes' => ['nullable', 'string', 'max:1000'],
         ];
     }
@@ -57,7 +56,6 @@ class UpdateAdminDriverRequest extends FormRequest
             'nomor_stnk.unique' => 'Nomor STNK sudah terdaftar.',
             'nomor_sim.required' => 'Nomor SIM wajib diisi.',
             'nomor_sim.unique' => 'Nomor SIM sudah terdaftar.',
-            'status.required' => 'Status driver wajib dipilih.',
             'status.in' => 'Status driver tidak valid.',
         ];
     }
