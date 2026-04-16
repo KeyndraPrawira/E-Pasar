@@ -48,12 +48,12 @@
             </div>
         </div>
         <div class="item">
-            <div class="card border-0 zoom-in bg-success-subtle shadow-none">
+            <div class="card border-0 zoom-in bg-warning-subtle shadow-none">
                 <div class="card-body">
                     <div class="text-center">
                         <img src="{{ asset('template/images/svgs/icon-favorites.svg')}}" width="50" height="50" class="mb-3" alt="modernize-img" />
-                        <p class="fw-semibold fs-3 text-success mb-1">Total Pedagang</p>
-                        <h5 class="fw-semibold text-success mb-0">{{ $totalPedagang }}</h5>
+                        <p class="fw-semibold fs-3 text-warning mb-1">Total Pedagang</p>
+                        <h5 class="fw-semibold text-warning mb-0">{{ $totalPedagang }}</h5>
                     </div>
                 </div>
             </div>
