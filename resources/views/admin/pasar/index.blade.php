@@ -113,7 +113,7 @@
                                 <div class="info-label">
                                     <i class="ti ti-compass me-1"></i>Ongkir
                                 </div>
-                                <div class="info-value">{{ $pasar->ongkir ?? '-' }}/meter</div>
+                                <div class="info-value">{{ $pasar->ongkir ?? '-' }}/Km</div>
                             </div>
                         </div>
                         <div class="col-md-6">

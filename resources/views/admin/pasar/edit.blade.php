@@ -99,7 +99,7 @@
                         <div class="col-md-12">
                             <div class="form-floating mb-3">
                             <input name="ongkir" type="number" class="form-control {{ $errors->has('ongkir') ? 'is-invalid' : '' }}" id="tb-ongkir" value="{{ $pasar->ongkir }}" />
-                            <label for="tb-ongkir" class="text-dark">Ongkir (Per-meter)</label>
+                            <label for="tb-ongkir" class="text-dark">Ongkir (Per-Km)</label>
                             </div>
                         </div>
                       </div>
