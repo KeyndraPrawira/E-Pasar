@@ -78,7 +78,6 @@ class DriverController extends Controller
                 $driver->user()->update([
                     'role' => 'driver',
                     'is_online' => false,
-                    'foto_profile'  => $driver->foto_diri
                 ]);
             });
 
@@ -136,16 +135,16 @@ class DriverController extends Controller
             }
 
             DB::transaction(function () use ($request, $driver, $storedFiles): void {
-                $status = $request->validated('status');
-                $verifiedBy = $status === Driver::STATUS_PENDING ? null : auth()->id();
-                $verifiedAt = $status === Driver::STATUS_PENDING ? null : now();
+                
+                $verifiedBy =  auth()->id();
+                $verifiedAt = now();
 
                 $payload = [
                     'nomor_kendaraan' => $request->validated('nomor_kendaraan'),
                     'jenis_kendaraan' => $request->validated('jenis_kendaraan'),
                     'nomor_stnk' => $request->validated('nomor_stnk'),
                     'nomor_sim' => $request->validated('nomor_sim'),
-                    'status' => $status,
+                    'status' => 'approved',
                     'verification_notes' => $request->validated('verification_notes'),
                     'verified_by' => $verifiedBy,
                     'verified_at' => $verifiedAt,

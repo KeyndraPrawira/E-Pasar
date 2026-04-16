@@ -45,7 +45,6 @@ class UserController extends Controller
         'password'      => 'required|string|min:8',
         'role'          => 'required|in:user,pedagang,driver',
         'nomor_telepon' => 'required|string|max:15',
-        'foto_profil'   => 'nullable|mimes:jpg,png,jpeg,svg'
     ], [
         'name.required'         => 'Nama wajib diisi.',
         'email.required'        => 'Email wajib diisi.',
@@ -56,7 +55,6 @@ class UserController extends Controller
         'role.required'         => 'Role wajib dipilih.',
         'role.in'               => 'Role yang dipilih tidak valid.',
         'nomor_telepon.required'=> 'Nomor telepon wajib diisi.',
-        'foto_profil.mimes'     => 'File harus berupa gambar jpg, png, jpeg, atau svg.',
     ]);
 
     $data = [
@@ -65,17 +63,9 @@ class UserController extends Controller
         'password'      => bcrypt($request->password),
         'role'          => $request->role,
         'nomor_telepon' => $request->nomor_telepon,
-        'foto_profil'   => null,
     ];
 
-    if ($request->hasFile('foto_profil')) {
-        $tanggal  = Carbon::now()->format('dmY');
-        $urutan   = User::whereDate('created_at', Carbon::today())->count() + 1;
-        $ext      = $request->file('foto_profil')->getClientOriginalExtension();
-        $namaFile = $tanggal . '_' . $urutan . '.' . $ext;
-        $data['foto_profil'] = $request->file('foto_profil')
-            ->storeAs('foto_profil', $namaFile, 'public');
-    }
+   
 
     User::create($data);
 
@@ -110,7 +100,6 @@ class UserController extends Controller
             'password' => 'nullable',
             'role' => 'required|in:user,pedagang,driver',
             'nomor_telepon' => 'required|string|max:15',
-            'foto'
         ], [
             'name.required' => 'Nama wajib diisi.',
             'email.required' => 'Email wajib diisi.',

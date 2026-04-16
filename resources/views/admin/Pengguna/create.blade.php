@@ -60,14 +60,7 @@
                             </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-floating mb-3">
-                            <input type="file" class="form-control" name="foto_profil" id="tb-foto_profil" />
-                            <label for="tb-foto_profil" class="text-dark">Foto Profil</label>
-                            </div>
-                        </div>
-                      </div>
+                      
                     <div class="row d-flex justify-content-between">
                         <div class="col text-start">
                         <button type="submit" class="btn btn-primary">Buat Pengguna</button>

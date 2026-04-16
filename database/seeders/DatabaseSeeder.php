@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@epasar.id',
+            'email' => 'admin@pajajap.web.id',
             'password' => Hash::make('Admin123'),
             'role' => 'admin',
             'nomor_telepon' => '081234567890',
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'id' => 3,
             'name' => 'Keyndra',
-            'email' => 'keyndra@gmail.com',
+            'email' => 'keyndra@pajajap.web.id',
             'password' => Hash::make('keyndra123'),
             'role' => 'pedagang',
             'nomor_telepon' => '081234567890',
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'id' => 4,
             'name' => 'Adi',
-            'email' => 'adi@gmail.com',
+            'email' => 'adi@pajajap.web.id',
             'password' => Hash::make('adi12345'),
             'role' => 'user',
             'nomor_telepon' => '089463527393'
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'id' => 6,
             'name' => 'Rama Sutisna',
-            'email' => 'rama@gmail.com',
+            'email' => 'rama@pajajap.web.id',
             'password' => Hash::make('rama12345'),
             'role' => 'driver',
             'nomor_telepon' => '081234567890',
@@ -106,8 +106,8 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'id' => 2,
-            'name' => 'Tate',
-            'email' => 'tatemcrae@gmail.com',
+            'name' => 'Tati',
+            'email' => 'tati@pajajap.web.id',
             'password' => Hash::make('tate12345'),
             'role' => 'pedagang',
             'nomor_telepon' => '081234567890',

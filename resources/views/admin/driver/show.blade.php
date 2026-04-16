@@ -151,7 +151,7 @@
 
                         <div class="mb-3">
                             <label for="verification_notes" class="form-label">Catatan Verifikasi</label>
-                            <textarea name="verification_notes" id="verification_notes" rows="4" class="form-control @error('verification_notes') is-invalid @enderror" placeholder="Opsional, misalnya alasan penolakan atau catatan approval">{{ old('verification_notes') }}</textarea>
+                            <textarea name="verification_notes" id="verification_notes" rows="4" class="form-control @error('verification_notes') is-invalid @enderror" placeholder="Opsional, misalnya alasan penolakan atau catatan penerimaan">{{ old('verification_notes') }}</textarea>
                             @error('verification_notes')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

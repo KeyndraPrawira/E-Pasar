@@ -23,7 +23,6 @@
             <div class="card mb-0">
               <div class="card-body">
                 <a href="{{ route('landingpage') }}" class="text-nowrap logo-img text-center d-block w-100 mb-4">
-                  <img src="{{ asset('template/images/logos/Pajajap logo.png') }}" width="250px" class="dark-logo" alt="Logo-Dark" />
                   <img src="{{ asset('template/images/logos/Pajajap logo.png') }}" width="250px" class="light-logo" alt="Logo-light" />
                 </a>
 
@@ -57,18 +56,7 @@
                     @enderror
                   </div>
 
-                  <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                      <label for="password" class="form-label mb-0">{{ __('Password') }}</label>
-                      <a href="{{ route('driver.password.request') }}" class="text-primary small fw-semibold">Lupa password?</a>
-                    </div>
-                    <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" required autocomplete="current-password">
-                    @error('password')
-                      <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                      </span>
-                    @enderror
-                  </div>
+                  
 
                   <button type="submit" class="btn btn-primary w-100 py-8 mb-3 rounded-2">Masuk</button>
 

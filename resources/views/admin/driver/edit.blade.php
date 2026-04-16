@@ -116,17 +116,7 @@
                     </div>
 
                     <div class="row mt-3">
-                        <div class="col-md-6">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
-                                <option value="pending" @selected(old('status', $driver->status) === 'pending')>Pending</option>
-                                <option value="approved" @selected(old('status', $driver->status) === 'approved')>Approved</option>
-                                <option value="rejected" @selected(old('status', $driver->status) === 'rejected')>Rejected</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                       
                         <div class="col-md-6">
                             <label for="verification_notes" class="form-label">Catatan Verifikasi</label>
                             <textarea name="verification_notes" id="verification_notes" rows="3" class="form-control @error('verification_notes') is-invalid @enderror">{{ old('verification_notes', $driver->verification_notes) }}</textarea>

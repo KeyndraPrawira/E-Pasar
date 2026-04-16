@@ -50,7 +50,7 @@
                                     <span class="badge bg-danger">Rejected</span>
                                 @endif
                             </td>
-                            <td>{{ $driver->created_at?->format('d M Y H:i') }}</td>
+                            <td>{{ $driver->created_at?->format('d M Y') }}</td>
                             <td class="text-center">
                                 <a href="{{ route('driver.show', $driver) }}" class="btn btn-primary btn-sm">
                                     Detail

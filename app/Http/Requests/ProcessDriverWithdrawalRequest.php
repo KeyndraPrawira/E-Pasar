@@ -29,7 +29,7 @@ class ProcessDriverWithdrawalRequest extends FormRequest
     {
         $validator->after(function ($validator): void {
             if ($this->input('status') === DriverWithdrawal::STATUS_REJECTED && blank($this->input('admin_notes'))) {
-                $validator->errors()->add('admin_notes', 'Catatan admin wajib diisi saat withdraw ditolak.');
+                $validator->errors()->add('admin_notes', 'Catatan admin wajib diisi saat pengajuan ditolak.');
             }
         });
     }

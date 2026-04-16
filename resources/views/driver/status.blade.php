@@ -54,10 +54,10 @@
                         <div class="col-md-6">
                             <div class="border rounded p-3 h-100">
                                 <div class="text-muted small mb-1">Waktu Pengajuan</div>
-                                <div class="fw-semibold">{{ $driver->created_at?->format('d M Y H:i') }}</div>
+                                <div class="fw-semibold">{{ $driver->created_at?->format('d M Y') }}</div>
                                 @if ($driver->verified_at)
                                     <div class="text-muted small mt-3 mb-1">Waktu Verifikasi</div>
-                                    <div class="fw-semibold">{{ $driver->verified_at->format('d M Y H:i') }}</div>
+                                    <div class="fw-semibold">{{ $driver->verified_at->format('d M Y') }}</div>
                                 @endif
                             </div>
                         </div>

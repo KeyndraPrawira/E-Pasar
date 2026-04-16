@@ -114,17 +114,10 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="transfer_reference" class="form-label">Referensi Transfer</label>
-                            <input type="text" name="transfer_reference" id="transfer_reference" class="form-control @error('transfer_reference') is-invalid @enderror" value="{{ old('transfer_reference') }}" placeholder="Opsional, isi saat approve">
-                            @error('transfer_reference')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
+                        
                         <div class="mb-3">
                             <label for="admin_notes" class="form-label">Catatan Admin</label>
-                            <textarea name="admin_notes" id="admin_notes" rows="4" class="form-control @error('admin_notes') is-invalid @enderror" placeholder="Wajib diisi saat ditolak, opsional saat approve">{{ old('admin_notes') }}</textarea>
+                            <textarea name="admin_notes" id="admin_notes" rows="4" class="form-control @error('admin_notes') is-invalid @enderror" placeholder="Wajib diisi saat ditolak, opsional saat diterima">{{ old('admin_notes') }}</textarea>
                             @error('admin_notes')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

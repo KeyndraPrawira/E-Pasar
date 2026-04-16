@@ -681,7 +681,9 @@
 <nav class="navbar">
     <div class="nav-container">
         <a href="#" class="logo">
-            <div class="logo-icon">🛒</div>
+            <div class="logo-icon">
+                <img src="{{ asset('template/images/logos/pajajap_logo-white.png') }}" alt="logo-pajajap" width=30px>
+            </div>
             <span>PAJAJAP</span>
         </a>
         

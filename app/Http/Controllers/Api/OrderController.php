@@ -126,6 +126,13 @@ class OrderController extends Controller
                 'message' => 'Data pasar belum dikonfigurasi',
             ], 500);
         }
+        $keranjangProduk = Keranjang::with('produk');
+        if($keranjangProduk->produk->kios->status == 'tutup'){
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Kios sedang tutup',
+            ], 403);
+        }
 
         $totalBerat = $keranjang->sum(fn ($item) => (int) ($item->produk->berat_satuan ?? 0) * $item->jumlah);
         $totalHargaBarang = $keranjang->sum('harga_total');
